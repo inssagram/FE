@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  compiler: {
+    styledComponents: true,
+  },
+};
 
 module.exports = nextConfig;
 module.exports = {
@@ -7,3 +11,5 @@ module.exports = {
     domains: ["upload.wikimedia.org"],
   },
 };
+
+module.exports = nextConfig;

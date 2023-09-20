@@ -5,7 +5,6 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane'
 import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark'
-import { faCircleDot } from '@fortawesome/free-regular-svg-icons/faCircleDot'
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons/faCommentDots'
 
 

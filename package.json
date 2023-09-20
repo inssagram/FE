@@ -11,6 +11,10 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
+<<<<<<< HEAD
+=======
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+>>>>>>> 20d8efaad3950a81a53ad85d55f3b2873cb5fc23
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/node": "20.6.2",
@@ -23,5 +27,8 @@
     "react-dom": "18.2.0",
     "styled-components": "^6.0.8",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "@types/styled-components": "^5.1.27"
   }
 }
