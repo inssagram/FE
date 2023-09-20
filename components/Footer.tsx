@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faMagnifyingGlass, faFilm, faPaperPlane, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as SC from "../styles/index";
 
-const Header: React.FC = () => {
+const Footer: React.FC = () => {
   return (
     <SC.StyledFooter>
       <div className="footerBottom">
@@ -19,4 +19,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default Footer;
