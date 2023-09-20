@@ -88,9 +88,10 @@
 html,
 body {
   overflow-x: hidden;
-  min-width: 390px;
-  max-width: 480px;
-  height: 100%;
+  max-width: 520px;
+  width: 100%;
+  height: 100vh;
+  margin: 0 auto;
 }
 
 body {
