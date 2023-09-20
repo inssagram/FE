@@ -11,5 +11,3 @@ module.exports = {
     domains: ["upload.wikimedia.org"],
   },
 };
-
-module.exports = nextConfig;

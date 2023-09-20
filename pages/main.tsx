@@ -5,7 +5,7 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane'
 import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark'
-import { faCommentDots } from '@fortawesome/free-regular-svg-icons/faCommentDots'
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function Main(){
@@ -25,7 +25,7 @@ export default function Main(){
                         <SC.ID>정호다</SC.ID>
                     </SC.Profile>
                     <SC.More>
-                        <FontAwesomeIcon icon={faCommentDots} fontSize={'25px'}/>
+                        <FontAwesomeIcon icon={faEllipsis} />
                     </SC.More>
                 </SC.Head>
                 <SC.Contents>
