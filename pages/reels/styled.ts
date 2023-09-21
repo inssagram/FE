@@ -6,7 +6,7 @@ export const Container = styled.section`
     height: 90vh;
     padding-bottom: 48px;
     background-color: white;
-    color: black;
+    color: white;
 `
 
 export const Article = styled.article`
@@ -20,8 +20,6 @@ export const Article = styled.article`
 
 export const Contents = styled.div`
     flex: 7;
-    width: 100%;
-    height: 100%;
     `
 
 // ----------------------------------------------------------------------------
@@ -31,15 +29,17 @@ export const Details = styled.div`
     display: flex;
     flex-direction: column;
     position: absolute;
-    bottom: 0;
     color: white;
+    bottom: 0;
 `
 
 // ----------------------------------------------------------------------------
+
+
 export const Profile = styled.div`
-    flex: 9;
-    display: flex;
-    padding: 10px;
+flex: 9;
+display: flex;
+padding: 10px;
 `
 export const ID = styled.span`
     margin-left: 12px;

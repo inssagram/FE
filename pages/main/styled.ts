@@ -28,11 +28,6 @@ export const Profile = styled.div`
     display: flex;
     align-items: center;
 `
-export const ProfileImage = styled.div`
-    width: 40px;
-    height: 40px;
-    position: relative;
-`
 export const ID = styled.span`
     margin-left: 12px;
 `
@@ -50,6 +45,11 @@ export const Contents = styled.div`
     position: relative;
 `
 
+export const ImageContent = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+`
 
 // ----------------------------------------------------------------------------
 
@@ -65,17 +65,20 @@ export const Details = styled.div`
 export const Buttons = styled.div`
     flex: 2;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     `
 export const LeftIcons = styled.div`
     display: flex;
     align-items: center;
     gap: 10px; 
+    width: 50%;
+    padding-right: 10px;
 `;
 
 export const RightIcon = styled.div`
-    margin-left: auto; 
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
 `;
 
 // ----------------------------------------------------------------------------
