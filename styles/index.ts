@@ -10,7 +10,8 @@ export const StyledHeader = styled.div`
     justify-content: space-between;
     padding: 0 16px;
     position: fixed;
-    background-color: white;
+    background-color: #ffffff;
+    color: #222222;
     z-index: 10;
   }
   .iconPannels {
