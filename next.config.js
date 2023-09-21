@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   compiler: {
     styledComponents: true,
   },
-};
-
-module.exports = nextConfig;
-module.exports = {
   images: {
     domains: ["upload.wikimedia.org"],
   },
