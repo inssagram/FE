@@ -14,30 +14,14 @@ export const Article = styled.article`
     display: flex;
     flex-direction: column;
 `
+// ----------------------------------------------------------------------------
 
 export const Head = styled.div`
     width: 100%;
     flex: 0.5;
     padding: 14px 4px 14px 16px;
     display: flex;
-`
-
-export const Contents = styled.div`
-    flex: 7;
-    position: relative;
-`
-
-export const ContentsImage = styled.image`
-    width: 100%;
-    height: 100%;
-`
-
-export const Details = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 2;
-`
+    `
 
 export const Profile = styled.div`
     flex: 9;
@@ -59,12 +43,43 @@ export const More = styled.div`
     padding: 8px;
 `
 
+// ----------------------------------------------------------------------------
+
+export const Contents = styled.div`
+    flex: 7;
+    position: relative;
+`
+
+
+// ----------------------------------------------------------------------------
+
+export const Details = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+`
+
+// ----------------------------------------------------------------------------
+
 export const Buttons = styled.div`
     flex: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
-`
+    `
+export const LeftIcons = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+`;
+
+export const RightIcon = styled.div`
+    margin-left: auto; 
+`;
+
+// ----------------------------------------------------------------------------
+
 
 export const Likes = styled.div`
     flex: 1;
@@ -81,13 +96,3 @@ export const Comment = styled.div`
 export const AllComment =styled.div`
     flex: 1;
 `
-
-export const LeftIcons = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px; /* 아이콘들 사이의 간격 조절 */
-`;
-
-export const RightIcon = styled.div`
-  margin-left: auto; /* 오른쪽으로 아이콘을 이동합니다. */
-`;

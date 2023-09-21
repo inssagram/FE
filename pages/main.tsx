@@ -32,7 +32,8 @@ export default function Main(){
                     <Image
                         src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                         alt="개"
-                        layout="fill"
+                        width={400}
+                        height={500}
                         />
                 </SC.Contents>
                 <SC.Details>
