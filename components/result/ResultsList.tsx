@@ -30,7 +30,7 @@ const Name = styled.span`
 `;
 
 const Desc = styled.span`
-  color: #737373;
+  color: #7c7c7c;
 `;
 
 const ResultsList: React.FC = () => {
