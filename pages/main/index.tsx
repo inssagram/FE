@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SC from '../styles/main' 
+import * as SC from './styled' 
 import Image from 'next/image'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
@@ -14,14 +14,13 @@ export default function Main(){
             <SC.Article>
                 <SC.Head>
                     <SC.Profile>
-                        <SC.ProfileImage>
-                            <Image
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-                            alt="개"
-                            layout="fill"
-                            style={{borderRadius: '100%'}}
-                            />
-                        </SC.ProfileImage>
+                        <Image
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                        alt="개"
+                        width={40}
+                        height={40}
+                        style={{borderRadius: '100%'}}
+                        />
                         <SC.ID>정호다</SC.ID>
                     </SC.Profile>
                     <SC.More>
@@ -29,12 +28,15 @@ export default function Main(){
                     </SC.More>
                 </SC.Head>
                 <SC.Contents>
-                    <Image
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-                        alt="개"
-                        width={400}
-                        height={500}
+                    <SC.ImageContent>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            layout='responsive'
+                            width={10}
+                            height={10}
                         />
+                    </SC.ImageContent>
                 </SC.Contents>
                 <SC.Details>
                     <SC.Buttons>
