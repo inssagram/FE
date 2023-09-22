@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../components/input/SearchBar";
 
-const Search: React.FC = () => {
+const Explore: React.FC = () => {
   return (
     <SC.Container>
-      <SC.SearchTop>
+      <SC.ExploreTop>
         <SearchBar />
-      </SC.SearchTop>
+      </SC.ExploreTop>
       <SC.Content>
         <Image src="/images/coffee.jpg" alt="게시글" width={135} height={135} />
         <Image src="/images/coffee.jpg" alt="게시글" width={135} height={135} />
@@ -35,4 +35,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default Search;
+export default Explore;

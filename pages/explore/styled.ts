@@ -8,7 +8,7 @@ export const Container = styled.section`
   color: #fff;
 `;
 
-export const SearchTop = styled.div`
+export const ExploreTop = styled.div`
   padding: 10px 16px;
 `;
 
