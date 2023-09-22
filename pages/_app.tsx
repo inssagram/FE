@@ -7,11 +7,11 @@ import "../styles/main.css";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
-    <div>
-      {/* <Header /> */}
+    <>
+      <Header />
       <Component {...pageProps} />
       <Footer />
-    </div>
+    </>
   );
 };
 

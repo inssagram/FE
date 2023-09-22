@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Main from "./Main.1";
+import Main from "./main";
 
 const Home: React.FC = () => {
   return (
