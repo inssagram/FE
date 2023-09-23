@@ -8,7 +8,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Component {...pageProps} />
-      <Footer />
     </>
   );
 };
