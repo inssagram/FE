@@ -1,7 +1,6 @@
 @font-face {
-  font-family: "MyFont";
-  src: url("/path/to/myfont.woff") format("woff");
-  /* 추가 폰트 서식 및 속성 설정 */
+  font-family: "JejuGothic";
+  src: url("/fonts/JejuGothic.TTF") format("truetype");
 }
 
 :root {

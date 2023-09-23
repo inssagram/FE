@@ -17,6 +17,60 @@ export const Article = styled.article`
     position: relative;
 `
 // ----------------------------------------------------------------------------
+export const ProgressBars = styled.div`
+    display: flex;
+    width: 100%;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    background-color: transparent;
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+`
+
+export const Bar = styled.div`
+    width: 95%;
+    height: 20%;
+    background-color: white;
+    border-radius: 10px;
+`
+
+// ----------------------------------------------------------------------------
+
+export const Head = styled.div`
+    width: 100%;
+    flex: 0.5;
+    padding: 14px 4px 14px 16px;
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    font-size: 25px;
+    `
+
+export const Profile = styled.div`
+    flex: 9;
+    display: flex;
+    align-items: center;
+`
+export const ID = styled.span`
+    margin-left: 12px;
+`
+
+export const PostedTime = styled.span`
+    color: gray;
+    margin-left: 12px;
+`
+
+
+export const More = styled.div`
+    flex: 1;
+    padding: 8px;
+`
+
+
+// ----------------------------------------------------------------------------
 
 export const Contents = styled.div`
     width: 100%;
@@ -29,16 +83,22 @@ export const Comment = styled.div`
     position: absolute;
     width: 100%;
     bottom: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 10px;
 `
 
 export const TextArea = styled.input`
-    border-radius: 50px;
-    width: 80%;
-    border: 2px white solid;
-    height: 40px;
-    background-color: transparent;
-    ::placeholder { 
     color: white;
+    border-radius: 50px;
+    width: 70%;
+    border: 2px white solid;
+    height: 100%;
+    background-color: transparent;
+    ::placeholder {
+    color: deepPink;
   }
-
+  padding-left: 15px;
 `
