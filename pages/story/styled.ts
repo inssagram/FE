@@ -46,7 +46,6 @@ export const Head = styled.div`
     position: absolute;
     z-index: 1;
     top: 0;
-    font-size: 25px;
     `
 
 export const Profile = styled.div`
