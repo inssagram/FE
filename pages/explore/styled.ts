@@ -4,8 +4,10 @@ export const Container = styled.section`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  background-color: #000;
-  color: #fff;
+  color: #222;
+  background-color: #fff;
+  // color: #fff;
+  // background-color: #000;
 `;
 
 export const ExploreTop = styled.div`
