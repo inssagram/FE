@@ -17,8 +17,10 @@ const SearchArea = styled.div`
   display: flex;
   align-items: center;
   padding: 8px;
+  border: 1px solid #c0c0c0;
   border-radius: 7px;
-  background-color: #404040;
+  background-color: #fff;
+  // background-color: #404040;
 `;
 
 const Input = styled.input`
@@ -26,8 +28,10 @@ const Input = styled.input`
   border: none;
   outline: none;
   padding: 0 8px;
-  color: #fff;
-  background-color: #404040;
+  color: #222;
+  background-color: #fff;
+  // color: #fff;
+  // background-color: #404040;
 `;
 
 const SearchIcon = styled.div`
