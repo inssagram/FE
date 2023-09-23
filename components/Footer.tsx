@@ -1,21 +1,19 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faMagnifyingGlass, faFilm, faPaperPlane, faUser } from "@fortawesome/free-solid-svg-icons";
-import * as SC from "../styles/index";
+import * as SC from "../components/styledFooter";
 
 const Footer: React.FC = () => {
   return (
-    <SC.StyledFooter>
-      <div className="footerBottom">
-        <div className="iconPannels">
-          <FontAwesomeIcon icon={faHouse} />
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-          <FontAwesomeIcon icon={faFilm} />
-          <FontAwesomeIcon icon={faPaperPlane} />
-          <FontAwesomeIcon icon={faUser} />
-        </div>
-      </div>
-    </SC.StyledFooter>
+    <SC.Footer>
+      <SC.IconPannels>
+        <FontAwesomeIcon icon={faHouse} />
+        <FontAwesomeIcon icon={faMagnifyingGlass} />
+        <FontAwesomeIcon icon={faFilm} />
+        <FontAwesomeIcon icon={faPaperPlane} />
+        <FontAwesomeIcon icon={faUser} />
+      </SC.IconPannels>
+    </SC.Footer>
   );
 };
 

@@ -1,4 +1,7 @@
 @font-face {
+  font-family: "MyFont";
+  src: url("/path/to/myfont.woff") format("woff");
+  /* 추가 폰트 서식 및 속성 설정 */
 }
 
 :root {
@@ -77,6 +80,7 @@
 }
 
 * {
+  font-family: "JejuGothic";
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -192,7 +196,7 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
+  font-family: "JejuGothic";
   vertical-align: baseline;
 }
 

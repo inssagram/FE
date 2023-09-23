@@ -1,10 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SC from './styled' 
-import Image from 'next/image'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane'
-import { faBookmark } from '@fortawesome/free-regular-svg-icons/faBookmark'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as SC from "./styled";
+import Image from "next/image";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
+import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Layout from '@/components/Layout'
 
