@@ -1,7 +1,7 @@
 import React from "react";
 import * as SC from "./styled";
 import SearchBar from "../../components/input/SearchBar";
-import ResultsList from "../../components/result/ResultsList";
+import ResultsList from "../../components/list/ResultsList";
 import Footer from "../../components/Footer";
 
 const Search: React.FC = () => {
