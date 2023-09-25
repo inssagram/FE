@@ -7,11 +7,100 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Layout from '@/components/Layout'
+import { SVGProps, useState } from 'react';
+import { useRouter } from 'next/router';
+
 
 export default function Main(){
+    const router = useRouter()
+    const [isAnimating, setIsAnimating] = useState(false);
+
+    const spinnerHandler = () => {
+        setIsAnimating(true);
+        setTimeout(() => router.push('/story'), 2000);
+    }
+
+
     return (
         <Layout>
             <SC.Container>
+                <SC.Stories>
+                    <SC.Story onClick={spinnerHandler}>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            width={40}
+                            height={40}
+                            style={{borderRadius: '100%', border: `${isAnimating ? '' : '3px solid red'}`}}
+                        />
+                            <SC.Spinner>
+                            <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </SC.Spinner>
+                        <SC.StoryID>정호다</SC.StoryID>
+                    </SC.Story>
+                    <SC.Story onClick={spinnerHandler}>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            width={40}
+                            height={40}
+                            style={{borderRadius: '100%', border: `${isAnimating ? '' : '3px solid red'}`}}
+                        />
+                            <SC.Spinner>
+                            <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </SC.Spinner>
+                        <SC.StoryID>정호다</SC.StoryID>
+                    </SC.Story>
+                    <SC.Story onClick={spinnerHandler}>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            width={40}
+                            height={40}
+                            style={{borderRadius: '100%', border: `${isAnimating ? '' : '3px solid red'}`}}
+                        />
+                            <SC.Spinner>
+                            <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </SC.Spinner>
+                        <SC.StoryID>정호다</SC.StoryID>
+                    </SC.Story>
+                    <SC.Story onClick={spinnerHandler}>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            width={40}
+                            height={40}
+                            style={{borderRadius: '100%', border: `${isAnimating ? '' : '3px solid red'}`}}
+                        />
+                            <SC.Spinner>
+                            <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </SC.Spinner>
+                        <SC.StoryID>정호다</SC.StoryID>
+                    </SC.Story>
+                    <SC.Story onClick={spinnerHandler}>
+                        <Image
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                            alt="개"
+                            width={40}
+                            height={40}
+                            style={{borderRadius: '100%', border: `${isAnimating ? '' : '3px solid red'}`}}
+                        />
+                            <SC.Spinner>
+                            <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                </svg>
+                            </SC.Spinner>
+                        <SC.StoryID>정호다</SC.StoryID>
+                    </SC.Story>
+                </SC.Stories>
                 <SC.Article>
                     <SC.Head>
                         <SC.Profile>
