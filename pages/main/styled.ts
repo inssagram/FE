@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {css,keyframes} from "styled-components";
 
 export const Container = styled.section`
     width: 100%;
@@ -6,7 +7,46 @@ export const Container = styled.section`
     padding: 44px 0 48px 0;
     background-color: white;
     color: black;
+    overflow-y: scroll;
 `
+
+// ----------------------------------------------------------------------------
+export const Stories = styled.div`
+    width: 100%;
+    height: 10%;
+    display: flex;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    overflow-x: scroll;
+`
+
+export const Spinner = styled.div`
+    position: absolute;
+    top: 0;
+    margin-top: 5px;
+`
+
+
+export const Story = styled.div`
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    position: relative;
+`
+
+
+
+
+
+export const StoryID = styled.span`
+
+`
+
+
+// ----------------------------------------------------------------------------
 
 export const Article = styled.article`
     width: 100%;

@@ -7,14 +7,28 @@ export const Container = styled.section`
     background-color: white;
     color: white;
     position: relative;
+    transform-style: preserve-3d;
 `
+
 
 export const Article = styled.article`
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
+    position: absolute;
+    &.cube1{
+        transform: rotateY(0deg) translateZ(calc(100vw / 2));
+    }
+    &.cube2{
+        transform: rotateY(90deg) translateZ(calc(100vw / 2));
+    }
+    &.cube3{
+        transform: rotateY(180deg) translateZ(calc(100vw / 2));
+    }
+    &.cube4{
+        transform: rotateY(270deg) translateZ(calc(100vw / 2));
+    }
 `
 // ----------------------------------------------------------------------------
 export const ProgressBars = styled.div`
