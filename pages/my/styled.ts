@@ -1,13 +1,38 @@
 import styled from "styled-components";
 
-export const ProfileContainer = styled.div`
+export const Header = styled.div`
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: fixed;
+  background-color: #ffffff;
+  color: #222222;
+  z-index: 10;
+  border-bottom: 1px solid #e2e2e2;
+`;
+export const HeaderCon = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 33%;
+  margin-top: 0.6rem;
+  color: black;
+  font-weight: bold;
+  font-size: 1.4rem;
+`;
+
+export const Container = styled.div`
   width: 100%;
   height: 20vh;
   background-color: white;
   border-bottom: 1px solid #e2e2e2;
   display: flex;
-  flex-direction: row; // 가로로 아이템을 배열
-  align-items: flex-start; // 아이템을 위쪽으로 정렬
+  flex-direction: row;
+  align-items: flex-start;
   padding: 16px;
   border-top: 2px solid #e2e2e2;
 `;
@@ -63,7 +88,8 @@ export const UserName = styled.span`
 `;
 
 export const UserId = styled.h1`
-  margin-left: 1rem;
+  font-size: 1.7rem;
+  margin: 1rem 0 1rem 1.5rem;
   font-weight: lighter;
 `;
 
@@ -85,6 +111,7 @@ export const MyDataValue = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
 `;
 
 export const DataName = styled.span`
