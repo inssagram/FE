@@ -11,7 +11,7 @@ import { SVGProps, useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-export default function Main(){
+const Main:React.FC = () => {
     const router = useRouter()
     const [isAnimating, setIsAnimating] = useState(false);
 
@@ -149,3 +149,5 @@ export default function Main(){
         </Layout>
     )
 }
+
+export default Main
