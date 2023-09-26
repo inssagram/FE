@@ -7,7 +7,7 @@ import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane'
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Footer from '@/components/Footer'
 
-export default function reels(){
+const Reels:React.FC = () => {
     return (
         <>
             <SC.Container>
@@ -56,3 +56,5 @@ export default function reels(){
         </>
     )
 }
+
+export default Reels
