@@ -13,6 +13,6 @@ export const Footer = styled.div`
 export const IconPannels = styled.div`
   display: flex;
   align-items: center;
-  gap: 3.5rem;
+  gap: 5rem;
   font-size: 1.5rem;
 `;

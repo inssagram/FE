@@ -1,13 +1,22 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTable, faMobileScreen } from "@fortawesome/free-solid-svg-icons";
+import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "../styles/mypage";
+import * as SC from "./styled";
+import Footer from "@/components/Footer";
 
-const MyPage: React.FC = () => {
+const My: React.FC = () => {
   return (
     <>
-      <SC.ProfileContainer>
+      <SC.Header>
+        <FontAwesomeIcon icon={faGear} fontSize={"2rem"} />
+        <SC.HeaderCon>
+          <h2>gummy_jelly</h2>
+          <FontAwesomeIcon icon={faChevronDown} fontSize={"1.5rem"} />
+        </SC.HeaderCon>
+        <FontAwesomeIcon icon={faUserPlus} fontSize={"2rem"} />
+      </SC.Header>
+      <SC.Container>
         <SC.ProfileLeft>
           <SC.MyProfile />
           <SC.UserName>조유리</SC.UserName>
@@ -23,7 +32,7 @@ const MyPage: React.FC = () => {
             </SC.ProfileEdit>
           </SC.MyIdGroup>
         </SC.MyIdContainer>
-      </SC.ProfileContainer>
+      </SC.Container>
       <SC.MyDataContainer>
         <SC.MyDataValue>
           <SC.DataName>게시물</SC.DataName>
@@ -49,8 +58,9 @@ const MyPage: React.FC = () => {
           <SC.Feed key={index}></SC.Feed>
         ))}
       </SC.FeedViewCon>
+      <Footer />
     </>
   );
 };
 
-export default MyPage;
+export default My;
