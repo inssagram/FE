@@ -29,7 +29,7 @@ const Account = styled.span`
   padding-bottom: 3px;
 `;
 
-const Conversation = styled.div`
+const Recent = styled.div`
   display: flex;
   flex-direction: row;
   gap: 5px;
@@ -38,9 +38,9 @@ const Conversation = styled.div`
 
 const RecentConvo = styled.span``;
 
-const LastConvo = styled.span``;
+const RecentTime = styled.span``;
 
-const DirectList = () => {
+const DmAccountsList = () => {
   return (
     <ContentContainer>
       <Profile>
@@ -48,13 +48,13 @@ const DirectList = () => {
       </Profile>
       <Content>
         <Account>daily-manjoo</Account>
-        <Conversation>
+        <Recent>
           <RecentConvo>만쥬 좋아하세요?</RecentConvo>
-          <LastConvo>23분</LastConvo>
-        </Conversation>
+          <RecentTime>23분</RecentTime>
+        </Recent>
       </Content>
     </ContentContainer>
   );
 };
 
-export default DirectList;
+export default DmAccountsList;

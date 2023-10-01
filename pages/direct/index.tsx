@@ -1,7 +1,7 @@
 import React from "react";
 import * as SC from "./styled";
 import DirectHeader from "../../components/atoms/DirectHeader";
-import DirectList from "../../components/list/DirectList";
+import DmAccountsList from "../../components/list/DmAccountsList";
 
 const Direct: React.FC = () => {
   return (
@@ -9,10 +9,10 @@ const Direct: React.FC = () => {
       <DirectHeader />
       <SC.PageTitle>메시지</SC.PageTitle>
       <SC.DirectAccount>
-        <DirectList />
-        <DirectList />
-        <DirectList />
-        <DirectList />
+        <DmAccountsList />
+        <DmAccountsList />
+        <DmAccountsList />
+        <DmAccountsList />
       </SC.DirectAccount>
     </SC.Container>
   );
