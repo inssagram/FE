@@ -20,3 +20,8 @@ export const IconPannels = styled.div`
   gap: 0.8rem;
   font-size: 1.5rem;
 `;
+
+export const Button = styled.button`
+  border-style: none;
+  background-color: transparent;
+`;
