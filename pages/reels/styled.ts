@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 export const Container = styled.section`
     width: 100%;
-    height: 90vh;
-    margin-bottom: 44px;
+    height: 95vh;
     background-color: white;
     color: white;
+    overflow-y: scroll;
 `
 
 export const Article = styled.article`
