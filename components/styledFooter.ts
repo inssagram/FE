@@ -9,6 +9,9 @@ export const Footer = styled.div`
   justify-content: space-evenly;
   padding: 0 16px;
   border-top: 1px solid #e2e2e2;
+  background-color: white;
+  position: absolute;
+  bottom: 0;
 `;
 export const IconPannels = styled.div`
   display: flex;
