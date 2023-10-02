@@ -13,7 +13,9 @@ const Header = styled.div`
   letter-spacing: 0.3px;
   padding: 0 16px;
 `;
-const BackIcon = styled.div``;
+const BackIcon = styled.div`
+  padding-right: 12px;
+`;
 const Account = styled.div``;
 const NewDM = styled.div``;
 
