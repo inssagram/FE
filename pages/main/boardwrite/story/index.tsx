@@ -5,7 +5,7 @@ import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import * as SC from "./styled";
 import Image from "next/image";
 
-const BoardWrite: React.FC = () => {
+const Story: React.FC = () => {
   return (
     <>
       <SC.Header>
@@ -31,4 +31,4 @@ const BoardWrite: React.FC = () => {
   );
 };
 
-export default BoardWrite;
+export default Story;
