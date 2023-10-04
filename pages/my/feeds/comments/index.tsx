@@ -6,7 +6,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import React from "react";
 
-const Contents: React.FC = () => {
+const Comments: React.FC = () => {
   return (
     <SC.Container>
       <SC.Header>
@@ -92,4 +92,4 @@ const Contents: React.FC = () => {
   );
 };
 
-export default Contents;
+export default Comments;

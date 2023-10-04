@@ -6,7 +6,7 @@ import { faChevronLeft, faCheck, faFont } from "@fortawesome/free-solid-svg-icon
 import Footer from "@/components/Footer";
 import React from "react";
 
-const Contents: React.FC = () => {
+const Edit: React.FC = () => {
   return (
     <SC.Container>
       <SC.Header>
@@ -65,4 +65,4 @@ const Contents: React.FC = () => {
   );
 };
 
-export default Contents;
+export default Edit;
