@@ -32,7 +32,6 @@ const Signup: React.FC = () => {
             .then((response) => {
                 const data = response.data
                 const filtered = data.filter((v: any) => v.email === email)
-                console.log(filtered)
                 if(filtered.length === 0){
                     axios.post('http://localhost:5000/email', {email: `${email}`})
                     .then(() => {
