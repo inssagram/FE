@@ -1,8 +1,8 @@
 import React from "react";
-import * as SC from "./styled";
+import * as SC from "@/styled/direct/new/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import DirectSearchBar from "../../../components/input/DirectSearchBar";
+import DirectSearchBar from "@/components/input/DirectSearchBar";
 
 const New: React.FC = () => {
   return (

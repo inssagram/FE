@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import * as SC from "./styled";
+import * as SC from "@/styled/explore/styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import SearchBar from "../../components/input/SearchBar";
-import Footer from "../../components/Footer";
+import SearchBar from "@/components/input/SearchBar";
+import Footer from "@/components/Footer";
 
 const Explore: React.FC = () => {
   return (

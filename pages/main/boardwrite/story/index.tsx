@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/main/boardwrite/story/styled";
 import Image from "next/image";
 
 const BoardWrite: React.FC = () => {

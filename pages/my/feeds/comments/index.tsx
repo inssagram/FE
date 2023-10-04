@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "./styled";
+import * as SC from "@/styled/my/feeds/comments/styled";
 import Image from "next/image";
 import { faHeart, faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
