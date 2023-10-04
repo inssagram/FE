@@ -7,7 +7,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%
+  width: 100%;
   height: 44px;
   font-size: 20px;
   font-weight: 700;
