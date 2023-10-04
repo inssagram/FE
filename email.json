@@ -27,11 +27,20 @@
     {
       "email": "jhyeom95@daum.com",
       "id": 7
+    },
+    {
+      "email": "jhyeom95@info.com",
+      "id": 8
     }
   ],
   "auth": [
     {
       "number": "123456"
+    }
+  ],
+  "nickname" :[
+    {
+      "nickname": "jungho123_."
     }
   ]
 }
