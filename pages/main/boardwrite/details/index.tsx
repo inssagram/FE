@@ -5,7 +5,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import * as SC from "./styled";
 import Image from "next/image";
 
-const BoardWrite: React.FC = () => {
+const Details: React.FC = () => {
   return (
     <>
       <SC.Header>
@@ -52,4 +52,4 @@ const BoardWrite: React.FC = () => {
   );
 };
 
-export default BoardWrite;
+export default Details;
