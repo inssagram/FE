@@ -5,5 +5,18 @@
       "userId": "gummy__jelly",
       "content": "아 곱창전골 먹고 싶다구요옹"
     }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userId": "test",
+      "password": "test"
+    }
+  ],
+  "tokens": [
+    {
+      "userID": 1,
+      "token": "test_token"
+    }
   ]
 }
