@@ -1,5 +1,6 @@
 import { styled } from "styled-components"
 
+
 export const Container = styled.section`
     width: 100%;
     height: 95vh;
@@ -39,28 +40,35 @@ export const Descriptions = styled.p`
     margin-bottom: 10px;
 `
 
-export const InputBox = styled.div`
-    width: 100%;
-    margin-bottom: 20px;
-`
 
-export const Input = styled.input`
+export const JobInput = styled.input`
     background-color: gainsboro;
-    border: 2px solid transparent;
-    border-radius: 10px;
     width: 100%;
+    border: none;
+    border-radius: 10px;
     height: 45px;
     color: black;
     font-size: 20px;
     margin-bottom: 10px;
 `
 
-export const ProcessState = styled.p`
-    color: red;
-    top: 40%;
-    right: 0;
-    transform: translate(0, -50%);
-    font-size: 15px;
+export const InputBox = styled.div`
+        width: 100%;
+        position: relative;
+        margin-bottom: 50px;
+    `
+
+export const JobList = styled.ul`
+    position: absolute;
+    width: 100%;
+    border: 1px solid black;
+`
+
+export const JobName = styled.li`
+    font-size: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid gray;
+    background-color: white;
 `
 
 export const SubmitButton = styled.button`

@@ -6,4 +6,7 @@ module.exports = {
   images: {
     domains: ["upload.wikimedia.org"],
   },
+  env: {
+    COMPANY_LIST_API_KEY: process.env.COMPANY_LIST_API_KEY,
+  },
 };
