@@ -2,7 +2,7 @@ import React from "react";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "../styles/main.css";
-import '../styled/main/spinner.scss'
+import '@/styled/spinner.scss'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (

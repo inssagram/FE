@@ -1,5 +1,5 @@
 import React from "react";
-import * as SC from "@/styled/direct/styled";
+import * as SC from "@/styled/direct";
 import DirectHeader from "@/components/atoms/DirectHeader";
 import DmAccountsList from "@/components/list/DmAccountsList";
 

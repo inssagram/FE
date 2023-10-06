@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand, faArrowsRotate, faXmark } from "@fortawesome/free-solid-svg-icons";
 // import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/styled/main/boardwrite/styled";
+import * as SC from "@/styled/main_boardwrite";
 import Image from "next/image";
 
 const BoardWrite: React.FC = () => {

@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/styled/my/styled";
+import * as SC from "@/styled/my";
 import Footer from "@/components/Footer";
 
 const My: React.FC = () => {

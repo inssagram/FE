@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 // import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/styled/main/boardwrite/details/styled";
+import * as SC from "@/styled/main_boardwrite_details";
 import Image from "next/image";
 
 const Details: React.FC = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import * as SC from "@/styled/direct/new/styled";
+import * as SC from "@/styled/direct_new";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import DirectSearchBar from "@/components/input/DirectSearchBar";
