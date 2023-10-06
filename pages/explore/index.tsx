@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
-import * as SC from "./styled";
+import * as SC from "@/styled/explore";
+import axios from 'axios'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import SearchBar from "../../components/input/SearchBar";
-import Footer from "../../components/Footer";
+import SearchBar from "@/components/input/SearchBar";
+import Footer from "@/components/Footer";
 
 interface Post {
   id: number;

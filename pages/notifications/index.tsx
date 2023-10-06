@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as SC from "./styled";
+import * as SC from "@/styled/notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
