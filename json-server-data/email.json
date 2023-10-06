@@ -1,0 +1,46 @@
+{
+  "email": [
+    {
+      "email": "asdfadsf@gmail.com",
+      "id": 1
+    },
+    {
+      "email": "hjajsj@naver.com",
+      "id": 2
+    },
+    {
+      "email": "asdf@gmail.com",
+      "id": 3
+    },
+    {
+      "email": "jhyeom95@gmail.com",
+      "id": 4
+    },
+    {
+      "email": "jhyeom95@naver.com",
+      "id": 5
+    },
+    {
+      "email": "jhyeom95@nate.com",
+      "id": 6
+    },
+    {
+      "email": "jhyeom95@daum.com",
+      "id": 7
+    },
+    {
+      "email": "jhyeom95@info.com",
+      "id": 8
+    }
+  ],
+  "auth": [
+    {
+      "number": "123456"
+    }
+  ],
+  "nickname" :[
+    {
+      "nickname": "jungho123_."
+    }
+  ]
+}

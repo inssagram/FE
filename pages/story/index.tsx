@@ -7,7 +7,7 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react'
 
 
-const Reels :React.FC = () => {
+const Story :React.FC = () => {
     const [currentRotation, setCurrentRotation] = useState(0);
 
     const handleFlip = (e:any) => {
@@ -167,4 +167,4 @@ const Reels :React.FC = () => {
     )
 }
 
-export default Reels
+export default Story

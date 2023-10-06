@@ -6,7 +6,7 @@ export const NewHeader = styled.div`
   align-items: center;
   height: 44px;
   padding: 0 16px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
 `;
 
 export const HeaderTitle = styled.span`

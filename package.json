@@ -6,8 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "json-server --watch explore.json --port 3001"
   },
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
@@ -24,12 +26,14 @@
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.16.0",
     "sass": "^1.68.0",
     "styled-components": "^6.0.8",
     "typescript": "5.2.2",
     "vercel": "^32.4.1"
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.27"
+    "@types/styled-components": "^5.1.28",
+    "babel-plugin-styled-components": "^2.1.4"
   }
 }
