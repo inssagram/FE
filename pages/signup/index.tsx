@@ -1,4 +1,4 @@
-import * as SC from './styled'
+import * as SC from '../../styled/signup/styled'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import { useState} from 'react'

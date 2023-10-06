@@ -1,4 +1,4 @@
-import * as SC from './styled'
+import * as SC from '../../../styled/signup/job/styled'
 import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
