@@ -1,21 +1,54 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faHeart } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "../components/styledHeader";
 import { useRef } from "react";
 import axios from "axios";
+import { useState } from "react";
+import styled from "styled-components";
 
-const Header: React.FC = () => {
+const Container = styled.div`
+  width: 412px;
+  height: 44px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: fixed;
+  background-color: #ffffff;
+  color: #222222;
+  z-index: 10;
+  border-bottom: 1px solid #e2e2e2;
+`;
+const IconPannels = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 1.5rem;
+`;
+
+const Button = styled.button`
+  border-style: none;
+  background-color: transparent;
+`;
+
+interface HeaderProps {
+  setSelectedImage: (src: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const createBoards = () => {
     fileInputRef.current?.click();
   };
-
+  const [selectedImage, setSelectedImage] = useState<string>("");
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 파일 선택하더라도 정해진 이미지 주소만 사용
+    // 파일 선택하더라도 아래 이미지 주소만 사용하려고 테스트 중임다
     const fixedImageSrc = "https://www.animals.or.kr/api/files/images/51386-cb98b35c-a5ac-484c-b365-f73e8263bd05.png";
+    setSelectedImage(fixedImageSrc);
 
+    localStorage.setItem("selectedImage", fixedImageSrc);
     try {
       const response = await axios.post("http://localhost:4000/posts", {
         image: fixedImageSrc,
@@ -29,18 +62,18 @@ const Header: React.FC = () => {
   };
 
   return (
-    <SC.Header>
+    <Container>
       <h1>Instagram</h1>
-      <SC.IconPannels>
-        <SC.Button id="createBoards" onClick={createBoards}>
+      <IconPannels>
+        <Button id="createBoards" onClick={createBoards}>
           <FontAwesomeIcon icon={faSquarePlus} />
-        </SC.Button>
+        </Button>
         <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: "none" }} accept="image/*" />
-        <SC.Button>
+        <Button>
           <FontAwesomeIcon icon={faHeart} />
-        </SC.Button>
-      </SC.IconPannels>
-    </SC.Header>
+        </Button>
+      </IconPannels>
+    </Container>
   );
 };
 

@@ -11,6 +11,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Feeds: React.FC = () => {
+  const defaultImageSrc = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg";
+  const [imageSrc, setImageSrc] = useState<string>("");
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 localStorage에서 이미지 URL을 가져옵니다.
+    const storedImageSrc = localStorage.getItem("selectedImage");
+    if (storedImageSrc) {
+      setImageSrc(storedImageSrc);
+    }
+  }, []); // 의존성 배열을 비워 useEffect가 컴포넌트 마운트 시에만 실행되도록 합니다.
   // const [content, setContent] = useState("");
 
   // useEffect(() => {
@@ -51,15 +61,7 @@ const Feeds: React.FC = () => {
         </SC.More>
       </SC.Head>
       <SC.Contents>
-        <SC.ImageContent>
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-            alt="개"
-            layout="responsive"
-            width={10}
-            height={10}
-          />
-        </SC.ImageContent>
+        <SC.ImageContent>{imageSrc && <Image src={imageSrc} alt="개" layout="responsive" width={10} height={10} />}</SC.ImageContent>
       </SC.Contents>
       <SC.Details>
         <SC.Buttons>

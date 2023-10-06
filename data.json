@@ -1,0 +1,89 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "userId": "gummy__jelly",
+      "content": "제 미래의 강아지에요",
+      "imageurl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+    },
+    {
+      "id": 2,
+      "userId": "gummy__jelly",
+      "content": "나만 강아지 없어",
+      "imageurl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png"
+    },
+    {
+      "id": 3,
+      "userId": "gummy__jelly",
+      "content": "얘는 마못이래요",
+      "imageurl": "https://www.naturephoto-cz.com/photos/others/%EC%95%8C%ED%94%84%EC%8A%A4%EB%A7%88%EB%AA%BB-147975.jpg"
+    },
+    {
+      "id": 4,
+      "userId": "gummy__jelly",
+      "content": "산책하는 프레리독",
+      "imageurl": "https://i.ytimg.com/vi/0vSuNRiqEP8/maxresdefault.jpg"
+    },
+    {
+      "id": 5,
+      "userId": "gummy__jelly",
+      "content": "아기하마",
+      "imageurl": "https://img.animalplanet.co.kr/news/2020/01/13/700/sfu2275cc174s39hi89k.jpg"
+    },
+    {
+      "id": 6,
+      "userId": "gummy__jelly",
+      "content": "뭘 보시나요?",
+      "imageurl": "https://t1.daumcdn.net/cfile/tistory/263F9F4B5626340E01"
+    },
+    {
+      "id": 7,
+      "userId": "gummy__jelly",
+      "content": "너구리 구리구리",
+      "imageurl": "https://a-static.besthdwallpaper.com/innocent-baby-racoon-wallpaper-3840x2160-42075_54.jpg"
+    },
+    {
+      "id": 8,
+      "userId": "gummy__jelly",
+      "content": "아기사슴",
+      "imageurl": "https://img.freepik.com/premium-photo/a-close-up-of-a-baby-deer_777078-27194.jpg"
+    },
+    {
+      "id": 9,
+      "userId": "gummy__jelly",
+      "content": "골든 햄스터 또 나왔음",
+      "imageurl": "https://www.chemicalnews.co.kr/news/photo/202107/4159_10727_3352.png"
+    },
+    {
+      "id": 10,
+      "userId": "gummy__jelly",
+      "content": "초상권 침해하지 마세요",
+      "imageurl": "https://storage.enuri.info/pic_upload/knowbox2/202301/01173760320230103eeeb0b1a-d5b2-442c-8907-220065017346.jpg"
+    },
+    {
+      "id": 11,
+      "userId": "gummy__jelly",
+      "content": "안녕하냐고?",
+      "imageurl": "https://contents-cdn.viewus.co.kr/image/2023/08/CP-2023-0056/image-7adf97c8-ef11-4def-81e8-fe2913667983.jpeg"
+    },
+    {
+      "id": 12,
+      "userId": "gummy__jelly",
+      "content": "내 스타일 페키니즈",
+      "imageurl": "https://images.mypetlife.co.kr/content/uploads/2022/07/12130844/6489091733_cb7b711ba3_z.jpg"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userId": "test",
+      "password": "test"
+    }
+  ],
+  "tokens": [
+    {
+      "userID": 1,
+      "token": "test_token"
+    }
+  ]
+}
