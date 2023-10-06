@@ -4996,7 +4996,7 @@ v8-compile-cache-lib@^3.0.1:
   resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.1.tgz#6336e8d71965cb3d35a1bbb7868445a7c05264bf"
   integrity sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==
 
-vercel@^32.3.1:
+vercel@^32.4.1:
   version "32.4.1"
   resolved "https://registry.yarnpkg.com/vercel/-/vercel-32.4.1.tgz#6a393d68de314b5ef06856b276705a2fc48312ae"
   integrity sha512-cULmLvceDaluXz2usPtPYhb9y/jwjWolAjBBbG1DLGQmxVlnHVHTOJrYPaq2ioujQpU0yi92+RQPdzjzOY6aEg==
