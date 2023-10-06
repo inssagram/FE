@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as SC from "./styled";
+import * as SC from "@/styled/notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -21,6 +21,7 @@ const Notifications: React.FC = () => {
               alt="프로필"
               width={44}
               height={44}
+              style={{ borderRadius: "100%" }}
             />
           </SC.Account>
           <SC.Content>
@@ -42,6 +43,7 @@ const Notifications: React.FC = () => {
               alt="프로필"
               width={44}
               height={44}
+              style={{ borderRadius: "100%" }}
             />
           </SC.Account>
           <SC.Content>

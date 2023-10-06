@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "./styled";
+import * as SC from "@/styled/my_feeds_comments";
 import Image from "next/image";
 import { faHeart, faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import React from "react";
 
-const Contents: React.FC = () => {
+const Comments: React.FC = () => {
   return (
     <SC.Container>
       <SC.Header>
@@ -92,4 +92,4 @@ const Contents: React.FC = () => {
   );
 };
 
-export default Contents;
+export default Comments;

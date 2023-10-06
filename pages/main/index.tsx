@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "./styled";
+import * as SC from "@/styled/main";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
@@ -35,7 +35,7 @@ const Main:React.FC = () => {
                         />
                             <SC.Spinner>
                             <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
                                 </svg>
                             </SC.Spinner>
                         <SC.StoryID>정호다</SC.StoryID>
@@ -50,7 +50,7 @@ const Main:React.FC = () => {
                         />
                             <SC.Spinner>
                             <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
                                 </svg>
                             </SC.Spinner>
                         <SC.StoryID>정호다</SC.StoryID>
@@ -65,7 +65,7 @@ const Main:React.FC = () => {
                         />
                             <SC.Spinner>
                             <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
                                 </svg>
                             </SC.Spinner>
                         <SC.StoryID>정호다</SC.StoryID>
@@ -80,7 +80,7 @@ const Main:React.FC = () => {
                         />
                             <SC.Spinner>
                             <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
                                 </svg>
                             </SC.Spinner>
                         <SC.StoryID>정호다</SC.StoryID>
@@ -95,7 +95,7 @@ const Main:React.FC = () => {
                         />
                             <SC.Spinner>
                             <svg className={`${isAnimating ? 'spinner' : ''}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" stroke-width="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
+                                    <circle className={`${isAnimating ? 'path' : ''}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
                                 </svg>
                             </SC.Spinner>
                         <SC.StoryID>정호다</SC.StoryID>

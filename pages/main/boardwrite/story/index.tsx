@@ -2,10 +2,10 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/main_boardwirte_story";
 import Image from "next/image";
 
-const BoardWrite: React.FC = () => {
+const Story: React.FC = () => {
   return (
     <>
       <SC.Header>
@@ -31,4 +31,4 @@ const BoardWrite: React.FC = () => {
   );
 };
 
-export default BoardWrite;
+export default Story;

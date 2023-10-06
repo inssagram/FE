@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SC from './styled'
+import * as SC from '@/styled/story'
 import Image from 'next/image'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons/faPaperPlane'
@@ -7,7 +7,7 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react'
 
 
-const Reels :React.FC = () => {
+const Story :React.FC = () => {
     const [currentRotation, setCurrentRotation] = useState(0);
 
     const handleFlip = (e:any) => {
@@ -167,4 +167,4 @@ const Reels :React.FC = () => {
     )
 }
 
-export default Reels
+export default Story

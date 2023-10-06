@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "./styled";
+import * as SC from "@/styled/my_feeds";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Contents: React.FC = () => {
+const Feeds: React.FC = () => {
   // const [content, setContent] = useState("");
 
   // useEffect(() => {
@@ -93,4 +93,4 @@ const Contents: React.FC = () => {
   );
 };
 
-export default Contents;
+export default Feeds;

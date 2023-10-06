@@ -1,5 +1,5 @@
 import React from "react";
-import * as SC from "./styled";
+import * as SC from "@/styled/search";
 import SearchBar from "../../components/input/SearchBar";
 import ResultsList from "../../components/list/ResultsList";
 import Footer from "../../components/Footer";
