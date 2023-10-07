@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,6 +18,7 @@ const SearchArea = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 8px;
   border: 1px solid #c0c0c0;
   border-radius: 7px;
@@ -51,19 +54,55 @@ const CancleButton = styled.div`
   cursor: pointer;
 `;
 
-const SearchBar: React.FC = () => {
+const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
+  onSearch,
+}) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setSearchValue(event.target.value);
+    onSearch(newValue);
+  };
+
+  const clearInput = () => {
+    setSearchValue("");
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleCancleClick = () => {
+    router.back();
+  };
+
   return (
     <SearchBarContainer>
       <SearchArea>
         <SearchIcon>
           <FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"15px"} />
         </SearchIcon>
-        <Input type="text" placeholder="검색" />
-        <Xmark>
-          <FontAwesomeIcon icon={faCircleXmark} fontSize={"15px"} />
-        </Xmark>
+        <Link href="/explore/search" style={{ width: "100%" }}>
+          <Input
+            type="text"
+            placeholder="검색"
+            value={searchValue}
+            onChange={handleInputChange}
+            onFocus={handleFocus}
+          />
+        </Link>
+        {searchValue && (
+          <Xmark onClick={clearInput}>
+            <FontAwesomeIcon icon={faCircleXmark} fontSize={"15px"} />
+          </Xmark>
+        )}
       </SearchArea>
-      <CancleButton>취소</CancleButton>
+      {isFocused && (
+        <CancleButton onClick={handleCancleClick}>취소</CancleButton>
+      )}
     </SearchBarContainer>
   );
 };
