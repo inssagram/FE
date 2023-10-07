@@ -16,14 +16,13 @@ export interface Post {
 
 const My: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [isClient, setIsClient] = useState(false); // 클라이언트 사이드 체크용 state 추가
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // 컴포넌트가 마운트되면 클라이언트 사이드라고 판단
+    setIsClient(true);
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/posts");
-        console.log(response.data);
         setPosts(response.data);
       } catch (error) {
         console.error("데이터를 불러오는 데 실패했습니다.", error);
@@ -33,8 +32,7 @@ const My: React.FC = () => {
   }, []);
 
   if (!isClient) {
-    // 클라이언트 사이드가 아니면 null 또는 로딩 컴포넌트 반환
-    return null; // or <LoadingComponent />;
+    return null;
   }
   return (
     <>

@@ -20,7 +20,6 @@ const Feeds: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      // id가 있을 때만 API 호출
       const fetchData = async () => {
         try {
           const response = await axios.get(`http://localhost:4000/posts/${id}`);
@@ -32,26 +31,15 @@ const Feeds: React.FC = () => {
       fetchData();
     }
   }, [id]);
-  // 의존성 배열을 비워 useEffect가 컴포넌트 마운트 시에만 실행되도록 합니다.
-  // const [content, setContent] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4000/posts/1");
-  //       setContent(response.data.content);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  const handlePrevClick = () => {
+    router.push("/my");
+  };
 
   return (
     <SC.Container>
       <SC.Header>
-        <SC.Prev>
+        <SC.Prev onClick={handlePrevClick}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </SC.Prev>
         <SC.H1>게시물</SC.H1>
@@ -91,7 +79,7 @@ const Feeds: React.FC = () => {
         <SC.Likes>foreignerSyoon님 외 100명이 좋아합니다</SC.Likes>
         <SC.BoardContents>
           <SC.MyId>gummy__jelly</SC.MyId>
-          <SC.Content>곱창 먹고 싶다고요옹</SC.Content>
+          <SC.Content>{post?.content}</SC.Content>
         </SC.BoardContents>
         <SC.MoreComments>더 보기</SC.MoreComments>
         <SC.AllComment>댓글 4개 모두 보기</SC.AllComment>

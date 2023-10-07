@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faMagnifyingGlass, faFilm, faPaperPlane, faUser } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
@@ -22,15 +23,26 @@ const IconPannels = styled.div`
   gap: 5rem;
   font-size: 1.5rem;
 `;
+
 const Footer: React.FC = () => {
   return (
     <Container>
       <IconPannels>
-        <FontAwesomeIcon icon={faHouse} />
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-        <FontAwesomeIcon icon={faFilm} />
-        <FontAwesomeIcon icon={faPaperPlane} />
-        <FontAwesomeIcon icon={faUser} />
+        <Link href="/">
+          <FontAwesomeIcon icon={faHouse} />
+        </Link>
+        <Link href="/explore">
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Link>
+        <Link href="/">
+          <FontAwesomeIcon icon={faFilm} />
+        </Link>
+        <Link href="/direct">
+          <FontAwesomeIcon icon={faPaperPlane} />
+        </Link>
+        <Link href="/my">
+          <FontAwesomeIcon icon={faUser} />
+        </Link>
       </IconPannels>
     </Container>
   );
