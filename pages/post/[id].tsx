@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import PostContent from "../../components/atoms/post/PostContent";
 import Footer from "../../components/Footer";
 
@@ -35,7 +35,7 @@ const Post: React.FC = () => {
     <>
       <SC.Header>
         <SC.BackIcon>
-          <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
+          <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
         </SC.BackIcon>
         <SC.Title>탐색 탭</SC.Title>
       </SC.Header>

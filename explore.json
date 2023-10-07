@@ -63,5 +63,44 @@
       "content": "어제도 먹었는데 또 먹고싶어",
       "imageUrl": "/images/maratang.jpg"
     }
+  ],
+
+  "accounts": [
+    {
+      "id": 1,
+      "userId": "americano_sam",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    },
+    {
+      "id": 2,
+      "userId": "king_jungho",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    },
+    {
+      "id": 3,
+      "userId": "godchaani",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    },
+    {
+      "id": 4,
+      "userId": "jinnny",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    },
+    {
+      "id": 5,
+      "userId": "jjangguchingu_yuri",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    },
+    {
+      "id": 6,
+      "userId": "Shiba_S2",
+      "desc": "시바견을 키우는 집사입니다 🐶",
+      "profileUrl": "/images/profile.jpg"
+    }
   ]
 }
