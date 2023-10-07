@@ -85,7 +85,7 @@ export const Contents = styled.div`
 
 export const ImageContent = styled.div`
   width: 100%;
-  height: 100%;
+  height: 412px;
   position: relative;
 `;
 

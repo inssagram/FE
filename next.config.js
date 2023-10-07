@@ -4,7 +4,7 @@ module.exports = {
     styledComponents: true,
   },
   images: {
-    domains: ["upload.wikimedia.org", "www.animals.or.kr"],
+    domains: ["upload.wikimedia.org", "www.animals.or.kr", "www.chemicalnews.co.kr"],
   },
   env: {
     COMPANY_LIST_API_KEY: process.env.COMPANY_LIST_API_KEY,

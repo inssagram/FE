@@ -1,11 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/my";
 import Footer from "@/components/Footer";
+import axios from "axios";
+import Link from "next/link";
+
+export interface Post {
+  id: number;
+  userId: string;
+  content: string;
+  imageUrl: string;
+}
 
 const My: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isClient, setIsClient] = useState(false); // 클라이언트 사이드 체크용 state 추가
+
+  useEffect(() => {
+    setIsClient(true); // 컴포넌트가 마운트되면 클라이언트 사이드라고 판단
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/posts");
+        console.log(response.data);
+        setPosts(response.data);
+      } catch (error) {
+        console.error("데이터를 불러오는 데 실패했습니다.", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (!isClient) {
+    // 클라이언트 사이드가 아니면 null 또는 로딩 컴포넌트 반환
+    return null; // or <LoadingComponent />;
+  }
   return (
     <>
       <SC.Header>
@@ -54,8 +84,10 @@ const My: React.FC = () => {
         <FontAwesomeIcon icon={faUser} />
       </SC.IconContainer>
       <SC.FeedViewCon>
-        {Array.from({ length: 12 }, (_, index) => (
-          <SC.Feed key={index}></SC.Feed>
+        {posts.map((post) => (
+          <Link href={`/my/feeds/${post.id}`} passHref key={post.id}>
+            <SC.Feed style={{ backgroundImage: `url(${post.imageUrl})` }}></SC.Feed>
+          </Link>
         ))}
       </SC.FeedViewCon>
       <Footer />

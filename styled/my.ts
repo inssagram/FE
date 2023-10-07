@@ -49,8 +49,8 @@ export const MyProfile = styled.div`
 
 export const ProfileLeft = styled.div`
   display: flex;
-  flex-direction: column; // 세로로 아이템을 배열
-  align-items: center; // 가운데 정렬
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const MyIdContainer = styled.section`
@@ -150,5 +150,7 @@ export const FeedViewCon = styled.div`
 export const Feed = styled.div`
   width: 136px;
   height: 136px;
-  background-color: yellow;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
