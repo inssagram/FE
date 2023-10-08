@@ -19,6 +19,6 @@ jobs:
         
       - name: Set Step
         run:
-         yarn install
+         yarn add
          yarn test
          yarn build
