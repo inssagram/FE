@@ -53,7 +53,9 @@ const My: React.FC = () => {
           <SC.UserId>gummy_bear</SC.UserId>
           <SC.MyIdGroup>
             <SC.ProfileEdit>
-              <SC.ProfileBox>프로필 편집</SC.ProfileBox>
+              <Link href="my/profile" passHref>
+                <SC.ProfileBox>프로필 편집</SC.ProfileBox>
+              </Link>
             </SC.ProfileEdit>
             <SC.ProfileEdit>
               <SC.ProfileBox>보관된 스토리 보기</SC.ProfileBox>

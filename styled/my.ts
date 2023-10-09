@@ -145,6 +145,7 @@ export const FeedViewCon = styled.div`
   gap: 10px;
   justify-content: center;
   align-content: center;
+  position: relative;
 `;
 
 export const Feed = styled.div`

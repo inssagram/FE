@@ -61,9 +61,7 @@ const Feeds: React.FC = () => {
         </SC.More>
       </SC.Head>
       <SC.Contents>
-        <SC.ImageContent>
-          {post?.imageUrl && <Image src={post.imageUrl} alt="게시물 이미지" layout="fill" objectFit="cover" objectPosition="center center" />}
-        </SC.ImageContent>
+        <SC.ImageContent>{post?.imageUrl && <Image src={post.imageUrl} alt="게시물 이미지" fill />}</SC.ImageContent>
       </SC.Contents>
       <SC.Details>
         <SC.Buttons>

@@ -81,6 +81,7 @@ export const More = styled.div`
 
 export const Contents = styled.div`
   position: relative;
+  height: 412px;
 `;
 
 export const ImageContent = styled.div`
