@@ -2,8 +2,7 @@ import * as SC from "@/styled/post";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { BackChevron } from "@/components/atoms/Icons";
 import PostContent from "../../components/atoms/post/PostContent";
 import Footer from "../../components/Footer";
 
@@ -17,6 +16,10 @@ const Post: React.FC = () => {
   const [post, setPost] = useState<Post | null>(null);
   const router = useRouter();
   const { id } = router.query;
+
+  const goBack = () => {
+    router.back();
+  };
 
   useEffect(() => {
     if (id) {
@@ -34,9 +37,7 @@ const Post: React.FC = () => {
   return (
     <>
       <SC.Header>
-        <SC.BackIcon>
-          <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
-        </SC.BackIcon>
+        <BackChevron />
         <SC.Title>탐색 탭</SC.Title>
       </SC.Header>
       {post && <PostContent postId={post.id} />}

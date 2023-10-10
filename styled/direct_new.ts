@@ -24,13 +24,6 @@ export const Next = styled.span`
 
 export const NewContainer = styled.div``;
 
-export const ResultsList = styled.div`
-  padding: 24px;
-`;
-
-export const Results = styled.span`
-  height: 35px;
-  color: #737373;
-  font-size: 14px;
-  font-weight: 400;
+export const ResultsContainer = styled.div`
+  margin-top: 16px;
 `;

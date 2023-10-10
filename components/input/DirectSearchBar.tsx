@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const SearchBarContainer = styled.div`
@@ -23,17 +24,33 @@ const Input = styled.input`
   background-color: #fff;
 `;
 
-const SearchArea = styled.div`
-  height: 100%;
-`;
+const DirectSearchBar: React.FC<{
+  onSearch: (searchValue: string) => void;
+  selectedUserId: string | null;
+  setSelectedUserId: (userId: string | null) => void;
+}> = ({ onSearch, selectedUserId, setSelectedUserId }) => {
+  const [searchValue, setSearchValue] = useState("");
 
-const DirectSearchBar = () => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setSearchValue(event.target.value);
+    onSearch(newValue);
+  };
+
+  useEffect(() => {
+    setSearchValue(selectedUserId || "");
+  }, [selectedUserId]);
+
   return (
     <>
       <SearchBarContainer>
         <Title>받는 사람:</Title>
-        <Input type="text" placeholder="검색..." />
-        <SearchArea></SearchArea>
+        <Input
+          type="text"
+          placeholder="검색..."
+          value={searchValue}
+          onChange={handleInputChange}
+        />
       </SearchBarContainer>
     </>
   );
