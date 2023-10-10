@@ -1,7 +1,7 @@
 import * as SC from '@/styled/signup_job'
 import axios from 'axios';
 import { useState, useEffect } from 'react'
-import { BackButton } from '../backbutton';
+import { BackButton } from '../../../components/backbutton';
 import { useRouter } from 'next/router';
 
 const Job = () => {

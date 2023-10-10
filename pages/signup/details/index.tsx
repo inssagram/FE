@@ -2,7 +2,7 @@ import * as SC from '@/styled/signup_details'
 import React, {useState} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/router';
-import { BackButton } from '../backbutton';
+import { BackButton } from '../../../components/backbutton';
 
 const Details: React.FC = () => {
     const router = useRouter()
