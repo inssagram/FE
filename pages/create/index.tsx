@@ -16,7 +16,7 @@ const BoardWrite: React.FC = () => {
         <SC.Next>다음</SC.Next>
       </SC.Header>
       <SC.Container>
-        <Image src="/images/cat.jpg" alt="cute cat" layout="fill" objectFit="cover" />
+        <Image src="/images/cat.jpg" alt="cute cat" fill />
       </SC.Container>
       <SC.IconContainer>
         <SC.Button>

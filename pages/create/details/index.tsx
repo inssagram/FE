@@ -4,8 +4,32 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 // import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
 import * as SC from "@/styled/main_boardwrite_details";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Details: React.FC = () => {
+  type PostType = {
+    id: number;
+    userId: string;
+    content: string;
+    image: string;
+  };
+  const [post, setPost] = useState<PostType | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/posts");
+        if (response.data && response.data.length > 0) {
+          setPost(response.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(post);
   return (
     <>
       <SC.Header>
@@ -20,9 +44,7 @@ const Details: React.FC = () => {
         <SC.TextCont>
           <SC.Text>떡볶이 먹고 싶다</SC.Text>
         </SC.TextCont>
-        <SC.PicCon>
-          <Image src="/images/cat.jpg" alt="cute cat" width={50} height={50} />
-        </SC.PicCon>
+        <SC.PicCon> {post && <Image src={post.image} alt="fetched image" width={50} height={50} />}</SC.PicCon>
       </SC.Container>
       <SC.FunctionPannels>
         <SC.Button>
