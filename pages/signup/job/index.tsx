@@ -1,13 +1,14 @@
 import * as SC from '@/styled/signup_job'
-import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
 import { useState, useEffect } from 'react'
+import { BackButton } from '../backbutton';
+import { useRouter } from 'next/router';
 
 const Job = () => {
     const API_KEY = process.env.JOBLIST_API_KEY;
     const [inputValue, setInputValue] = useState('')
     const [jobList, setJobList] = useState<string[]>([]);
+    const router = useRouter()
 
     interface JobData {
       job: string;
@@ -48,10 +49,15 @@ const Job = () => {
         setInputValue(job)
       }
 
+      const submitButtonHandler = () => {
+        alert('계정이 생성 되었습니다')
+        router.push('/')
+      }
+
             return(
                 <>
             <SC.Header>
-                <FontAwesomeIcon icon={faChevronLeft}/>
+                <BackButton></BackButton>
                 <span>등록</span>
                 <span></span>
             </SC.Header>
@@ -74,7 +80,7 @@ const Job = () => {
                             ) }
                         </SC.JobList>
                       </SC.InputBox>
-                    <SC.SubmitButton>다음</SC.SubmitButton>
+                    <SC.SubmitButton onClick={submitButtonHandler}>다음</SC.SubmitButton>
                 </SC.Contents>
             </SC.Container>
             </>
