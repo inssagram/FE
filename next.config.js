@@ -7,6 +7,6 @@ module.exports = {
     domains: ["upload.wikimedia.org"],
   },
   env: {
-    COMPANY_LIST_API_KEY: process.env.COMPANY_LIST_API_KEY,
+    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
   },
 };

@@ -1,9 +1,8 @@
 import * as SC from '@/styled/signup_auth'
 import React, { useEffect, useState} from 'react';
-import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
 import {useRouter} from 'next/router';
+import { BackButton } from '../../../components/backbutton';
 
 const Auth: React.FC = () => {
     const router = useRouter()
@@ -47,7 +46,7 @@ const Auth: React.FC = () => {
     return(
         <>
         <SC.Header>
-            <FontAwesomeIcon icon={faChevronLeft}/>
+            <BackButton></BackButton>
             <span>등록</span>
             <span></span>
         </SC.Header>
