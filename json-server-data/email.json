@@ -31,6 +31,10 @@
     {
       "email": "jhyeom95@info.com",
       "id": 8
+    },
+    {
+      "email": "jhyeom96@daum.com",
+      "id": 9
     }
   ],
   "auth": [
@@ -38,7 +42,7 @@
       "number": "123456"
     }
   ],
-  "nickname" :[
+  "nickname": [
     {
       "nickname": "jungho123_."
     }

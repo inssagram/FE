@@ -5,26 +5,32 @@ import axios from 'axios';
 import { useState, useEffect } from 'react'
 
 const Job = () => {
+    const API_KEY = process.env.JOBLIST_API_KEY;
     const [inputValue, setInputValue] = useState('')
     const [jobList, setJobList] = useState<string[]>([]);
+
+    interface JobData {
+      job: string;
+    }
+
+    
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:5000/job');
-            const data = response.data[0];
+            
+            const encodedString = encodeURIComponent(inputValue)
+            const response = await axios.get(`https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`);
+            const data: JobData[] = response.data.dataSearch.content
             const regexPattern = inputValue ? new RegExp(`^${inputValue}`) : null;
-            const jobListArr = [];
-      
-            for (let keys in data) {
-              if(regexPattern !== null){
-                if (regexPattern.test(data[keys])) {
-                  jobListArr.push(data[keys]);
-                }
+            console.log(data)
+            const jobListArr: string[] = [];
+            for(let i in data){
+              if(regexPattern !== null && regexPattern.test(data[i].job)){
+                jobListArr.push(data[i].job)
               }
             }
-      
             setJobList(jobListArr);
-            console.log(inputValue,jobList);
+            // console.log(inputValue,jobList);
           } catch (error) {
             console.log(error);
           }
