@@ -2,6 +2,7 @@ import Image from "next/image";
 import styled from "styled-components";
 
 const ContentContainer = styled.li`
+  width: 100%;
   height: 72px;
   display: flex;
   align-items: center;
@@ -25,7 +26,7 @@ const Content = styled.div`
   font-size: 14px;
 `;
 
-const Account = styled.span`
+const Id = styled.span`
   padding-bottom: 3px;
 `;
 
@@ -47,7 +48,7 @@ const DmAccountsList = () => {
         <Image src="/images/profile.jpg" alt="프로필" width={56} height={56} />
       </Profile>
       <Content>
-        <Account>daily-manjoo</Account>
+        <Id>daily-manjoo</Id>
         <Recent>
           <RecentConvo>만쥬 좋아하세요?</RecentConvo>
           <RecentTime>23분</RecentTime>

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { BackArrow } from "@/components/atoms/Icons";
 
 const Header = styled.div`
   display: flex;
@@ -16,14 +15,11 @@ const Header = styled.div`
   border-bottom: 1px solid #ccc;
 `;
 
-const BackIcon = styled.div`
-  padding-right: 12px;
-`;
-
 const Info = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-left: 12px;
   height: 44px;
   gap: 6px;
 `;
@@ -55,9 +51,7 @@ const DirectInHeader: React.FC = () => {
   return (
     <>
       <Header>
-        <BackIcon>
-          <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
-        </BackIcon>
+        <BackArrow />
         <Info>
           <Profile>
             <Image

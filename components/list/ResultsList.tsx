@@ -50,10 +50,10 @@ const ResultsList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
     if (searchTerm) {
       setIsLoading(false);
       axios
-        .get(`http://localhost:3001/accounts`)
+        .get<Item[]>(`http://localhost:3001/accounts`)
         .then((response) => response.data)
         .then((data) => {
-          const filteredResults = data.filter((item = Item) =>
+          const filteredResults = data.filter((item) =>
             item.userId.startsWith(searchTerm)
           );
           setResults(filteredResults);

@@ -1,5 +1,6 @@
 import * as SC from "./styled";
 import Image from "next/image";
+import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,6 +21,7 @@ interface Post {
 
 const PostContent: React.FC<{ postId: number }> = ({ postId }) => {
   const [post, setPost] = useState<Post | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -35,6 +37,10 @@ const PostContent: React.FC<{ postId: number }> = ({ postId }) => {
 
     fetchPostData();
   }, [postId]);
+
+  const handleEtcClick = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   if (!post) {
     return (
@@ -61,9 +67,18 @@ const PostContent: React.FC<{ postId: number }> = ({ postId }) => {
             <SC.Id>{post.name}</SC.Id>
             <SC.FollowBtn>팔로우</SC.FollowBtn>
           </SC.Account>
-          <SC.EtcIcon>
+          <SC.EtcIcon onClick={handleEtcClick}>
             <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
           </SC.EtcIcon>
+          {isModalOpen && (
+            <SC.ModalBackdrop>
+              <SC.ModalContent>
+                <SC.CopyLink>링크 복사</SC.CopyLink>
+                <SC.CopyLink>이 계정 정보</SC.CopyLink>
+                <SC.CloseBtn onClick={handleEtcClick}>취소</SC.CloseBtn>
+              </SC.ModalContent>
+            </SC.ModalBackdrop>
+          )}
         </SC.ContentHeader>
         <SC.ImageContent>
           <Image src={post.imageUrl} alt="프로필" width={412} height={412} />
@@ -73,7 +88,9 @@ const PostContent: React.FC<{ postId: number }> = ({ postId }) => {
             <SC.Left>
               <FontAwesomeIcon icon={faHeart} fontSize={"24px"} />
               <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
-              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+              <Link href="/direct/in">
+                <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+              </Link>
             </SC.Left>
             <SC.Right>
               <FontAwesomeIcon icon={faBookmark} fontSize={"24px"} />
