@@ -11,9 +11,12 @@ export const BackArrow = () => {
 
   return (
     <>
-      <p onClick={goBack}>
+      <button
+        onClick={goBack}
+        style={{ backgroundColor: "transparent", border: "none" }}
+      >
         <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
-      </p>
+      </button>
     </>
   );
 };
@@ -27,9 +30,12 @@ export const BackChevron = () => {
 
   return (
     <>
-      <p onClick={goBack}>
+      <button
+        onClick={goBack}
+        style={{ backgroundColor: "transparent", border: "none" }}
+      >
         <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
-      </p>
+      </button>
     </>
   );
 };
