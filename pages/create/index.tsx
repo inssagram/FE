@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand, faArrowsRotate, faXmark } from "@fortawesome/free-solid-svg-icons";
 // import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/main_boardwrite";
 import Image from "next/image";
 
 const BoardWrite: React.FC = () => {
@@ -16,7 +16,7 @@ const BoardWrite: React.FC = () => {
         <SC.Next>다음</SC.Next>
       </SC.Header>
       <SC.Container>
-        <Image src="/images/cat.jpg" alt="cute cat" layout="fill" objectFit="cover" />
+        <Image src="/images/cat.jpg" alt="cute cat" fill />
       </SC.Container>
       <SC.IconContainer>
         <SC.Button>

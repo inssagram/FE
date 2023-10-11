@@ -1,0 +1,89 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "userId": "gummy__jelly",
+      "content": "제 미래의 강아지에요",
+      "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png"
+    },
+    {
+      "id": 2,
+      "userId": "gummy__jelly",
+      "content": "나만 강아지 없어",
+      "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png"
+    },
+    {
+      "id": 3,
+      "userId": "gummy__jelly",
+      "content": "이름 지어줘요",
+      "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png"
+    },
+    {
+      "id": 4,
+      "userId": "gummy__jelly",
+      "content": "안.....녕.....",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/ChinchillaKR.jpg/300px-ChinchillaKR.jpg"
+    },
+    {
+      "id": 5,
+      "userId": "gummy__jelly",
+      "content": "귀여워 미쳐",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/ChinchillaKR.jpg/300px-ChinchillaKR.jpg"
+    },
+    {
+      "id": 6,
+      "userId": "gummy__jelly",
+      "content": "내 코딩 속도는 사육 중",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/ChinchillaKR.jpg/300px-ChinchillaKR.jpg"
+    },
+    {
+      "id": 7,
+      "userId": "gummy__jelly",
+      "content": "살찌우고싶어",
+      "imageUrl": "https://www.chemicalnews.co.kr/news/photo/202107/4159_10727_3352.png"
+    },
+    {
+      "id": 8,
+      "userId": "gummy__jelly",
+      "content": "골스터",
+      "imageUrl": "https://www.chemicalnews.co.kr/news/photo/202107/4159_10727_3352.png"
+    },
+    {
+      "id": 9,
+      "userId": "gummy__jelly",
+      "content": "골든 햄스터 또 나왔음",
+      "imageUrl": "https://www.chemicalnews.co.kr/news/photo/202107/4159_10727_3352.png"
+    },
+    {
+      "id": 10,
+      "userId": "gummy__jelly",
+      "content": "대나무가 그리 맛있더나",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Panda_eating.jpg/300px-A_Panda_eating.jpg"
+    },
+    {
+      "id": 11,
+      "userId": "gummy__jelly",
+      "content": "나도 다음생엔 판다로",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Panda_eating.jpg/300px-A_Panda_eating.jpg"
+    },
+    {
+      "id": 12,
+      "userId": "gummy__jelly",
+      "content": "도토리 다 판다",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Panda_eating.jpg/300px-A_Panda_eating.jpg"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userId": "test",
+      "password": "test"
+    }
+  ],
+  "tokens": [
+    {
+      "userID": 1,
+      "token": "test_token"
+    }
+  ]
+}

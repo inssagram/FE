@@ -1,9 +1,8 @@
-import * as SC from './styled'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import * as SC from '@/styled/signup'
 import { useState} from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { BackButton } from '../../components/backbutton';
 
 const Signup: React.FC = () => {
     const router = useRouter()
@@ -21,6 +20,10 @@ const Signup: React.FC = () => {
         }else{
             setEmail((prev) => prev + targetElement.innerHTML)
         }
+    }
+
+    const backButtonHandler = (e:React.MouseEvent<HTMLButtonElement>) => {
+        router.back()
     }
 
     const submitHandler = () => {
@@ -52,7 +55,7 @@ const Signup: React.FC = () => {
     return(
         <>
         <SC.Header>
-            <FontAwesomeIcon icon={faChevronLeft}/>
+            <BackButton></BackButton>
             <span>회원가입</span>
             <span></span>
         </SC.Header>

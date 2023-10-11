@@ -1,6 +1,8 @@
+import Link from "next/link";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { BackArrow } from "@/components/atoms/Icons";
 
 const Header = styled.div`
   display: flex;
@@ -13,22 +15,21 @@ const Header = styled.div`
   letter-spacing: 0.3px;
   padding: 0 16px;
 `;
-const BackIcon = styled.div`
-  padding-right: 12px;
-`;
+
 const Account = styled.div``;
+
 const NewDM = styled.div``;
 
 const DirectHeader: React.FC = () => {
   return (
     <>
       <Header>
-        <BackIcon>
-          <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
-        </BackIcon>
+        <BackArrow />
         <Account>februaar</Account>
         <NewDM>
-          <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
+          <Link href="/direct/new">
+            <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
+          </Link>
         </NewDM>
       </Header>
     </>

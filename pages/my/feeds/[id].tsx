@@ -9,30 +9,37 @@ import { faEllipsis, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
+import { Post } from "@/pages/my/index";
 
 const Feeds: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  // 의존성 배열을 비워 useEffect가 컴포넌트 마운트 시에만 실행되도록 합니다.
-  // const [content, setContent] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4000/posts/1");
-  //       setContent(response.data.content);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  const [post, setPost] = useState<Post | null>(null);
 
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:4000/posts/${id}`);
+          setPost(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
+
+  const handlePrevClick = () => {
+    router.push("/my");
+  };
 
   return (
     <SC.Container>
       <SC.Header>
-        <SC.Prev>
+        <SC.Prev onClick={handlePrevClick}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </SC.Prev>
         <SC.H1>게시물</SC.H1>
@@ -54,15 +61,7 @@ const Feeds: React.FC = () => {
         </SC.More>
       </SC.Head>
       <SC.Contents>
-        <SC.ImageContent>
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-            alt="개"
-            layout="responsive"
-            width={10}
-            height={10}
-          />
-        </SC.ImageContent>
+        <SC.ImageContent>{post?.imageUrl && <Image src={post.imageUrl} alt="게시물 이미지" fill />}</SC.ImageContent>
       </SC.Contents>
       <SC.Details>
         <SC.Buttons>
@@ -78,7 +77,7 @@ const Feeds: React.FC = () => {
         <SC.Likes>foreignerSyoon님 외 100명이 좋아합니다</SC.Likes>
         <SC.BoardContents>
           <SC.MyId>gummy__jelly</SC.MyId>
-          <SC.Content>곱창 먹고 싶다고요옹</SC.Content>
+          <SC.Content>{post?.content}</SC.Content>
         </SC.BoardContents>
         <SC.MoreComments>더 보기</SC.MoreComments>
         <SC.AllComment>댓글 4개 모두 보기</SC.AllComment>

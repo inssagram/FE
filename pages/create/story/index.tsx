@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/main_boardwirte_story";
 import Image from "next/image";
 
 const Story: React.FC = () => {
@@ -20,8 +20,7 @@ const Story: React.FC = () => {
         </SC.IconPannels>
       </SC.Header>
       <SC.body>
-        ddd
-        <Image src="/images/cat.jpg" alt="cute cat" layout="fill" objectFit="cover" />
+        <Image src="/images/cat.jpg" alt="cute cat" fill />
       </SC.body>
       <SC.Footer>
         <FontAwesomeIcon icon={faPlus} style={{ backgroundColor: "white", color: "gray", fontSize: "2rem", borderRadius: "50%" }} />

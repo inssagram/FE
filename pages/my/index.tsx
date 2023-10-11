@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "./styled";
+import * as SC from "@/styled/my";
 import Footer from "@/components/Footer";
+import axios from "axios";
+import Link from "next/link";
+
+export interface Post {
+  id: number;
+  userId: string;
+  content: string;
+  imageUrl: string;
+}
 
 const My: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/posts");
+        setPosts(response.data);
+      } catch (error) {
+        console.error("데이터를 불러오는 데 실패했습니다.", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
   return (
     <>
       <SC.Header>
@@ -25,7 +53,9 @@ const My: React.FC = () => {
           <SC.UserId>gummy_bear</SC.UserId>
           <SC.MyIdGroup>
             <SC.ProfileEdit>
-              <SC.ProfileBox>프로필 편집</SC.ProfileBox>
+              <Link href="my/profile" passHref>
+                <SC.ProfileBox>프로필 편집</SC.ProfileBox>
+              </Link>
             </SC.ProfileEdit>
             <SC.ProfileEdit>
               <SC.ProfileBox>보관된 스토리 보기</SC.ProfileBox>
@@ -54,8 +84,10 @@ const My: React.FC = () => {
         <FontAwesomeIcon icon={faUser} />
       </SC.IconContainer>
       <SC.FeedViewCon>
-        {Array.from({ length: 12 }, (_, index) => (
-          <SC.Feed key={index}></SC.Feed>
+        {posts.map((post) => (
+          <Link href={`/my/feeds/${post.id}`} passHref key={post.id}>
+            <SC.Feed style={{ backgroundImage: `url(${post.imageUrl})` }}></SC.Feed>
+          </Link>
         ))}
       </SC.FeedViewCon>
       <Footer />

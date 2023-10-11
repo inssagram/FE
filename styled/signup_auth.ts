@@ -1,4 +1,4 @@
-import { styled } from "styled-components"
+import styled from "styled-components"
 
 
 export const Container = styled.section`
@@ -41,34 +41,14 @@ export const Descriptions = styled.p`
 `
 
 
-export const JobInput = styled.input`
+export const AuthInput = styled.input`
     background-color: gainsboro;
-    width: 100%;
     border: none;
     border-radius: 10px;
     height: 45px;
     color: black;
     font-size: 20px;
     margin-bottom: 10px;
-`
-
-export const InputBox = styled.div`
-        width: 100%;
-        position: relative;
-        margin-bottom: 50px;
-    `
-
-export const JobList = styled.ul`
-    position: absolute;
-    width: 100%;
-    border: 1px solid black;
-`
-
-export const JobName = styled.li`
-    font-size: 20px;
-    padding: 10px 0;
-    border-bottom: 1px solid gray;
-    background-color: white;
 `
 
 export const SubmitButton = styled.button`
