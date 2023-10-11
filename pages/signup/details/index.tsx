@@ -1,4 +1,4 @@
-import * as SC from '@/styled/signup_details'
+import * as SC from '@/components/styled/signup_details'
 import React, {useState} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/router';

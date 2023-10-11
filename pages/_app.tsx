@@ -2,9 +2,9 @@ import React from "react";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "../styles/main.css";
-import '@/styled/spinner.scss'
+import '../components/styled/spinner.scss'
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <Component {...pageProps} />
@@ -12,4 +12,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default MyApp;
+export default App;

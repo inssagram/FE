@@ -1,4 +1,4 @@
-import * as SC from "@/styled/my_login";
+import * as SC from "@/components/styled/my_login";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useRouter } from "next/router";

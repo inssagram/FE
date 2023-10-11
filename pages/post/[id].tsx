@@ -1,4 +1,4 @@
-import * as SC from "@/styled/post";
+import * as SC from "@/components/styled/post";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";

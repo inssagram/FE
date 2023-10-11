@@ -1,4 +1,4 @@
-import * as SC from '@/styled/signup_job'
+import * as SC from '@/components/styled/signup_job'
 import axios from 'axios';
 import { useState, useEffect } from 'react'
 import { BackButton } from '../../../components/backbutton';

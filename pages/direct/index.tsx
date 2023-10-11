@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import * as SC from "@/styled/direct";
+import * as SC from "@/components/styled/direct";
 import DirectHeader from "@/components/atoms/DirectHeader";
 import DmAccountsList from "@/components/list/DmAccountsList";
 
