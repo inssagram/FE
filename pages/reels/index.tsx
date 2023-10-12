@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SC from '@/styled/reels'
+import * as SC from '@/components/styled/reels'
 import Image from 'next/image'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
@@ -45,7 +45,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            fill
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>
@@ -83,7 +83,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            fill
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>
@@ -121,7 +121,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            fill
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>

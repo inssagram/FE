@@ -1,8 +1,10 @@
-import * as SC from '@/styled/signup_auth'
+import * as SC from '@/components/styled/signup_auth'
 import React, { useEffect, useState} from 'react';
 import axios from 'axios';
 import {useRouter} from 'next/router';
-import { BackButton } from '../../../components/backbutton';
+import { BackArrow } from '@/components/atoms/Icons';
+
+
 
 const Auth: React.FC = () => {
     const router = useRouter()
@@ -46,7 +48,7 @@ const Auth: React.FC = () => {
     return(
         <>
         <SC.Header>
-            <BackButton></BackButton>
+            <BackArrow></BackArrow>
             <span>등록</span>
             <span></span>
         </SC.Header>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import * as SC from "@/styled/direct_new";
+import * as SC from "@/components/styled/direct_new";
 import { BackArrow } from "@/components/atoms/Icons";
 import DirectSearchBar from "@/components/input/DirectSearchBar";
 import DmSearchList from "@/components/list/DmSearchList";
