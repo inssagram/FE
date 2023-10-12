@@ -10,6 +10,7 @@ const Job = () => {
     const [jobList, setJobList] = useState<string[]>([]);
     const router = useRouter()
 
+    
     interface JobData {
       job: string;
     }
