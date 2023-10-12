@@ -1,8 +1,8 @@
 import * as SC from '@/components/styled/signup_job'
 import axios from 'axios';
 import { useState, useEffect } from 'react'
-import { BackButton } from '../../../components/backbutton';
 import { useRouter } from 'next/router';
+import { BackArrow } from '@/components/atoms/Icons';
 
 const Job = () => {
     const API_KEY = process.env.JOBLIST_API_KEY;
@@ -57,7 +57,7 @@ const Job = () => {
             return(
                 <>
             <SC.Header>
-                <BackButton></BackButton>
+                <BackArrow></BackArrow>
                 <span>등록</span>
                 <span></span>
             </SC.Header>
