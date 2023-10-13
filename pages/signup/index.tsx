@@ -2,7 +2,7 @@ import * as SC from '@/components/styled/signup'
 import { useState} from 'react'
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { BackButton } from '../../components/backbutton';
+import { BackArrow } from '@/components/atoms/Icons';
 
 const Signup: React.FC = () => {
     const router = useRouter()
@@ -55,7 +55,7 @@ const Signup: React.FC = () => {
     return(
         <>
         <SC.Header>
-            <BackButton></BackButton>
+            <BackArrow></BackArrow>
             <span>회원가입</span>
             <span></span>
         </SC.Header>
