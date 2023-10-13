@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
           <SC.MyProfile>
             <SC.ProfileImage />
             <SC.IdCont>
-              <SC.MyId>gummy_jelly</SC.MyId>
+              <SC.MyId>gummy_jelly</SC.MyId>F
               <SC.ChangeProfile>프로필 사진 바꾸기</SC.ChangeProfile>
             </SC.IdCont>
           </SC.MyProfile>

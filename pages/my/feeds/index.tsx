@@ -55,13 +55,7 @@ const Feeds: React.FC = () => {
       </SC.Head>
       <SC.Contents>
         <SC.ImageContent>
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-            alt="개"
-            layout="responsive"
-            width={10}
-            height={10}
-          />
+          <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg" alt="개" fill={true} />
         </SC.ImageContent>
       </SC.Contents>
       <SC.Details>
