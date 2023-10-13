@@ -125,7 +125,11 @@ export const DataValue = styled.span`
 `;
 
 export const IconContainer = styled.div`
+  position: sticky;
+  top: 44px;
+  left: 0;
   width: 100%;
+  z-index: 100;
   height: 44px;
   background-color: white;
   display: flex;
@@ -137,7 +141,7 @@ export const IconContainer = styled.div`
 
 export const FeedViewCon = styled.div`
   width: 100%;
-  height: 63vh;
+  min-height: 63vh;
   background-color: white;
   display: grid;
   grid-template-columns: repeat(3, 136px);
@@ -146,6 +150,7 @@ export const FeedViewCon = styled.div`
   justify-content: center;
   align-content: center;
   position: relative;
+  overflow-y: scroll;
 `;
 
 export const Feed = styled.div`
@@ -154,4 +159,9 @@ export const Feed = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+`;
+
+export const Sentinel = styled.div`
+  height: 10px;
+  visibility: hidden;
 `;

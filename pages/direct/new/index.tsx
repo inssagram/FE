@@ -27,17 +27,9 @@ const New: React.FC = () => {
         </Link>
       </SC.NewHeader>
       <SC.NewContainer>
-        <DirectSearchBar
-          onSearch={handleSearch}
-          selectedUserId={selectedUserId}
-        />
+        <DirectSearchBar onSearch={handleSearch} selectedUserId={selectedUserId} />
         <SC.ResultsContainer>
-          <DmSearchList
-            onClick={handleResultClick}
-            searchTerm={searchTerm}
-            selectedUserId={selectedUserId}
-            setSelectedUserId={setSelectedUserId}
-          />
+          <DmSearchList onClick={handleResultClick} searchTerm={searchTerm} selectedUserId={selectedUserId} setSelectedUserId={setSelectedUserId} />
         </SC.ResultsContainer>
       </SC.NewContainer>
     </>

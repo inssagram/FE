@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
@@ -6,6 +6,7 @@ import * as SC from "@/components/styled/my";
 import Footer from "@/components/Footer";
 import axios from "axios";
 import Link from "next/link";
+import { useCallback } from "react";
 
 export interface Post {
   id: number;
@@ -17,9 +18,10 @@ export interface Post {
 const My: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isClient, setIsClient] = useState(false);
+  const sentinelRef = useRef(null);
+  const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
 
   useEffect(() => {
-    setIsClient(true);
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/posts");
@@ -28,8 +30,47 @@ const My: React.FC = () => {
         console.error("데이터를 불러오는 데 실패했습니다.", error);
       }
     };
+
+    setIsClient(true);
     fetchData();
   }, []);
+
+  const repeatData = useCallback(() => {
+    const currentDataLength = posts.length;
+    const newPosts = posts.map((post, index) => {
+      return {
+        ...post,
+        id: post.id + currentDataLength,
+      };
+    });
+    setPosts((prev) => [...prev, ...newPosts]);
+  }, [posts]);
+
+  useEffect(() => {
+    const options = {
+      root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
+      rootMargin: "0px",
+      threshold: 0.1,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        repeatData();
+      }
+    }, options);
+
+    const currentSentinel = sentinelRef.current;
+
+    if (currentSentinel) {
+      observer.observe(currentSentinel);
+    }
+
+    return () => {
+      if (currentSentinel) {
+        observer.unobserve(currentSentinel);
+      }
+    };
+  }, [repeatData]);
 
   if (!isClient) {
     return null;
@@ -89,6 +130,7 @@ const My: React.FC = () => {
             <SC.Feed style={{ backgroundImage: `url(${post.imageUrl})` }}></SC.Feed>
           </Link>
         ))}
+        <SC.Sentinel ref={sentinelRef}></SC.Sentinel>
       </SC.FeedViewCon>
       <Footer />
     </>
