@@ -12,6 +12,7 @@ export const BackArrow = () => {
   return (
     <>
       <button
+        type="button"
         onClick={goBack}
         style={{ backgroundColor: "transparent", border: "none" }}
       >
@@ -31,6 +32,7 @@ export const BackChevron = () => {
   return (
     <>
       <button
+        type="button"
         onClick={goBack}
         style={{ backgroundColor: "transparent", border: "none" }}
       >

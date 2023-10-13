@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
@@ -30,16 +31,40 @@ const Input = styled.input`
   background-color: transparent;
 `;
 
-const ImageIcon = styled.div`
+const ImageIcon = styled.a`
   padding: 10px;
 `;
 
-const DirectMessage = () => {
+const DirectMessage = ({ onMessageSend }) => {
+  const [message, setMessage] = useState("");
+
+  const handleInputChange = (e) => {
+    setMessage(e.target.value);
+  };
+
+  const handleSendClick = () => {
+    if (message.trim() !== "") {
+      onMessageSend(message);
+      setMessage("");
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSendClick();
+    }
+  };
+
   return (
     <>
       <Container>
         <Message>
-          <Input placeholder="메시지 입력..."></Input>
+          <Input
+            placeholder="메시지 입력..."
+            value={message}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+          />
           <ImageIcon>
             <FontAwesomeIcon icon={faImage} fontSize={24} />
           </ImageIcon>

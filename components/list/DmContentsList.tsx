@@ -1,3 +1,6 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 const Content = styled.div`
@@ -34,12 +37,32 @@ const OtherMessage = styled(Message)`
   align-self: flex-start;
 `;
 
-const DmContentsList = () => {
+const DmContentsList: React.FC<{ messages: string[] }> = ({ messages }) => {
+  const [recieved, setReceived] = useState<string[]>([]);
+  const router = useRouter();
+  const { id } = router.query;
+  console.log(recieved);
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://localhost:3001/messages/${id}`)
+        .then((response) => {
+          setReceived(response.data.received);
+        })
+        .catch((error) => {
+          console.error("데이터를 불러오는 중 오류 발생:", error);
+        });
+    }
+  }, [id]);
+
   return (
     <Content>
       <RecentTime>(일) 오후 12:00</RecentTime>
-      <MyMessage>오늘 저녁 마라탕 어때?</MyMessage>
-      <OtherMessage>곱창도 먹자!</OtherMessage>
+      {recieved && <OtherMessage>{recieved}</OtherMessage>}
+      {messages.map((message, index) => (
+        <MyMessage key={index}>{message}</MyMessage>
+      ))}
     </Content>
   );
 };

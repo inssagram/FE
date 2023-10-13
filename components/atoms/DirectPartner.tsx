@@ -45,22 +45,32 @@ const Profile = styled.div`
   font-size: 14px;
 `;
 
-const DirectPartner = () => {
+interface Item {
+  userId: string;
+  name: string;
+  profileUrl: string;
+}
+
+const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
+  selectedItem,
+}) => {
   return (
     <>
       <Partner>
-        <Picture>
-          <Img>
-            <Image
-              src="/images/profile.jpg"
-              alt="프로필"
-              width={56}
-              height={56}
-            />
-          </Img>
-        </Picture>
-        <Name>정경진</Name>
-        <Id>februaar Inssagram</Id>
+        {selectedItem && (
+          <Picture>
+            <Img>
+              <Image
+                src={selectedItem.profileUrl}
+                alt="프로필"
+                width={56}
+                height={56}
+              />
+            </Img>
+          </Picture>
+        )}
+        <Name>{selectedItem?.name}</Name>
+        <Id>{selectedItem?.userId} Inssagram</Id>
         <Profile>
           <Link href="/my">프로필 보기</Link>
         </Profile>

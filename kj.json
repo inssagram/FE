@@ -64,21 +64,28 @@
       "imageUrl": "/images/maratang.jpg"
     }
   ],
-
+  "messages": [
+    {
+      "id": 1,
+      "name": " 김상윤",
+      "received": "곱창먹으러가자요를레히호"
+    },
+    { "id": 2, "name": " 염정호", "received": "곱창싫어유" }
+  ],
   "accounts": [
     {
       "id": 1,
       "name": "김상윤",
       "userId": "americano_sam",
       "desc": "시바견을 키우는 집사입니다 🐶",
-      "profileUrl": "/images/profile.jpg"
+      "profileUrl": "/images/sam.jpg"
     },
     {
       "id": 2,
       "name": "염정호",
       "userId": "king_jungho",
       "desc": "시바견을 키우는 집사입니다 🐶",
-      "profileUrl": "/images/profile.jpg"
+      "profileUrl": "/images/jungho.jpg"
     },
     {
       "id": 3,
@@ -92,14 +99,14 @@
       "name": "정경진",
       "userId": "jinnny",
       "desc": "시바견을 키우는 집사입니다 🐶",
-      "profileUrl": "/images/profile.jpg"
+      "profileUrl": "/images/kyungjin.jpg"
     },
     {
       "id": 5,
       "name": "조유리",
       "userId": "jjangguchingu_yuri",
       "desc": "시바견을 키우는 집사입니다 🐶",
-      "profileUrl": "/images/profile.jpg"
+      "profileUrl": "/images/yuri.jpg"
     },
     {
       "id": 6,

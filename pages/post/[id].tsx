@@ -17,10 +17,6 @@ const Post: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const goBack = () => {
-    router.back();
-  };
-
   useEffect(() => {
     if (id) {
       axios

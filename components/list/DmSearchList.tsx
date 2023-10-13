@@ -2,28 +2,32 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 
 const ResultContainer = styled.div`
   width: 100%;
   height: 60px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
   font-size: 14px;
 `;
 
 const Profile = styled.div`
-  border-radius: 100%;
   display: flex;
   align-items: center;
   overflow: hidden;
   margin-right: 12px;
+  border-radius: 100%;
 `;
 
 const Account = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 288px;
   height: 36px;
   font-size: 14px;
 `;
@@ -34,8 +38,7 @@ const Id = styled.span`
 `;
 
 const ResultsList = styled.div`
-  padding: 24px;
-  height: 35px;
+  padding: 12px 24px;
 `;
 
 const Results = styled.div`
@@ -44,14 +47,36 @@ const Results = styled.div`
   font-weight: 400;
 `;
 
+const SelectBtn = styled.button`
+  border: none;
+  outline: none;
+  margin-left: 12px;
+  color: transparent;
+  background-color: transparent;
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+
+  &:active {
+    color: #0095f6;
+    border: 1px solid transparent;
+  }
+`;
+
 interface Item {
   id: number;
   name: string;
   userId: string;
-  imageUrl: string;
+  profileUrl: string;
 }
 
-const DmSearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
+const DmSearchList: React.FC<{
+  searchTerm: string;
+  onItemSelect: (item: Item) => void;
+}> = ({ searchTerm, onItemSelect }) => {
   const [searchResults, setSearchResults] = useState<Item[]>([]);
 
   useEffect(() => {
@@ -79,12 +104,20 @@ const DmSearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
         searchResults.map((item: Item) => (
           <ResultContainer key={item.id}>
             <Profile>
-              <Image src={item.imageUrl} alt="프로필" width={44} height={44} />
+              <Image
+                src={item.profileUrl}
+                alt="프로필"
+                width={44}
+                height={44}
+              />
             </Profile>
             <Account>
               <Name>{item.name}</Name>
               <Id>{item.userId}</Id>
             </Account>
+            <SelectBtn onClick={() => onItemSelect(item)}>
+              <Icon icon={faCircleCheck} fontSize={24} />
+            </SelectBtn>
           </ResultContainer>
         ))
       ) : (
