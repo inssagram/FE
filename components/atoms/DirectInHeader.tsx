@@ -42,27 +42,39 @@ const Account = styled.span`
 `;
 
 const RecentTime = styled.span`
+  margin-top: 2px;
   font-size: 12px;
   font-weight: 400;
   color: #737373;
 `;
 
-const DirectInHeader: React.FC = () => {
+interface Item {
+  name: string;
+  profileUrl: string;
+}
+
+const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
+  selectedItem,
+}) => {
   return (
     <>
       <Header>
         <BackArrow />
         <Info>
           <Profile>
-            <Image
-              src="/images/profile.jpg"
-              alt="프로필"
-              width={24}
-              height={24}
-            />
+            {selectedItem && (
+              <Image
+                src={selectedItem.profileUrl}
+                alt="프로필"
+                width={24}
+                height={24}
+              />
+            )}
           </Profile>
           <Recent>
-            <Account>정경진</Account>
+            <Account>
+              {selectedItem ? selectedItem.name : "No User Selected"}
+            </Account>
             <RecentTime>1시간 전에 활동</RecentTime>
           </Recent>
         </Info>
