@@ -35,11 +35,15 @@ const ImageIcon = styled.a`
   padding: 10px;
 `;
 
-const DirectMessage = ({ onMessageSend }) => {
-  const [message, setMessage] = useState("");
+interface DirectMessageProps {
+  onMessageSend: (message: string) => void;
+}
 
-  const handleInputChange = (e) => {
-    setMessage(e.target.value);
+const DirectMessage: React.FC<DirectMessageProps> = ({ onMessageSend }) => {
+  const [message, setMessage] = useState<string>("");
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(event.target.value);
   };
 
   const handleSendClick = () => {
@@ -49,8 +53,8 @@ const DirectMessage = ({ onMessageSend }) => {
     }
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
       handleSendClick();
     }
   };

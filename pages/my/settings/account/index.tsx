@@ -4,7 +4,7 @@ import axios from 'axios';
 import {useRouter} from 'next/router';
 import { BackArrow } from '@/components/atoms/Icons';
 
-const Details: React.FC = () => {
+const Account: React.FC = () => {
     const router = useRouter()
     const [nicknameSet, setNicknameSet] = useState(false)
     const [passwordSet, setPasswordSet] = useState(false)
@@ -58,6 +58,10 @@ const Details: React.FC = () => {
                     setNicknameProcessState('')
                     setWrongWayNickname(false)
                     setNicknameSet(true)
+                    axios.post('http://localhost:5000/account')
+                    .then((response) => {
+                        
+                    })
                 }else{
                     setNicknameProcessState('중복된 계정이 있습니다.')
                     setWrongWayNickname(true)
@@ -105,8 +109,8 @@ const Details: React.FC = () => {
 
     const setHandler = () => {
         if(passwordSet && nicknameSet){
-            alert('아이디와 비밀번호가 설정 되었습니다')
-            router.push('/signup/job')
+            alert('닉네임과 비밀번호가 설정 되었습니다')
+            router.push('/my/settings')
         }else{
             alert('계정 정보가 잘못입력 되었습니다')
         }
@@ -121,9 +125,9 @@ const Details: React.FC = () => {
         </SC.Header>
         <SC.Container>
             <SC.Contents>
-                <SC.Title>추가정보 입력</SC.Title>
+                <SC.Title>닉네임 / 비밀번호 변경</SC.Title>
                 <SC.Descriptions>
-                    친구들이 회원님을 찾을 수 있도록 개인정보를 추가해주세요
+                    닉네임과 비밀번호를 변경해주세요
                 </SC.Descriptions>
                 <SC.InputBox>
                     <SC.Input
@@ -158,4 +162,4 @@ const Details: React.FC = () => {
     )
 }
 
-export default Details
+export default Account

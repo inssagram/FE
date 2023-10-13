@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import * as SC from "@/styled/direct_new";
+import * as SC from "@/components/styled/direct_new";
 import { BackArrow } from "@/components/atoms/Icons";
 import DirectSearchBar from "@/components/input/DirectSearchBar";
 import DmSearchList from "@/components/list/DmSearchList";
@@ -17,7 +17,6 @@ const New: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
-  console.log(selectedItem);
 
   const router = useRouter();
 

@@ -41,7 +41,6 @@ const DmContentsList: React.FC<{ messages: string[] }> = ({ messages }) => {
   const [recieved, setReceived] = useState<string[]>([]);
   const router = useRouter();
   const { id } = router.query;
-  console.log(recieved);
 
   useEffect(() => {
     if (id) {

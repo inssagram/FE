@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "@/styled/my_feeds_edit";
+import * as SC from "@/components/styled/my_feeds_edit";
 import Image from "next/image";
 import { faFaceSmile, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faChevronLeft, faCheck, faFont } from "@fortawesome/free-solid-svg-icons";

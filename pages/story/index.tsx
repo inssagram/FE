@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "@/styled/story";
+import * as SC from "@/components/styled/story";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
@@ -46,8 +46,7 @@ const Story: React.FC = () => {
             <Image
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Cara_de_quem_caiu_do_caminh%C3%A3o..._%28cropped%29.jpg/220px-Cara_de_quem_caiu_do_caminh%C3%A3o..._%28cropped%29.jpg"
               alt="개"
-              layout="fill"
-              objectFit="cover" // 이미지를 꽉 채우도록 설정
+              fill={true}
             />
           </SC.Contents>
           <SC.Comment>
@@ -80,8 +79,7 @@ const Story: React.FC = () => {
             <Image
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
               alt="개"
-              layout="fill"
-              objectFit="cover" // 이미지를 꽉 채우도록 설정
+              fill={true}
             />
           </SC.Contents>
           <SC.Comment>
@@ -114,8 +112,7 @@ const Story: React.FC = () => {
             <Image
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/New_born_pups.JPG/220px-New_born_pups.JPG"
               alt="개"
-              layout="fill"
-              objectFit="cover" // 이미지를 꽉 채우도록 설정
+              fill={true}
             />
           </SC.Contents>
           <SC.Comment>
@@ -148,8 +145,7 @@ const Story: React.FC = () => {
             <Image
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Pupplies_loving.jpg/220px-Pupplies_loving.jpg"
               alt="개"
-              layout="fill"
-              objectFit="cover" // 이미지를 꽉 채우도록 설정
+              fill={true}
             />
           </SC.Contents>
           <SC.Comment>

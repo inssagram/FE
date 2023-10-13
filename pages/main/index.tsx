@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "@/styled/main";
+import * as SC from "@/components/styled/main";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
@@ -120,9 +120,7 @@ const Main: React.FC = () => {
               <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                 alt="개"
-                layout="responsive"
-                width={10}
-                height={10}
+                fill={true}
               />
             </SC.ImageContent>
           </SC.Contents>

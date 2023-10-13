@@ -58,14 +58,11 @@ const DirectSearchBar: React.FC<{
   selectedItem: string | null;
 }> = ({ onSearch, selectedItem }) => {
   const [searchValue, setSearchValue] = useState("");
-  console.log(searchValue);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  console.log(selectedItems);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
     setSearchValue(event.target.value);
-    onSearch(newValue);
+    onSearch(event.target.value);
   };
 
   useEffect(() => {
