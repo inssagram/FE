@@ -53,9 +53,7 @@ const ResultsList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
         .get<Item[]>(`http://localhost:3001/accounts`)
         .then((response) => response.data)
         .then((data) => {
-          const filteredResults = data.filter((item) =>
-            item.userId.startsWith(searchTerm)
-          );
+          const filteredResults = data.filter((item) => item.userId.startsWith(searchTerm));
           setResults(filteredResults);
           setIsLoading(false);
         })
@@ -78,12 +76,7 @@ const ResultsList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
         <Link key={result.id} href="/my">
           <Account>
             <Profile>
-              <Image
-                src={result.profileUrl}
-                alt="프로필"
-                width={44}
-                height={44}
-              />
+              <Image src={result.profileUrl} alt="프로필" width={44} height={44} />
             </Profile>
             <Info>
               <Name>{result.userId}</Name>
