@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/styled/my";
+import * as SC from "@/components/styled/my";
 import Footer from "@/components/Footer";
 import axios from "axios";
 import Link from "next/link";

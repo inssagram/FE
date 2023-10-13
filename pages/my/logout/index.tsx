@@ -1,4 +1,4 @@
-import * as SC from "@/styled/my_logout";
+import * as SC from "@/components/styled/my_logout";
 import Image from "next/image";
 import React from "react";
 

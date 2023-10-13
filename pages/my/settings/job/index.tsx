@@ -64,9 +64,9 @@ const Job = () => {
             </SC.Header>
             <SC.Container>
                 <SC.Contents>
-                    <SC.Title>직업 입력</SC.Title>
+                    <SC.Title>변경할 직업 입력</SC.Title>
                     <SC.Descriptions>
-                        본인의 직업을 입력해보세요.
+                        변경할 직업을 입력해보세요
                     </SC.Descriptions>
                     <SC.InputBox>
                         <SC.JobInput 

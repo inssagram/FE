@@ -1,5 +1,5 @@
 import React from "react";
-import * as SC from "@/styled/my_profile";
+import * as SC from "@/components/styled/my_profile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";

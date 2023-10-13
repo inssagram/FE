@@ -1,5 +1,5 @@
 import Image from "next/image";
-import * as SC from "@/styled/notifications";
+import * as SC from "@/components/styled/notifications";
 import { BackChevron } from "@/components/atoms/Icons";
 
 const Notifications: React.FC = () => {

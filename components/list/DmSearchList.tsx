@@ -49,6 +49,7 @@ interface Item {
   name: string;
   userId: string;
   imageUrl: string;
+  profileUrl: string;
 }
 
 const DmSearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
@@ -73,13 +74,15 @@ const DmSearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
     }
   }, [searchTerm]);
 
+
+  console.log(searchResults)
   return (
     <>
       {searchResults.length > 0 ? (
         searchResults.map((item: Item) => (
           <ResultContainer key={item.id}>
             <Profile>
-              <Image src={item.imageUrl} alt="프로필" width={44} height={44} />
+              <Image src={item.profileUrl} alt="프로필" width={44} height={44} />
             </Profile>
             <Account>
               <Name>{item.name}</Name>

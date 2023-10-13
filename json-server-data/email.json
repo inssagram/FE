@@ -39,6 +39,10 @@
     {
       "email": "jhjhj@gmail.com",
       "id": 10
+    },
+    {
+      "email": "asdfbv@naver.com",
+      "id": 11
     }
   ],
   "auth": [
@@ -46,9 +50,10 @@
       "number": "123456"
     }
   ],
-  "nickname": [
+  "account": [
     {
-      "nickname": "jungho123_."
+      "nickname": "jungho123_.",
+      "password": "Abcdefg123!"
     }
   ]
 }
