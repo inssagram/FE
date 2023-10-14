@@ -51,8 +51,15 @@ const Job = () => {
       }
 
       const submitButtonHandler = () => {
-        alert('계정이 생성 되었습니다')
-        router.push('/')
+        let id = sessionStorage.getItem('accountId')
+            axios.patch(`http://localhost:5000/account/${id}`,{
+              'job': inputValue
+            }).then(() => {
+              alert('직업이 변경 되었습니다.')
+              router.push('/')
+            }).catch((error) => {
+              console.log(error)
+            })
       }
 
             return(
