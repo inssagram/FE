@@ -24,7 +24,6 @@ const Job = () => {
             const response = await axios.get(`https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`);
             const data: JobData[] = response.data.dataSearch.content
             const regexPattern = inputValue ? new RegExp(`^${inputValue}`) : null;
-            console.log(data)
             const jobListArr: string[] = [];
             for(let i in data){
               if(regexPattern !== null && regexPattern.test(data[i].job)){
@@ -51,8 +50,15 @@ const Job = () => {
       }
 
       const submitButtonHandler = () => {
-        alert('계정이 생성 되었습니다')
-        router.push('/')
+        let id = sessionStorage.getItem('accountId')
+        axios.patch(`http://localhost:5000/account/${id}`,{
+          'job': inputValue
+        }).then(() => {
+          alert('직업이 설정 되었습니다')
+          router.push('/')
+        }).catch((error) => {
+          console.log(error)
+        })
       }
 
             return(

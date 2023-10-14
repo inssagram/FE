@@ -109,8 +109,16 @@ const Account: React.FC = () => {
 
     const setHandler = () => {
         if(passwordSet && nicknameSet){
-            alert('닉네임과 비밀번호가 설정 되었습니다')
-            router.push('/my/settings')
+            let id = sessionStorage.getItem('accountId')
+            axios.patch(`http://localhost:5000/account/${id}`,{
+                'nickname': nickname,
+                'password': password
+            }).then(() => {
+                alert('닉네임과 비밀번호가 설정 되었습니다')
+                router.push('/my/settings')
+            }).catch((error) => {
+                console.log(error)
+            })
         }else{
             alert('계정 정보가 잘못입력 되었습니다')
         }

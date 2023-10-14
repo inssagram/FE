@@ -1,7 +1,29 @@
 {
   "account": [
+    {},
     {
-      "account": ""
+      "id": 1,
+      "nickname": "asdfasd",
+      "password": "Abcdefg123!"
+    },
+    {
+      "nickname": "asdf",
+      "password": "Abcdefg123!",
+      "id": 2
+    },
+    {
+      "job": "경영컨설턴트",
+      "id": 3
+    },
+    {
+      "job": "교육학연구원",
+      "id": 4
+    },
+    {
+      "nickname": "ajksdlfl",
+      "password": "Abcdefg111!",
+      "id": 5,
+      "job": "경비원"
     }
   ]
 }

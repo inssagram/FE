@@ -105,8 +105,17 @@ const Details: React.FC = () => {
 
     const setHandler = () => {
         if(passwordSet && nicknameSet){
-            alert('아이디와 비밀번호가 설정 되었습니다')
-            router.push('/signup/job')
+            axios.post('http://localhost:5000/account',{
+                'nickname': nickname,
+                'password': password
+            })
+            .then((response) => {
+                alert('아이디와 비밀번호가 설정 되었습니다')
+                sessionStorage.setItem('accountId', response.data.id)
+                router.push('/signup/job')
+            }).catch((error) => {
+                console.log(error)
+            })
         }else{
             alert('계정 정보가 잘못입력 되었습니다')
         }

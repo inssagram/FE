@@ -43,6 +43,11 @@
     {
       "email": "asdfbv@naver.com",
       "id": 11
+    },
+    {
+      "nickname": "sdjlk",
+      "password": "Abcdefg123!",
+      "id": 12
     }
   ],
   "auth": [
