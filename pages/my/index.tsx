@@ -83,7 +83,9 @@ const My: React.FC = () => {
           <h2>gummy_jelly</h2>
           <FontAwesomeIcon icon={faChevronDown} fontSize={"1.5rem"} />
         </SC.HeaderCon>
-        <FontAwesomeIcon icon={faUserPlus} fontSize={"2rem"} />
+        <Link href="my/recommend" passHref>
+          <FontAwesomeIcon icon={faUserPlus} fontSize={"2rem"} />
+        </Link>
       </SC.Header>
       <SC.Container>
         <SC.ProfileLeft>
@@ -94,7 +96,7 @@ const My: React.FC = () => {
           <SC.UserId>gummy_bear</SC.UserId>
           <SC.MyIdGroup>
             <SC.ProfileEdit>
-              <Link href="my/profile" passHref>
+              <Link href="my/settings/profile" passHref>
                 <SC.ProfileBox>프로필 편집</SC.ProfileBox>
               </Link>
             </SC.ProfileEdit>
