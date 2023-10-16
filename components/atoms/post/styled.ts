@@ -1,20 +1,9 @@
 import styled from "styled-components";
 
 export const Loading = styled.div`
-  align-items: stretch;
-  border: 0;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  font: inherit;
-  font-size: 100%;
-  height: 48px;
-  margin: 0;
-  margin-top: 40px;
-  padding: 0;
-  position: relative;
-  vertical-align: baseline;
+  position: absolute;
+  top: 25%;
+  left: 50%;
 `;
 
 export const ContentArea = styled.section``;
@@ -62,6 +51,39 @@ export const FollowBtn = styled.span`
 export const EtcIcon = styled.div`
   height: 40px;
   padding: 8px 16px 8px 8px;
+`;
+
+export const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 30%;
+  left: 10%;
+  background-color: #fff;
+  min-width: 324px;
+  min-height: 144px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  z-index: 100;
+`;
+
+export const ModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  font-size: 14px;
+`;
+
+export const CopyLink = styled.button`
+  border: none;
+  background-color: inherit;
+  padding: 4px 8px;
+`;
+
+export const CloseBtn = styled.button`
+  border: none;
+  background-color: inherit;
+  padding: 4px 8px;
 `;
 
 export const ImageContent = styled.div``;

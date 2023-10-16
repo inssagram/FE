@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import * as SC from "@/styled/explore";
-import axios from 'axios'
+import * as SC from "@/components/styled/explore";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "@/components/input/SearchBar";
@@ -35,7 +35,7 @@ const Explore: React.FC = () => {
     <>
       <SC.Container>
         <SC.ExploreTop>
-          <SearchBar />
+          <SearchBar onSearch={function (searchValue: string): void {}} />
         </SC.ExploreTop>
         <SC.Content>
           {loading ? (

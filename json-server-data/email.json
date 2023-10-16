@@ -31,6 +31,23 @@
     {
       "email": "jhyeom95@info.com",
       "id": 8
+    },
+    {
+      "email": "jhyeom96@daum.com",
+      "id": 9
+    },
+    {
+      "email": "jhjhj@gmail.com",
+      "id": 10
+    },
+    {
+      "email": "asdfbv@naver.com",
+      "id": 11
+    },
+    {
+      "nickname": "sdjlk",
+      "password": "Abcdefg123!",
+      "id": 12
     }
   ],
   "auth": [
@@ -38,9 +55,10 @@
       "number": "123456"
     }
   ],
-  "nickname" :[
+  "account": [
     {
-      "nickname": "jungho123_."
+      "nickname": "jungho123_.",
+      "password": "Abcdefg123!"
     }
   ]
 }

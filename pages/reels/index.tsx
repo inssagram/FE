@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import * as SC from '@/styled/reels'
+import * as SC from '@/components/styled/reels'
 import Image from 'next/image'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
 import { faComment } from '@fortawesome/free-regular-svg-icons/faComment'
@@ -45,8 +45,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            layout="fill"
-                            objectFit="cover"
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>
@@ -57,7 +56,6 @@ const Reels: React.FC = () => {
                                 style={{ borderRadius: '100%' }}
                                 width={40}
                                 height={40}
-                                objectFit='contain'
                             />
                             <SC.ID>정호다 |</SC.ID><SC.Follow>팔로우</SC.Follow>
                         </SC.Profile>
@@ -85,8 +83,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            layout="fill"
-                            objectFit="cover" // 이미지를 꽉 채우도록 설정
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>
@@ -97,7 +94,6 @@ const Reels: React.FC = () => {
                                 style={{ borderRadius: '100%' }}
                                 width={40}
                                 height={40}
-                                objectFit='contain'
                             />
                             <SC.ID>정호다 |</SC.ID><SC.Follow>팔로우</SC.Follow>
                         </SC.Profile>
@@ -125,8 +121,7 @@ const Reels: React.FC = () => {
                         <Image
                             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
                             alt="개"
-                            layout="fill"
-                            objectFit="cover" // 이미지를 꽉 채우도록 설정
+                            fill={true}
                         />
                     </SC.Contents>
                     <SC.Details>
@@ -137,7 +132,6 @@ const Reels: React.FC = () => {
                                 style={{ borderRadius: '100%' }}
                                 width={40}
                                 height={40}
-                                objectFit='contain'
                             />
                             <SC.ID>정호다 |</SC.ID><SC.Follow>팔로우</SC.Follow>
                         </SC.Profile>

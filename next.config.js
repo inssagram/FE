@@ -1,12 +1,19 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
+  reactStrictMode: true,
   compiler: {
     styledComponents: true,
   },
   images: {
-    domains: ["upload.wikimedia.org"],
+    domains: [
+      "upload.wikimedia.org",
+      "www.animals.or.kr",
+      "www.chemicalnews.co.kr",
+    ],
   },
   env: {
-    COMPANY_LIST_API_KEY: process.env.COMPANY_LIST_API_KEY,
+    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
   },
 };
+
+module.exports = nextConfig;

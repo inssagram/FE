@@ -1,7 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { BackArrow } from "@/components/atoms/Icons";
 
 const Header = styled.div`
   display: flex;
@@ -16,14 +15,11 @@ const Header = styled.div`
   border-bottom: 1px solid #ccc;
 `;
 
-const BackIcon = styled.div`
-  padding-right: 12px;
-`;
-
 const Info = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-left: 12px;
   height: 44px;
   gap: 6px;
 `;
@@ -46,29 +42,39 @@ const Account = styled.span`
 `;
 
 const RecentTime = styled.span`
+  margin-top: 2px;
   font-size: 12px;
   font-weight: 400;
   color: #737373;
 `;
 
-const DirectInHeader: React.FC = () => {
+interface Item {
+  name: string;
+  profileUrl: string;
+}
+
+const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
+  selectedItem,
+}) => {
   return (
     <>
       <Header>
-        <BackIcon>
-          <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
-        </BackIcon>
+        <BackArrow />
         <Info>
           <Profile>
-            <Image
-              src="/images/profile.jpg"
-              alt="프로필"
-              width={24}
-              height={24}
-            />
+            {selectedItem && (
+              <Image
+                src={selectedItem.profileUrl}
+                alt="프로필"
+                width={24}
+                height={24}
+              />
+            )}
           </Profile>
           <Recent>
-            <Account>정경진</Account>
+            <Account>
+              {selectedItem ? selectedItem.name : "No User Selected"}
+            </Account>
             <RecentTime>1시간 전에 활동</RecentTime>
           </Recent>
         </Info>

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "@/styled/my_feeds";
+import * as SC from "@/components/styled/my_feeds";
 import Image from "next/image";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faComment } from "@fortawesome/free-regular-svg-icons/faComment";
@@ -8,9 +8,12 @@ import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useRouter } from "next/router";
 
 const Feeds: React.FC = () => {
+  const router = useRouter();
+  const { id } = router.query;
+  // 의존성 배열을 비워 useEffect가 컴포넌트 마운트 시에만 실행되도록 합니다.
   // const [content, setContent] = useState("");
 
   // useEffect(() => {
@@ -52,13 +55,7 @@ const Feeds: React.FC = () => {
       </SC.Head>
       <SC.Contents>
         <SC.ImageContent>
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-            alt="개"
-            layout="responsive"
-            width={10}
-            height={10}
-          />
+          <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg" alt="개" fill={true} />
         </SC.ImageContent>
       </SC.Contents>
       <SC.Details>

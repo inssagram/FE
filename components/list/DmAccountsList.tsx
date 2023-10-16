@@ -1,7 +1,11 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styled from "styled-components";
 
 const ContentContainer = styled.li`
+  width: 100%;
   height: 72px;
   display: flex;
   align-items: center;
@@ -25,7 +29,7 @@ const Content = styled.div`
   font-size: 14px;
 `;
 
-const Account = styled.span`
+const Id = styled.span`
   padding-bottom: 3px;
 `;
 
@@ -40,20 +44,47 @@ const RecentConvo = styled.span``;
 
 const RecentTime = styled.span``;
 
-const DmAccountsList = () => {
+interface DmAccount {
+  id: number;
+  profileUrl: string;
+  userId: string;
+  recentMessage: string;
+  recentTime: string;
+}
+
+const DmAccountsList: React.FC = () => {
+  const [dmList, setDmList] = useState<DmAccount[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/messages")
+      .then((response) => {
+        setDmList(response.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 불러오는 중 오류 발생:", error);
+      });
+  }, []);
+
   return (
-    <ContentContainer>
-      <Profile>
-        <Image src="/images/profile.jpg" alt="프로필" width={56} height={56} />
-      </Profile>
-      <Content>
-        <Account>daily-manjoo</Account>
-        <Recent>
-          <RecentConvo>만쥬 좋아하세요?</RecentConvo>
-          <RecentTime>23분</RecentTime>
-        </Recent>
-      </Content>
-    </ContentContainer>
+    <>
+      {dmList.map((dm, index) => (
+        <Link key={index} href={`/direct/in/${dm.id}`}>
+          <ContentContainer>
+            <Profile>
+              <Image src={dm.profileUrl} alt="프로필" width={56} height={56} />
+            </Profile>
+            <Content>
+              <Id>{dm.userId}</Id>
+              <Recent>
+                <RecentConvo>{dm.recentMessage}</RecentConvo>
+                <RecentTime>{dm.recentTime}</RecentTime>
+              </Recent>
+            </Content>
+          </ContentContainer>
+        </Link>
+      ))}
+    </>
   );
 };
 

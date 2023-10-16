@@ -1,15 +1,12 @@
 import Image from "next/image";
-import * as SC from "@/styled/notifications";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import * as SC from "@/components/styled/notifications";
+import { BackChevron } from "@/components/atoms/Icons";
 
 const Notifications: React.FC = () => {
   return (
     <>
       <SC.Header>
-        <SC.BackIcon>
-          <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
-        </SC.BackIcon>
+        <BackChevron />
         <SC.PageTitle>알림</SC.PageTitle>
       </SC.Header>
       <SC.Notifications>
