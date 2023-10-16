@@ -2,7 +2,13 @@ import React from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faMagnifyingGlass, faFilm, faPaperPlane, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHouse,
+  faMagnifyingGlass,
+  faFilm,
+  faPaperPlane,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   width: 100%;
