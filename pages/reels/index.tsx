@@ -11,27 +11,31 @@ import  { useState , useEffect, useRef } from 'react'
 
 const Reels: React.FC = () => {
     const containerRef = useRef<HTMLElement | null>(null);
-    let [count, setCount] = useState(0)
-    let [startY, setStartY] = useState(0)
+    const [count, setCount] = useState(0)
+    const [startY, setStartY] = useState(0)
+    const [articles] = useState(2)
     useEffect(() => {
         const container = containerRef.current;
         if (container) {
-          container.scrollTo({ top: 870 * count, behavior: 'smooth' });
+            container.scrollTo({ top: 870 * count, behavior: 'smooth' });
         }
       }, [count]);
+
+      
     
       const handleTouchStart = (e:React.TouchEvent) => {
-        setStartY(e.touches[0].clientY)
+          setStartY(e.touches[0].clientY)
       }
 
       const handleTouchEnd = (e:React.TouchEvent) => {
         if(startY > e.changedTouches[0].clientY){
-            setCount((prev) => prev + 1)
+            console.log(e)
+            setCount((prev) => prev === articles ? prev : prev + 1 )
         }else if(startY < e.changedTouches[0].clientY){
-            setCount((prev) => prev - 1)
+            setCount((prev) => prev === 0 ? prev : prev - 1)
         }
     }
-
+    
 
     return (
         <>
