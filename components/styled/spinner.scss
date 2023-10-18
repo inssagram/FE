@@ -1,6 +1,10 @@
 $offset: 190;
 $duration: 1.4s;
 
+svg{
+  pointer-events: bounding-box;
+}
+
 .spinner {
   animation: rotator $duration linear infinite;
 }
