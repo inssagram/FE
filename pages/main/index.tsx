@@ -7,97 +7,72 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Layout from "@/components/Layout";
-import { SVGProps, useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Main: React.FC = () => {
   const router = useRouter();
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [data, setData] = useState<dataItem[]>([])
+  const [isAnimating, setIsAnimating] = useState(Array(SC.Stories.length).fill(false));
+  const [pointerBlock, setPointerBlock] = useState<boolean>(false)
 
-  const spinnerHandler = () => {
-    setIsAnimating(true);
+  const spinnerHandler = (index: number) => {
+    const newIsAnimating = [...isAnimating];
+    newIsAnimating[index] = true;
+    setIsAnimating(newIsAnimating);
+    setPointerBlock(true);
     setTimeout(() => router.push("/story"), 2000);
   };
+
+
+
+  interface dataItem {
+    id: number,
+    image: string,
+    userId: string
+  }
+
+  const getData = () => {
+    axios.get('http://localhost:5000/story')
+    .then((res) => {
+      setData(res.data)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  },[])
+
+ 
 
   return (
     <Layout>
       <SC.Container>
         <SC.Stories>
-          <SC.Story onClick={spinnerHandler}>
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-              alt="개"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%", border: `${isAnimating ? "" : "3px solid red"}` }}
-            />
-            <SC.Spinner>
-              <svg className={`${isAnimating ? "spinner" : ""}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle className={`${isAnimating ? "path" : ""}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-              </svg>
-            </SC.Spinner>
-            <SC.StoryID>정호다</SC.StoryID>
-          </SC.Story>
-          <SC.Story onClick={spinnerHandler}>
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-              alt="개"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%", border: `${isAnimating ? "" : "3px solid red"}` }}
-            />
-            <SC.Spinner>
-              <svg className={`${isAnimating ? "spinner" : ""}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle className={`${isAnimating ? "path" : ""}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-              </svg>
-            </SC.Spinner>
-            <SC.StoryID>정호다</SC.StoryID>
-          </SC.Story>
-          <SC.Story onClick={spinnerHandler}>
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-              alt="개"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%", border: `${isAnimating ? "" : "3px solid red"}` }}
-            />
-            <SC.Spinner>
-              <svg className={`${isAnimating ? "spinner" : ""}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle className={`${isAnimating ? "path" : ""}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-              </svg>
-            </SC.Spinner>
-            <SC.StoryID>정호다</SC.StoryID>
-          </SC.Story>
-          <SC.Story onClick={spinnerHandler}>
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-              alt="개"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%", border: `${isAnimating ? "" : "3px solid red"}` }}
-            />
-            <SC.Spinner>
-              <svg className={`${isAnimating ? "spinner" : ""}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle className={`${isAnimating ? "path" : ""}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-              </svg>
-            </SC.Spinner>
-            <SC.StoryID>정호다</SC.StoryID>
-          </SC.Story>
-          <SC.Story onClick={spinnerHandler}>
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-              alt="개"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%", border: `${isAnimating ? "" : "3px solid red"}` }}
-            />
-            <SC.Spinner>
-              <svg className={`${isAnimating ? "spinner" : ""}`} width="42px" height="42px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                <circle className={`${isAnimating ? "path" : ""}`} fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-              </svg>
-            </SC.Spinner>
-            <SC.StoryID>정호다</SC.StoryID>
-          </SC.Story>
+          {data.map((item, index) => (
+            <SC.Story key={index}>
+              <SC.ImageTag 
+                onClick={() => spinnerHandler(index)}
+                src={`${item.image}`}
+                alt="개" 
+                width={40}
+                height={40}
+                style={{
+                  borderColor: isAnimating[index] ? 'white' : 'red',
+                  pointerEvents: pointerBlock ? 'none' : 'auto'
+                }}
+              />
+              {isAnimating[index] &&
+                <SC.ImageICN>
+                  <SC.ImageCUT>
+                    <SC.ImageDonut></SC.ImageDonut>
+                  </SC.ImageCUT>
+                </SC.ImageICN>
+              }
+              <SC.StoryID>{item.userId}</SC.StoryID>
+            </SC.Story>
+          ))}
         </SC.Stories>
         <SC.Article>
           <SC.Head>
