@@ -13,21 +13,10 @@ import { useRouter } from "next/router";
 const Feeds: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
-  // 의존성 배열을 비워 useEffect가 컴포넌트 마운트 시에만 실행되도록 합니다.
-  // const [content, setContent] = useState("");
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:4000/posts/1");
-  //       setContent(response.data.content);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+  
+  const handleComment = () => {
+    router.push('/comments')
+  }
 
   return (
     <SC.Container>
@@ -62,7 +51,7 @@ const Feeds: React.FC = () => {
         <SC.Buttons>
           <SC.LeftIcons>
             <FontAwesomeIcon icon={faHeart} fontSize={"25px"} />
-            <FontAwesomeIcon icon={faComment} fontSize={"25px"} />
+            <FontAwesomeIcon onClick={handleComment} icon={faComment} fontSize={"25px"} />
             <FontAwesomeIcon icon={faPaperPlane} fontSize={"25px"} />
           </SC.LeftIcons>
           <SC.RightIcon>

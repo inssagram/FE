@@ -74,6 +74,7 @@ const Main: React.FC = () => {
             </SC.Story>
           ))}
         </SC.Stories>
+        
         <SC.Article>
           <SC.Head>
             <SC.Profile>
@@ -116,6 +117,7 @@ const Main: React.FC = () => {
             <SC.Comment>댓글 달기...</SC.Comment>
           </SC.Details>
         </SC.Article>
+        
       </SC.Container>
     </Layout>
   );
