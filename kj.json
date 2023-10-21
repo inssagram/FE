@@ -3,6 +3,7 @@
     {
       "id": 1,
       "name": "americano_sam",
+      "profileUrl": "/images/sam.jpg",
       "title": "첫 번째 게시글",
       "content": "인생 카페로 등극",
       "imageUrl": "/images/coffee.jpg"
@@ -10,6 +11,7 @@
     {
       "id": 2,
       "name": "king_jungho",
+      "profileUrl": "/images/jungho.jpg",
       "title": "두 번째 게시글",
       "content": "여기 알바생 잘생겼어요ㅎ",
       "imageUrl": "/images/coffee.jpg"
@@ -17,6 +19,7 @@
     {
       "id": 3,
       "name": "godchaani",
+      "profileUrl": "/images/profile.jpg",
       "title": "세 번째 게시글",
       "content": "바닐라라떼 너무 내 취향이에요ㅠㅠ",
       "imageUrl": "/images/coffee.jpg"
@@ -24,6 +27,7 @@
     {
       "id": 4,
       "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
       "title": "네 번째 게시글",
       "content": "유리언니랑 곱창 먹으러",
       "imageUrl": "/images/gopchang.jpg"
@@ -31,6 +35,7 @@
     {
       "id": 5,
       "name": "jjangguchingu_yuri",
+      "profileUrl": "/images/yuri.jpg",
       "title": "다섯 번째 게시글",
       "content": "진구곱창 같네",
       "imageUrl": "/images/gopchang.jpg"
@@ -38,6 +43,7 @@
     {
       "id": 6,
       "name": "jjangguchingu_yuri",
+      "profileUrl": "/images/yuri.jpg",
       "title": "여섯 번째 게시글",
       "content": "곱창은 언제나 옳지",
       "imageUrl": "/images/gopchang.jpg"
@@ -45,6 +51,7 @@
     {
       "id": 7,
       "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
       "title": "일곱 번째 게시글",
       "content": "1일 1마라탕",
       "imageUrl": "/images/maratang.jpg"
@@ -52,6 +59,7 @@
     {
       "id": 8,
       "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
       "title": "여덟 번째 게시글",
       "content": "마라탕 먹으러가자",
       "imageUrl": "/images/maratang.jpg"
@@ -59,6 +67,7 @@
     {
       "id": 9,
       "name": "americano_sam",
+      "profileUrl": "/images/sam.jpg",
       "title": "아홉 번째 게시글",
       "content": "어제도 먹었는데 또 먹고싶어",
       "imageUrl": "/images/maratang.jpg"

@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import DirectInHeader from "../../../components/atoms/DirectInHeader";
 import DirectPartner from "../../../components/atoms/DirectPartner";
-import DirectMessage from "../../../components/input/DirectMessage";
-import DmContentsList from "../../../components/list/DmContentsList";
+import DirectMessage from "@/components/input/DirectMessage/DirectMessage";
+import DmContentsList from "@/components/list/DmContentsList";
 
 interface Partner {
   id: number;
@@ -16,11 +16,13 @@ interface Partner {
 const In: React.FC = () => {
   const [partner, setPartner] = useState<Partner | null>(null);
   const [messages, setMessages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const router = useRouter();
   const { id } = router.query;
 
-  const handleSendMessage = (message) => {
+  const handleSendMessage = (message: string, images: File[]) => {
     setMessages([...messages, message]);
+    setSelectedImages(images);
     console.log(`전달된 메시지: ${message}`);
   };
 
@@ -43,7 +45,7 @@ const In: React.FC = () => {
         <>
           <DirectInHeader selectedItem={partner} />
           <DirectPartner selectedItem={partner} />
-          <DmContentsList messages={messages} />
+          <DmContentsList messages={messages} selectedImages={selectedImages} />
           <DirectMessage onMessageSend={handleSendMessage} />
         </>
       )}
