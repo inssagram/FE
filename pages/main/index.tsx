@@ -7,8 +7,9 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Layout from "@/components/Layout";
-import { SVGProps, useState } from "react";
+import { useState} from "react";
 import { useRouter } from "next/router";
+import React from 'react';
 
 const Main: React.FC = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const Main: React.FC = () => {
     setIsAnimating(true);
     setTimeout(() => router.push("/story"), 2000);
   };
+
 
   return (
     <Layout>
@@ -99,6 +101,7 @@ const Main: React.FC = () => {
             <SC.StoryID>정호다</SC.StoryID>
           </SC.Story>
         </SC.Stories>
+        
         <SC.Article>
           <SC.Head>
             <SC.Profile>
@@ -141,6 +144,7 @@ const Main: React.FC = () => {
             <SC.Comment>댓글 달기...</SC.Comment>
           </SC.Details>
         </SC.Article>
+        
       </SC.Container>
     </Layout>
   );
