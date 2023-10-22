@@ -66,6 +66,102 @@
     },
     {
       "id": 9,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 10,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 11,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 12,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 13,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 14,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 15,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 16,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 17,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 18,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 19,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 20,
+      "name": "jinnny",
+      "profileUrl": "/images/kyungjin.jpg",
+      "title": "여덟 번째 게시글",
+      "content": "마라탕 먹으러가자",
+      "imageUrl": "/images/maratang.jpg"
+    },
+    {
+      "id": 22,
       "name": "americano_sam",
       "profileUrl": "/images/sam.jpg",
       "title": "아홉 번째 게시글",
@@ -76,6 +172,7 @@
   "accounts": [
     {
       "id": 1,
+      "type": "account",
       "name": "김상윤",
       "userId": "americano_sam",
       "desc": "시바견을 키우는 집사입니다 🐶",
@@ -83,6 +180,7 @@
     },
     {
       "id": 2,
+      "type": "account",
       "name": "염정호",
       "userId": "king_jungho",
       "desc": "시바견을 키우는 집사입니다 🐶",
@@ -90,6 +188,7 @@
     },
     {
       "id": 3,
+      "type": "account",
       "name": "한찬희",
       "userId": "godchaani",
       "desc": "시바견을 키우는 집사입니다 🐶",
@@ -97,6 +196,7 @@
     },
     {
       "id": 4,
+      "type": "account",
       "name": "정경진",
       "userId": "jinnny",
       "desc": "시바견을 키우는 집사입니다 🐶",
@@ -104,6 +204,7 @@
     },
     {
       "id": 5,
+      "type": "account",
       "name": "조유리",
       "userId": "jjangguchingu_yuri",
       "desc": "시바견을 키우는 집사입니다 🐶",
@@ -111,10 +212,27 @@
     },
     {
       "id": 6,
+      "type": "account",
       "userId": "Shiba_S2",
       "name": "집사님",
       "desc": "시바견을 키우는 집사입니다 🐶",
       "profileUrl": "/images/coffee.jpg"
+    }
+  ],
+  "hashtags": [
+    {
+      "id": 1,
+      "type": "hashtag",
+      "name": "기아",
+      "desc": "게시물 38.4만",
+      "profileUrl": "/images/hashtag.jpg"
+    },
+    {
+      "id": 2,
+      "type": "hashtag",
+      "name": "마라탕",
+      "desc": "게시물 38.4만",
+      "profileUrl": "/images/hashtag.jpg"
     }
   ],
   "messages": [
