@@ -6,16 +6,31 @@ import * as SC from "@/components/styled/main_boardwrite_details";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { PostType } from "@/src/redux/Posts/postSlice";
+
 
 const Details: React.FC = () => {
-  type PostType = {
-    id: number;
-    userId: string;
-    content: string;
-    image: string;
-  };
+  const router = useRouter()
+  const [userInput, setUserInput] = useState('');
   const [post, setPost] = useState<PostType | null>(null);
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(event.target.value);
+  }
+
+  const handlePrevClick = () => {
+    router.push('/create');
+    
+  }
+
+  const handleCreateBoard = () => {
+    // 사용자를 메인 페이지로 리다이렉트합니다.
+    router.push('/main');
+  };
+
+
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,18 +48,18 @@ const Details: React.FC = () => {
   return (
     <>
       <SC.Header>
-        <SC.Prev>
+        <SC.Prev onClick={handlePrevClick}>
           <FontAwesomeIcon icon={faChevronLeft} />
         </SC.Prev>
         <SC.H1>새 게시물</SC.H1>
-        <SC.Next>공유하기</SC.Next>
+        <SC.Next onClick={handleCreateBoard}>공유하기</SC.Next>
       </SC.Header>
       <SC.Container>
         <SC.MyProfile />
         <SC.TextCont>
-          <SC.Text>떡볶이 먹고 싶다</SC.Text>
+          <SC.InputText type="text" value={userInput} onChange={handleInputChange} placeholder="내용을 입력하세요" />
         </SC.TextCont>
-        <SC.PicCon> {post && <Image src={post.image} alt="fetched image" width={50} height={50} />}</SC.PicCon>
+        <SC.PicCon> {post && <Image src={post.imageUrl} alt="fetched image" width={50} height={50} />}</SC.PicCon>
       </SC.Container>
       <SC.FunctionPannels>
         <SC.Button>
