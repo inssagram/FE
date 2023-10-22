@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 
 
 export const Container = styled.section`
@@ -17,6 +17,9 @@ export const Article = styled.article`
     display: flex;
     flex-direction: column;
     position: absolute;
+    transform-origin: center center;
+    transition: transform 0.5s; // 애니메이션을 부드럽게 만듭니다.    
+ 
     &.cube1{
         transform: rotateY(0deg) translateZ(calc(100vw / 2));
     }
@@ -39,16 +42,53 @@ export const ProgressBars = styled.div`
     top: 0;
     background-color: transparent;
     z-index: 1;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 5px;
     align-items: center;
 `
 
 export const Bar = styled.div`
-    width: 95%;
+    width: 100%;
     height: 20%;
-    background-color: white;
+    background-color: rgba(255,255,255,0.5);
     border-radius: 10px;
+    position: relative;
 `
+export const BarCovering = keyframes`
+    0%{
+        width: 0%
+    }
+    100%{
+        width: 100%;
+    }
+`
+
+interface BarProps {
+    isAnimating: boolean;
+    isComplete: boolean;
+}
+
+export const BarCover = styled.div<BarProps>`
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+  position: absolute;
+  animation: ${(props) =>
+    props.isAnimating
+      ? css`
+          ${BarCovering} 5s linear
+        `
+      : 'none'};
+  width: ${(props) => (props.isAnimating ? '100%' : '0%')};
+  ${(props) =>
+    props.isComplete &&
+    css`
+      width: 100%;
+      animation: none; // 애니메이션 제거
+    `}
+`;
+
+
 
 // ----------------------------------------------------------------------------
 
