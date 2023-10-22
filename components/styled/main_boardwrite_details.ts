@@ -73,6 +73,10 @@ export const TextCont = styled.div`
   font-size: 1.5rem;
 `;
 
+export const InputText = styled.input`
+border-style:none;
+`;
+
 export const Text = styled.span``;
 
 export const PicCon = styled.div`

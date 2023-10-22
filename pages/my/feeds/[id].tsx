@@ -36,6 +36,10 @@ const Feeds: React.FC = () => {
     router.push("/my");
   };
 
+  const handleComment = () => {
+    router.push(`/my/feeds/${id}/comments`)
+  }
+
   return (
     <SC.Container>
       <SC.Header>
@@ -67,7 +71,7 @@ const Feeds: React.FC = () => {
         <SC.Buttons>
           <SC.LeftIcons>
             <FontAwesomeIcon icon={faHeart} fontSize={"25px"} />
-            <FontAwesomeIcon icon={faComment} fontSize={"25px"} />
+            <FontAwesomeIcon onClick={handleComment} icon={faComment} fontSize={"25px"} />
             <FontAwesomeIcon icon={faPaperPlane} fontSize={"25px"} />
           </SC.LeftIcons>
           <SC.RightIcon>
@@ -82,8 +86,10 @@ const Feeds: React.FC = () => {
         <SC.MoreComments>더 보기</SC.MoreComments>
         <SC.AllComment>댓글 4개 모두 보기</SC.AllComment>
         <SC.CommentCont>
-          <SC.UserId>Kyungjeeni</SC.UserId>
-          <SC.UserComment>언니 솔직히 정신차려요ㅋ</SC.UserComment>
+        <SC.UserId>Kyungjeeni</SC.UserId>
+        <SC.UserComment>언니 솔직히 정신차려요ㅋ</SC.UserComment>
+      </SC.CommentCont>
+          <SC.CommentCont>
           <SC.UserId>Ahnjanhee</SC.UserId>
           <SC.UserComment>이 분 지금 뭐함?</SC.UserComment>
         </SC.CommentCont>

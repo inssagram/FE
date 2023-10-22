@@ -5,22 +5,21 @@
       "userId": "gummy__jelly",
       "content": "제 미래의 강아지에요",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"코딩의 고독"
-      
+      "introduce": "코딩의 고독"
     },
     {
       "id": 2,
       "userId": "gummy__jelly",
       "content": "나만 강아지 없어",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"배고파요"
+      "introduce": "배고파요"
     },
     {
       "id": 3,
       "userId": "gummy__jelly",
       "content": "이름 지어줘요",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"팔로우 안받아요"
+      "introduce": "팔로우 안받아요"
     },
     {
       "id": 4,
@@ -76,6 +75,10 @@
       "userId": "gummy__jelly",
       "content": "도토리 다 판다",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/A_Panda_eating.jpg/300px-A_Panda_eating.jpg"
+    },
+    {
+      "image": "https://www.animals.or.kr/api/files/images/51386-cb98b35c-a5ac-484c-b365-f73e8263bd05.png",
+      "id": 13
     }
   ],
   "users": [
@@ -91,44 +94,43 @@
       "token": "test_token"
     }
   ],
-  "recommend":[
+  "recommend": [
     {
       "id": 1,
       "userId": "princess_yuri",
-      "userName" :"조유리",
+      "userName": "조유리",
       "content": "제 미래의 강아지에요",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"공주다"
-      
+      "introduce": "공주다"
     },
     {
       "id": 2,
       "userId": "mara_kyungjin",
       "content": "나만 강아지 없어",
-      "userName" :"장경진",
+      "userName": "장경진",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"마라탕 드실 분만 팔로"
+      "introduce": "마라탕 드실 분만 팔로"
     },
     {
       "id": 3,
       "userId": "iamsam_movie",
       "content": "이름 지어줘요",
-      "userName" :"샘킴",
+      "userName": "샘킴",
       "imageUrl": "https://www.animals.or.kr/api/files/images/50730-9078efba-8581-4341-bba2-bd1c7a6253c6.png",
-      "introduce":"음 오늘 낟배드"
+      "introduce": "음 오늘 낟배드"
     },
     {
       "id": 4,
       "userId": "chanchanchicken",
       "content": "안.....녕.....",
-      "userName" :"한찬희",
+      "userName": "한찬희",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/ChinchillaKR.jpg/300px-ChinchillaKR.jpg",
       "introduce": "비오니까 무릎쑤셔"
     },
     {
       "id": 5,
       "userId": "scientist_ho",
-      "userName" :"염정호",
+      "userName": "염정호",
       "content": "귀여워 미쳐",
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/ChinchillaKR.jpg/300px-ChinchillaKR.jpg"
     },
