@@ -9,6 +9,7 @@ const nextConfig = {
       "upload.wikimedia.org",
       "www.animals.or.kr",
       "www.chemicalnews.co.kr",
+      "search.pstatic.net",
     ],
   },
   env: {
