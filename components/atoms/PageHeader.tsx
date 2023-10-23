@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { BackChevron } from "@/components/atoms/Icons";
 
 export const Header = styled.div`
   display: flex;
@@ -9,13 +10,20 @@ export const Header = styled.div`
   border-bottom: 1px solid #ccc;
 `;
 
-export const BackIcon = styled.div`
-  padding-right: 12px;
-`;
-
 export const Title = styled.span`
   margin: 0 auto;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.3px;
 `;
+
+const PageHeader: React.FC = ({ title }) => {
+  return (
+    <Header>
+      <BackChevron />
+      <Title>{title}</Title>
+    </Header>
+  );
+};
+
+export default PageHeader;

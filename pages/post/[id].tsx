@@ -1,8 +1,7 @@
-import * as SC from "@/components/styled/post";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { BackChevron } from "@/components/atoms/Icons";
+import PageHeader from "@/components/atoms/PageHeader";
 import PostHeader from "@/components/atoms/PostHeader/PostHeader";
 import PostDetails from "@/components/atoms/PostDetails/PostDetails";
 import Footer from "@/components/Footer";
@@ -29,6 +28,8 @@ const Post: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const pageTitle = "탐색 탭";
+
   useEffect(() => {
     if (id) {
       axios
@@ -53,10 +54,7 @@ const Post: React.FC = () => {
 
   return (
     <>
-      <SC.Header>
-        <BackChevron />
-        <SC.Title>탐색 탭</SC.Title>
-      </SC.Header>
+      <PageHeader title={pageTitle} />
       {post && <PostHeader post={post} />}
       {post && <PostDetails post={post} account={account} />}
       <Footer />

@@ -17,6 +17,11 @@ interface Post {
 const Explore: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchValue, setSearchValue] = useState<string>("");
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+  };
 
   useEffect(() => {
     axios
@@ -35,7 +40,7 @@ const Explore: React.FC = () => {
     <>
       <SC.Container>
         <SC.ExploreTop>
-          <SearchBar onSearch={function (searchValue: string): void {}} />
+          <SearchBar onSearch={handleSearch} />
         </SC.ExploreTop>
         <SC.Content>
           {loading ? (
@@ -48,7 +53,7 @@ const Explore: React.FC = () => {
                 <Image
                   src={post.imageUrl}
                   alt={post.title}
-                  width={134}
+                  width={135}
                   height={135}
                 />
               </Link>
