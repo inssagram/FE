@@ -1,6 +1,13 @@
+import styled from "styled-components";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+
+const Icon = styled(FontAwesomeIcon)`
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+`;
 
 export const BackArrow = () => {
   const router = useRouter();
@@ -16,7 +23,7 @@ export const BackArrow = () => {
         onClick={goBack}
         style={{ backgroundColor: "transparent", border: "none" }}
       >
-        <FontAwesomeIcon icon={faArrowLeft} fontSize={24} />
+        <Icon icon={faArrowLeft} />
       </button>
     </>
   );
@@ -36,7 +43,7 @@ export const BackChevron = () => {
         onClick={goBack}
         style={{ backgroundColor: "transparent", border: "none" }}
       >
-        <FontAwesomeIcon icon={faChevronLeft} fontSize={24} />
+        <Icon icon={faChevronLeft} />
       </button>
     </>
   );

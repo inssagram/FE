@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { css, keyframes } from "styled-components";
+import { keyframes } from "styled-components";
+import Image from 'next/image';
 
 export const Container = styled.section`
   width: 100%;
@@ -11,32 +12,93 @@ export const Container = styled.section`
 `;
 
 // ----------------------------------------------------------------------------
-export const Stories = styled.div`
+export const Stories = styled.ul`
   width: 100%;
   height: 10%;
-  display: flex;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
+  white-space: nowrap;
   overflow-x: scroll;
-`;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  `;
 
-export const Spinner = styled.div`
-  position: absolute;
-  top: 0;
-  margin-top: 5px;
-`;
+export const StoryFlex = styled.div`
+  display: flex;
+`
 
-export const Story = styled.div`
+export const Story = styled.li`
   width: 20%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+  display: inline-block;
+  padding-left: 20px;
   position: relative;
 `;
 
-export const StoryID = styled.span``;
+export const StoryID = styled.span`
+  position: absolute;
+  left: 28%;
+  bottom: 10%;
+`;
+
+export const Clockwise = keyframes`
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg) }
+`
+
+export const DonutRotate = keyframes`
+  0% { transform: rotate(0) }
+  50% { transform: rotate(-140deg) }
+  100% { transform: rotate(0) }
+`
+export const noneAnimation = keyframes`
+  0% { transform: rotate(0)}
+  100% { transform: rotate(0)}
+`
+
+export const ImageICN = styled.div`
+  position: absolute;
+  opacity: 0.75;
+  width: 40px; 
+  height: 40px;
+  animation: ${Clockwise} 500ms linear infinite;
+  top: 10%;
+`
+
+export const ImageCUT = styled.div`
+  position: relative;
+  width: 20px;
+  height: 40px;
+  overflow: hidden;
+`
+
+export const ImageDonut = styled.div`
+  width: 40px;
+  height: 40px;
+  border: 2px solid red;
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+  margin: 0;
+  animation: ${DonutRotate} 1000ms cubic-bezier(.4,0,.22,1) infinite;
+`
+
+export const ImageTag = styled(Image)`
+  border: 2px solid red;
+  position: absolute;
+  border-radius: 100%;
+  top: 10%;
+`
+
+
+
+
 
 // ----------------------------------------------------------------------------
 

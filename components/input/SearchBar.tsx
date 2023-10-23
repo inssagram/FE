@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styled from "styled-components";
@@ -63,8 +63,7 @@ const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-    setSearchValue(event.target.value);
-    onSearch(newValue);
+    setSearchValue(newValue);
   };
 
   const clearInput = () => {
@@ -78,6 +77,10 @@ const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
   const handleCancleClick = () => {
     router.back();
   };
+
+  useEffect(() => {
+    onSearch(searchValue);
+  }, [searchValue]);
 
   return (
     <SearchBarContainer>

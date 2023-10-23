@@ -105,7 +105,7 @@ export const Details = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  flex: 3;
+  flex: 0.9;
   padding: 0 1rem 0 1rem;
 `;
 
@@ -228,3 +228,66 @@ export const SmileIcon = styled.div`
   top: 50%; // 상위 컨테이너의 중앙에 위치시킵니다.
   transform: translateY(-50%); // Y축을 중심으로 이를 조정하여 아이콘을 완벽하게 중앙에 위치시킵니다.
 `;
+
+// modal창
+
+export const ModalWrapper= styled.div` 
+    position:absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    top:0;
+    width: 412px;
+    margin: -12px;
+    background-color: black;
+    opacity: 0.9;
+    z-index:9;
+`
+
+export const ModalContent = styled.div`
+    height:110px;
+    text-align: center;
+    margin-bottom:3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+`
+
+export const ModalText = styled.span`
+font-size: 1.5rem;
+color: white;
+
+`
+
+export const ModalButtons = styled.div`
+    width: 324px;
+    height: 96px;
+    margin-top: 3rem;
+    
+`
+
+export const DeleteButton = styled.button`
+    width: 200px;
+    height: 48px;
+    background-color: #0095f6; /* 삭제 버튼 배경색 변경 */
+    color: white; /* 텍스트 색상 변경 */
+    border: none;
+    border-radius: 8px; /* 둥근 테두리 설정 */
+    margin-bottom: 10px; /* 버튼 간 간격 지정 */
+    cursor: pointer;
+    border-radius: 16px;
+`
+
+export const CancelButton = styled.button`
+    width: 200px;
+    height: 48px;
+    background-color: #e5e5e5; /* 취소 버튼 배경색 변경 */
+    color: black; /* 텍스트 색상 변경 */
+    border: none;
+    border-radius: 8px; /* 둥근 테두리 설정 */
+    cursor: pointer;
+    border-radius: 16px;
+`
+

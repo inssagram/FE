@@ -37,7 +37,17 @@ const OtherMessage = styled(Message)`
   align-self: flex-start;
 `;
 
-const DmContentsList: React.FC<{ messages: string[] }> = ({ messages }) => {
+const ImagePreview = styled.img`
+  width: 70px;
+  height: 100px;
+  background-color: #ebebeb;
+  padding: 5px;
+`;
+
+const DmContentsList: React.FC<{
+  messages: string[];
+  selectedImages: string[];
+}> = ({ messages, selectedImages }) => {
   const [recieved, setReceived] = useState<string[]>([]);
   const router = useRouter();
   const { id } = router.query;
@@ -61,6 +71,9 @@ const DmContentsList: React.FC<{ messages: string[] }> = ({ messages }) => {
       {recieved && <OtherMessage>{recieved}</OtherMessage>}
       {messages.map((message, index) => (
         <MyMessage key={index}>{message}</MyMessage>
+      ))}
+      {selectedImages.map((image, index) => (
+        <ImagePreview key={index} src={image} alt={`Selected Image ${index}`} />
       ))}
     </Content>
   );
