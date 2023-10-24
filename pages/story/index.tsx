@@ -14,6 +14,19 @@ const Story: React.FC = () => {
   const [data, setData] = useState<dataItem[]>([])
   const [contentsIndex, setContentsIndex] = useState(0)
   const [imageIndex, setImageIndex] = useState(0)
+  const [flag, toggleFlag] = useState(false);
+
+  interface dataItem{
+    id: number,
+    image: string[],
+    userId: string,
+    userProfile: string,
+    postedTime: string
+  }
+
+  interface cubesItem{
+    index: number
+  }
 
   const Cube: React.FC<cubesItem> = ({ index }) => (
     <SC.Article 
@@ -23,7 +36,11 @@ const Story: React.FC = () => {
             {data[index].image.map((_, i) => {
                 return(
                     <SC.Bar key={i}>
-                      <SC.BarCover key={i} isComplete={imageIndex > i} isAnimating={imageIndex === i}></SC.BarCover>
+                      <SC.BarCover key={i} 
+                      isComplete={imageIndex > i} 
+                      isAnimating={imageIndex === i}
+                      onAnimationEnd={flagHandler}
+                      ></SC.BarCover>
                     </SC.Bar>
                   )
               }
@@ -60,6 +77,7 @@ const Story: React.FC = () => {
         </SC.Article>
   )
 
+
   const handleFlip = (e: any) => {
     const totalWidth = e.target.width;
     const clickPosition = e.clientX;
@@ -87,18 +105,6 @@ const Story: React.FC = () => {
     }
   };
 
-  interface dataItem{
-    id: number,
-    image: string[],
-    userId: string,
-    userProfile: string,
-    postedTime: string
-  }
-
-  interface cubesItem{
-    index: number
-  }
-
   useEffect(() => {
     axios.get('http://localhost:5000/storypage')
     .then((response) => {
@@ -106,11 +112,30 @@ const Story: React.FC = () => {
     }).catch((error) => {
       console.log(error)
     })
-  },[contentsIndex])
+  },[])
 
 
- useEffect(() => {
-}, [imageIndex]);
+  const flagHandler = () => {
+    toggleFlag(true)
+  }
+
+  useEffect(() => {
+    if(flag && data.length !== 0){
+      const imagesLength = data[contentsIndex].image.length
+      console.log(imagesLength)
+      if(imageIndex === imagesLength - 1  && contentsIndex === data.length - 1){
+        router.push('/')
+      }else if(imageIndex === imagesLength - 1){
+        setCurrentRotation(currentRotation - 90);
+        setContentsIndex((prev) => prev + 1)
+        setImageIndex(0)
+      }else{
+        setImageIndex((prev) => prev + 1)
+      }
+      toggleFlag(false)
+    }
+  }, [flag]);
+
 
  
   if(data.length !== 0){
