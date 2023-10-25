@@ -15,6 +15,9 @@ const Story: React.FC = () => {
   const [contentsIndex, setContentsIndex] = useState(0)
   const [imageIndex, setImageIndex] = useState(0)
   const [flag, toggleFlag] = useState(false);
+  const [availableIndex, setAvailableIndex] = useState<number[]>([]);
+
+
 
   interface dataItem{
     id: number,
@@ -30,7 +33,7 @@ const Story: React.FC = () => {
 
   const Cube: React.FC<cubesItem> = ({ index }) => (
     <SC.Article 
-      style={{ transform: `rotateY(${index * 90}deg) translateZ(calc(100vw / 2))`, zIndex:`${contentsIndex === index ? 10 : 0}`}} 
+      style={{ transform: `rotateY(${index * 90}deg) translateZ(calc(100vw / 2))`, zIndex: availableIndex.includes(index) ? 10 : 0}} 
     >
           <SC.ProgressBars>
             {data[index].image.map((_, i) => {
@@ -76,6 +79,8 @@ const Story: React.FC = () => {
           </SC.Comment>
         </SC.Article>
   )
+  
+
 
 
   const handleFlip = (e: any) => {
@@ -114,11 +119,16 @@ const Story: React.FC = () => {
     })
   },[])
 
+  useEffect(() => {
+    setAvailableIndex([contentsIndex - 1, contentsIndex, contentsIndex + 1])
+  },[contentsIndex])
+
 
   const flagHandler = () => {
     toggleFlag(true)
   }
 
+  
   useEffect(() => {
     if(flag && data.length !== 0){
       const imagesLength = data[contentsIndex].image.length
@@ -143,7 +153,7 @@ const Story: React.FC = () => {
     <>
       <SC.Container onClick={handleFlip} style={{ transform: `rotateY(${currentRotation}deg)`, transition: "transform 0.5s ease-in-out" }}>
         {data.map((cube, index) => (
-          <Cube key={index} index={index} {...cube}  />
+          <Cube key={index} index={index} {...cube}/>
         ))}
       </SC.Container>
     </>
