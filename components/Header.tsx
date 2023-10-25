@@ -74,7 +74,9 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <Container>
-      <Title>Inssagram</Title>
+      <Title>
+        <Link href="/">Inssagram</Link>
+      </Title>
       <IconPannels>
         <PlusBtn id="createBoards" onClick={createBoards}>
           <FontAwesomeIcon icon={faSquarePlus} fontSize={"24px"} />
