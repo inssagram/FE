@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import DirectInHeader from "../../../components/atoms/DirectInHeader";
-import DirectPartner from "../../../components/atoms/DirectPartner";
+import DirectInHeader from "@/components/atoms/DirectInHeader";
+import DirectPartner from "@/components/atoms/DirectPartner";
 import DirectMessage from "@/components/input/DirectMessage/DirectMessage";
 import DmContentsList from "@/components/list/DmContentsList";
 
@@ -20,9 +20,19 @@ const In: React.FC = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
   const handleSendMessage = (message: string, images: File[]) => {
     setMessages([...messages, message]);
-    setSelectedImages(images);
+    setSelectedImages((prevSelectedImages) => [
+      ...prevSelectedImages,
+      ...images,
+    ]);
+
+    if (contentRef.current) {
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+      contentRef.current.focus();
+    }
     console.log(`전달된 메시지: ${message}`);
   };
 
@@ -45,8 +55,15 @@ const In: React.FC = () => {
         <>
           <DirectInHeader selectedItem={partner} />
           <DirectPartner selectedItem={partner} />
-          <DmContentsList messages={messages} selectedImages={selectedImages} />
-          <DirectMessage onMessageSend={handleSendMessage} />
+          <DmContentsList
+            messages={messages}
+            selectedImages={selectedImages}
+            contentRef={contentRef}
+          />
+          <DirectMessage
+            onMessageSend={handleSendMessage}
+            selectedImages={selectedImages}
+          />
         </>
       )}
     </>

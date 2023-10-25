@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { fileToDataUrl } from "@/utils/fileToDataUrl";
 
 const Content = styled.div`
   font-size: 15px;
@@ -9,6 +10,8 @@ const Content = styled.div`
   flex-direction: column;
   align-items: flex-end;
   padding: 0 16px;
+  height: 565px;
+  overflow-y: auto;
 `;
 
 const RecentTime = styled.span`
@@ -38,24 +41,26 @@ const OtherMessage = styled(Message)`
 `;
 
 const ImagePreview = styled.img`
-  width: 70px;
-  height: 100px;
-  background-color: #ebebeb;
+  max-width: 235px;
+  max-height: 200px;
   padding: 5px;
+  border-radius: 20px;
 `;
 
 const DmContentsList: React.FC<{
   messages: string[];
-  selectedImages: string[];
-}> = ({ messages, selectedImages }) => {
-  const [recieved, setReceived] = useState<string[]>([]);
+  selectedImages: File[];
+  contentRef: React.MutableRefObject<HTMLDivElement | null>;
+}> = ({ messages, selectedImages, contentRef }) => {
+  const [received, setReceived] = useState<string[]>([]);
+  const [imageDataUrls, setImageDataUrls] = useState<string[]>([]);
   const router = useRouter();
   const { id } = router.query;
 
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:3001/messages/${id}`)
+        .get<{ received: string[] }>(`http://localhost:3001/messages/${id}`)
         .then((response) => {
           setReceived(response.data.received);
         })
@@ -65,15 +70,43 @@ const DmContentsList: React.FC<{
     }
   }, [id]);
 
+  useEffect(() => {
+    const fetchImageUrls = async () => {
+      const urls: string[] = await Promise.all(
+        selectedImages.map(async (image) => await fileToDataUrl(image))
+      );
+      setImageDataUrls(urls);
+    };
+
+    if (selectedImages.length > 0) {
+      fetchImageUrls();
+    }
+  }, [selectedImages]);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.scrollTop = contentRef.current.scrollHeight;
+      contentRef.current.focus();
+    }
+  }, [contentRef, messages, received]);
+
   return (
-    <Content>
+    <Content ref={contentRef}>
       <RecentTime>(일) 오후 12:00</RecentTime>
-      {recieved && <OtherMessage>{recieved}</OtherMessage>}
+      {received && <OtherMessage>{received}</OtherMessage>}
+      {selectedImages.length > 0 && (
+        <>
+          {imageDataUrls.map((dataUrl, index) => (
+            <ImagePreview
+              key={index}
+              src={dataUrl}
+              alt={`Selected Image ${index}`}
+            />
+          ))}
+        </>
+      )}
       {messages.map((message, index) => (
         <MyMessage key={index}>{message}</MyMessage>
-      ))}
-      {selectedImages.map((image, index) => (
-        <ImagePreview key={index} src={image} alt={`Selected Image ${index}`} />
       ))}
     </Content>
   );
