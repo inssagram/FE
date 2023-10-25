@@ -4,9 +4,13 @@ import { faImage, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
 
 interface DirectMessageProps {
   onMessageSend: (message: string, images: File[], imageUrls: string[]) => void;
+  selectedImages: File[];
 }
 
-const DirectMessage: React.FC<DirectMessageProps> = ({ onMessageSend }) => {
+const DirectMessage: React.FC<DirectMessageProps> = ({
+  onMessageSend,
+  selectedImages,
+}) => {
   const [message, setMessage] = useState<string>("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -31,8 +35,10 @@ const DirectMessage: React.FC<DirectMessageProps> = ({ onMessageSend }) => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    const fileList = Array.from(files);
-    setSelectedFiles([...selectedFiles, ...fileList]);
+    if (files) {
+      const fileList = Array.from(files);
+      setSelectedFiles([...selectedFiles, ...fileList]);
+    }
   };
 
   const handleRemove = (index: number) => {
