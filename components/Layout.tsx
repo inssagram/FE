@@ -1,15 +1,18 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
+
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+    const [selectedImage, setSelectedImage] = useState<null | string>(null);
+
   return (
     <>
-      <Header />
+    <Header setSelectedImage={(src: string) => setSelectedImage(src)} />
       {children}
       <Footer />
     </>
