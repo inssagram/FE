@@ -13,11 +13,9 @@ const Story: React.FC = () => {
   const [currentRotation, setCurrentRotation] = useState(0);
   const [data, setData] = useState<dataItem[]>([])
   const [contentsIndex, setContentsIndex] = useState(0)
-  const [imageIndex, setImageIndex] = useState(0)
+  const [imagesIndexArr, setImagesIndexArr] = useState<number[]>([]);
   const [flag, toggleFlag] = useState(false);
   const [availableIndex, setAvailableIndex] = useState<number[]>([]);
-
-
 
   interface dataItem{
     id: number,
@@ -40,8 +38,8 @@ const Story: React.FC = () => {
                 return(
                     <SC.Bar key={i}>
                       <SC.BarCover key={i} 
-                      isComplete={imageIndex > i} 
-                      isAnimating={imageIndex === i}
+                      isComplete={imagesIndexArr[index] > i} 
+                      isAnimating={imagesIndexArr[index] === i}
                       onAnimationEnd={flagHandler}
                       ></SC.BarCover>
                     </SC.Bar>
@@ -67,7 +65,7 @@ const Story: React.FC = () => {
           </SC.Head>
           <SC.Contents style={{ position: "relative" }}>
             <Image
-              src={data[index].image[imageIndex]}
+              src={data[index].image[imagesIndexArr[index]]}
               alt="개"
               fill={true}
             />
@@ -83,29 +81,35 @@ const Story: React.FC = () => {
 
 
 
-  const handleFlip = (e: any) => {
+  const handleFlip = (e: any, i: number) => {
     const totalWidth = e.target.width;
     const clickPosition = e.clientX;
     const imagesLength = data[contentsIndex].image.length
     if (clickPosition < totalWidth / 2) {
-      if(imageIndex === 0 && contentsIndex > 0){
+      if(imagesIndexArr[i] === 0 && contentsIndex > 0){
         setCurrentRotation(currentRotation + 90);
         setContentsIndex((prev) => prev - 1)
-        setImageIndex(0)
-      }else if(imageIndex === 0 && contentsIndex === 0){
+      }else if(imagesIndexArr[i] === 0 && contentsIndex === 0){
         return
       }else{
-        setImageIndex((prev) => prev - 1)
+        setImagesIndexArr(prevState => {
+          const newImagesIndexArr = [...prevState];
+          newImagesIndexArr[i] -= 1;
+          return newImagesIndexArr;
+        });
       }
     } else if (clickPosition > totalWidth / 2) {
-      if(imageIndex === imagesLength - 1  && contentsIndex === data.length - 1){
+      if(imagesIndexArr[i] === imagesLength - 1  && contentsIndex === data.length - 1){
         router.push('/')
-      }else if(imageIndex === imagesLength - 1){
+      }else if(imagesIndexArr[i] === imagesLength - 1){
         setCurrentRotation(currentRotation - 90);
         setContentsIndex((prev) => prev + 1)
-        setImageIndex(0)
       }else{
-        setImageIndex((prev) => prev + 1)
+        setImagesIndexArr(prevState => {
+          const newImagesIndexArr = [...prevState];
+          newImagesIndexArr[i] += 1;
+          return newImagesIndexArr;
+        });
       }
     }
   };
@@ -114,11 +118,18 @@ const Story: React.FC = () => {
     axios.get('http://localhost:5000/storypage')
     .then((response) => {
       setData(response.data)
+    }).then(() => {
+      console.log(imagesIndexArr)
     }).catch((error) => {
       console.log(error)
     })
   },[])
 
+  useEffect(() => {
+    setImagesIndexArr(Array(data.length).fill(0))
+  },[data])
+  
+  console.log(imagesIndexArr)
   useEffect(() => {
     setAvailableIndex([contentsIndex - 1, contentsIndex, contentsIndex + 1])
   },[contentsIndex])
@@ -132,26 +143,28 @@ const Story: React.FC = () => {
   useEffect(() => {
     if(flag && data.length !== 0){
       const imagesLength = data[contentsIndex].image.length
-      console.log(imagesLength)
-      if(imageIndex === imagesLength - 1  && contentsIndex === data.length - 1){
+      if(imagesIndexArr[contentsIndex] === imagesLength - 1  && contentsIndex === data.length - 1){
         router.push('/')
-      }else if(imageIndex === imagesLength - 1){
+      }else if(imagesIndexArr[contentsIndex] === imagesLength - 1){
         setCurrentRotation(currentRotation - 90);
         setContentsIndex((prev) => prev + 1)
-        setImageIndex(0)
       }else{
-        setImageIndex((prev) => prev + 1)
+        setImagesIndexArr(prevState => {
+          const newImagesIndexArr = [...prevState];
+          newImagesIndexArr[contentsIndex] += 1;
+          return newImagesIndexArr;
+        });
       }
       toggleFlag(false)
     }
-  }, [flag]);
+  }, [flag,imagesIndexArr]);
 
 
  
   if(data.length !== 0){
   return (
     <>
-      <SC.Container onClick={handleFlip} style={{ transform: `rotateY(${currentRotation}deg)`, transition: "transform 0.5s ease-in-out" }}>
+      <SC.Container onClick={(e) => handleFlip(e,contentsIndex)} style={{ transform: `rotateY(${currentRotation}deg)`, transition: "transform 0.5s ease-in-out" }}>
         {data.map((cube, index) => (
           <Cube key={index} index={index} {...cube}/>
         ))}
