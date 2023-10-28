@@ -243,7 +243,7 @@
       "profileUrl": "/images/sam.jpg",
       "received": "곱창먹으러가자요를레히호",
       "recentMessage": "조용해",
-      "recentTime": "1일 전"
+      "recentTime": "1일"
     },
     {
       "id": 2,
@@ -254,5 +254,8 @@
       "recentMessage": "떡볶이 먹자",
       "recentTime": "2시간 전"
     }
-  ]
+  ],
+  "followStatus": {
+    "followStatus": true
+  }
 }
