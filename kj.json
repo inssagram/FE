@@ -256,6 +256,12 @@
     }
   ],
   "followStatus": {
-    "followStatus": true
+    "follow": true
+  },
+  "likeStatus": {
+    "like": true
+  },
+  "saveStatus": {
+    "save": true
   }
 }

@@ -21,16 +21,16 @@ const PostHeader: React.FC<{ post: Post }> = ({ post }) => {
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
 
   const handleFollowClick = () => {
-    setIsFollowing((prevIsFollowing) => !prevIsFollowing);
+    setIsFollowing(!isFollowing);
     axios
       .post("http://localhost:3001/followStatus", {
-        followStatus: isFollowing,
+        follow: !isFollowing,
       })
       .then((response) => {
-        console.log("팔로우 상태가 서버에 업데이트되었습니다.");
+        console.log("팔로우 상태가 서버에 업데이트되었습니다.", response);
       })
       .catch((error) => {
-        console.error("팔로우 상태 업데이트 중 오류가 발생했습니다.", error);
+        console.error("팔로우 상태가 업데이트 중 오류가 발생했습니다.", error);
       });
   };
 
