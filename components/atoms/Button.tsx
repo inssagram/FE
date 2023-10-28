@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const CopyLink = styled.button`
-  border: none;
-  background-color: inherit;
-  padding: 4px 8px;
-`;
-
-const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({ linkToCopy }) => {
+export const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({
+  linkToCopy,
+}) => {
   const copyToClipboard = () => {
     const tempInput = document.createElement("input");
     tempInput.value = linkToCopy;
@@ -21,4 +17,8 @@ const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({ linkToCopy }) => {
   return <CopyLink onClick={copyToClipboard}>링크 복사</CopyLink>;
 };
 
-export default CopyLinkButton;
+const CopyLink = styled.button`
+  border: none;
+  padding: 4px 8px;
+  background-color: transparent;
+`;

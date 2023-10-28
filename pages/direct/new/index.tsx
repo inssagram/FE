@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import * as SC from "@/components/styled/direct_new";
-import { BackArrow } from "@/components/atoms/Icons";
+import { BackArrow } from "@/components/atoms/Icon";
 import DirectSearchBar from "@/components/input/DirectSearchBar";
 import DmSearchList from "@/components/list/DmSearchList";
 
@@ -37,26 +37,52 @@ const New: React.FC = () => {
 
   return (
     <>
-      <SC.NewHeader>
+      <NewHeader>
         <BackArrow />
-        <SC.HeaderTitle>새로운 메시지</SC.HeaderTitle>
+        <HeaderTitle>새로운 메시지</HeaderTitle>
         {selectedItem && (
           <Link href={`/direct/in/${selectedItem.id}`}>
-            <SC.Next onClick={handleNextClick}>다음</SC.Next>
+            <Next onClick={handleNextClick}>다음</Next>
           </Link>
         )}
-      </SC.NewHeader>
-      <SC.NewContainer>
+      </NewHeader>
+      <div>
         <DirectSearchBar onSearch={handleSearch} selectedItem={selectedUser} />
-        <SC.ResultsContainer>
+        <ResultsContainer>
           <DmSearchList
             onItemSelect={handleItemSelect}
             searchTerm={searchTerm}
           />
-        </SC.ResultsContainer>
-      </SC.NewContainer>
+        </ResultsContainer>
+      </div>
     </>
   );
 };
 
 export default New;
+
+const NewHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid #ccc;
+`;
+
+const HeaderTitle = styled.span`
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+`;
+
+const Next = styled.span`
+  padding-left: 12px;
+  font-size: 14px;
+  color: #0095f6;
+`;
+
+const ResultsContainer = styled.div`
+  margin-top: 16px;
+`;

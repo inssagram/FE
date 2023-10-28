@@ -1,6 +1,6 @@
 import React from "react";
 import * as SC from "@/components/styled/direct";
-import DirectHeader from "@/components/atoms/DirectHeader";
+import { DirectHeader } from "@/components/atoms/Header";
 import DmAccountsList from "@/components/list/DmAccountsList";
 
 const Direct: React.FC = () => {
