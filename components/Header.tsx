@@ -5,6 +5,7 @@ import axios from "axios";
 import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { useRouter } from "next/router";
 
 const Title = styled.h1`
   font-size: 25px;
@@ -47,6 +48,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const createBoards = () => {
@@ -56,7 +58,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 선택하더라도 아래 이미지 주소만 사용하려고 테스트 중임다
     const fixedImageSrc =
-      "https://www.animals.or.kr/api/files/images/51386-cb98b35c-a5ac-484c-b365-f73e8263bd05.png";
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg";
     setSelectedImage(fixedImageSrc);
 
     localStorage.setItem("selectedImage", fixedImageSrc);
@@ -66,6 +68,7 @@ const Header: React.FC<HeaderProps> = (props) => {
       });
       if (response.status === 201) {
         alert("Image uploaded!");
+        router.push("/create");
       }
     } catch (error) {
       alert("Failed to upload the image");

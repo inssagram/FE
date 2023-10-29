@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from "redux-persist/lib/storage" //로컬
 import postsReducer from './postSlice';
+import userReducer from './userSlice';
 import commentsReducer from './commentSlice';
 import profileReducer from './userProfileSlice';
 import thunk from 'redux-thunk';
@@ -13,10 +14,10 @@ const persistConfig = {
   storage,
   whitelist: ["profile"], //영속성 유지할 리듀서 이름
   // blacklist: 유지하지 않을 리듀서 이름
-  
 }
 
 const reducers = combineReducers({
+    user: userReducer,
     posts: postsReducer,
     comments: commentsReducer,
     profile: profileReducer,

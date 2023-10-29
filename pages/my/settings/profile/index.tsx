@@ -22,7 +22,6 @@ const Profile: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    
     router.push("/my")
   }
 

@@ -26,7 +26,7 @@ const BoardWrite: React.FC = () => {
         <SC.Next onClick={handleNextClick}>다음</SC.Next>
       </SC.Header>
       <SC.Container>
-        <Image src="/images/cat.jpg" alt="cute cat" fill />
+        <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg" alt="cute cat" fill />
       </SC.Container>
       <SC.IconContainer>
         <SC.Button>
@@ -37,8 +37,8 @@ const BoardWrite: React.FC = () => {
         </SC.Button>
       </SC.IconContainer>
       <SC.Footer>
-        <SC.FunctionPannels>필터</SC.FunctionPannels>
-        <SC.FunctionPannels>수정</SC.FunctionPannels>
+        <SC.FunctionPannels>스토리</SC.FunctionPannels>
+        <SC.FunctionPannels>게시글</SC.FunctionPannels>
       </SC.Footer>
     </>
   );
