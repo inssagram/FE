@@ -37,7 +37,7 @@ const initialState: PostState = {
       "postId": 1,
       "memberId":1,
       "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg",
-      "contents":"kkang.stylist 이번주 목요일21일 19시 kkst에서 니트가 최초공개됩니다👏... 더 보기",
+      "contents":"텍스트",
       "likeCount":0,
       "commentsCounts":0,
     },
@@ -45,7 +45,7 @@ const initialState: PostState = {
       "postId": 2,
       "memberId":2,
       "image":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg",
-      "contents":"텍스트",
+      "contents":"kkang.stylist 이번주 목요일21일 19시 kkst에서 니트가 최초공개됩니다👏... 더 보기",
       "likeCount":0,
       "commentsCounts":0,
     }
