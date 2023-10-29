@@ -101,7 +101,7 @@ const Main: React.FC = () => {
             <SC.Contents>
               <SC.ImageContent>
                 <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                  src={item.image}
                   alt="개"
                   fill={true}
                 />
