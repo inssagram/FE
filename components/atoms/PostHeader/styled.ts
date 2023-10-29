@@ -46,7 +46,6 @@ export const FollowBtn = styled.button`
   border: none;
   margin-left: 18px;
   background-color: inherit;
-  color: #0095f6;
 `;
 
 export const EtcIcon = styled.div`

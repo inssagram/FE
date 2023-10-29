@@ -1,13 +1,14 @@
-import * as SC from "./styled";
+import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
+import * as SC from "./styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import EllipsisModal from "../../modal/EllipsisModal/EllipsisModal";
 import AccountInfoModal from "../../modal/AccountInfoModal/AccountInfoModal";
 
 interface Post {
-  id: number;
+  id: string;
   name: string;
   profileUrl: string;
   imageUrl: string;
@@ -15,8 +16,23 @@ interface Post {
 }
 
 const PostHeader: React.FC<{ post: Post }> = ({ post }) => {
+  const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
+
+  const handleFollowClick = () => {
+    setIsFollowing(!isFollowing);
+    axios
+      .post("http://localhost:3001/followStatus", {
+        follow: !isFollowing,
+      })
+      .then((response) => {
+        console.log("팔로우 상태가 서버에 업데이트되었습니다.", response);
+      })
+      .catch((error) => {
+        console.error("팔로우 상태가 업데이트 중 오류가 발생했습니다.", error);
+      });
+  };
 
   const handleEtcClick = () => {
     setIsEllipsisModalOpen(!isEllipsisModalOpen);
@@ -54,7 +70,14 @@ const PostHeader: React.FC<{ post: Post }> = ({ post }) => {
               />
             </SC.Profile>
             <SC.Id>{post.name}</SC.Id>
-            <SC.FollowBtn>팔로우</SC.FollowBtn>
+            <SC.FollowBtn
+              onClick={handleFollowClick}
+              style={{
+                color: isFollowing ? "#262626" : "#0095f6",
+              }}
+            >
+              {isFollowing ? `팔로잉` : `팔로우`}
+            </SC.FollowBtn>
           </SC.AccountArea>
           <SC.EtcIcon onClick={handleEtcClick}>
             <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
