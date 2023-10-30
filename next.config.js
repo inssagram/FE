@@ -14,6 +14,7 @@ const nextConfig = {
   },
   env: {
     JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
+    BASE_URL: process.env.BASE_URL,
   },
 };
 
