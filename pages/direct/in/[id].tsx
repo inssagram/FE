@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import DirectInHeader from "@/components/atoms/DirectInHeader";
+import { DirectInHeader } from "@/components/atoms/Header";
 import DirectPartner from "@/components/atoms/DirectPartner";
 import DirectMessage from "@/components/input/DirectMessage/DirectMessage";
 import DmContentsList from "@/components/list/DmContentsList";

@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import PageHeader from "@/components/atoms/PageHeader";
-import PostHeader from "@/components/atoms/PostHeader/PostHeader";
-import PostDetails from "@/components/atoms/PostDetails/PostDetails";
+import { PageHeader } from "@/components/atoms/Header";
+import PostTop from "@/components/Post/Top";
+import PostContents from "@/components/Post/Contents";
 import Footer from "@/components/Footer";
 
 interface Post {
@@ -55,8 +55,8 @@ const Post: React.FC = () => {
   return (
     <>
       <PageHeader title={pageTitle} />
-      {post && <PostHeader post={post} />}
-      {post && <PostDetails post={post} account={account} />}
+      {post && <PostTop post={post} />}
+      {post && <PostContents post={post} account={account} />}
       <Footer />
     </>
   );

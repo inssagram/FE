@@ -2,6 +2,42 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 
+interface Item {
+  userId: string;
+  name: string;
+  profileUrl: string;
+}
+
+const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
+  selectedItem,
+}) => {
+  return (
+    <>
+      <Partner>
+        {selectedItem && (
+          <Picture>
+            <Img>
+              <Image
+                src={selectedItem.profileUrl}
+                alt="프로필"
+                width={56}
+                height={56}
+              />
+            </Img>
+          </Picture>
+        )}
+        <Name>{selectedItem?.name}</Name>
+        <Id>{selectedItem?.userId} Inssagram</Id>
+        <Profile>
+          <Link href="/my">프로필 보기</Link>
+        </Profile>
+      </Partner>
+    </>
+  );
+};
+
+export default DirectPartner;
+
 const Partner = styled.div`
   display: flex;
   flex-direction: column;
@@ -44,39 +80,3 @@ const Profile = styled.div`
   background-color: #efefef;
   font-size: 14px;
 `;
-
-interface Item {
-  userId: string;
-  name: string;
-  profileUrl: string;
-}
-
-const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
-  selectedItem,
-}) => {
-  return (
-    <>
-      <Partner>
-        {selectedItem && (
-          <Picture>
-            <Img>
-              <Image
-                src={selectedItem.profileUrl}
-                alt="프로필"
-                width={56}
-                height={56}
-              />
-            </Img>
-          </Picture>
-        )}
-        <Name>{selectedItem?.name}</Name>
-        <Id>{selectedItem?.userId} Inssagram</Id>
-        <Profile>
-          <Link href="/my">프로필 보기</Link>
-        </Profile>
-      </Partner>
-    </>
-  );
-};
-
-export default DirectPartner;
