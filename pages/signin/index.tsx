@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const router = useRouter();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch = useDispatch();
-  const backendAPI = "http://3.36.239.69:8080";
+  const backendAPI = process.env.BASE_URL;
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
