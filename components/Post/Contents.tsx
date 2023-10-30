@@ -16,26 +16,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface Post {
-  id: string;
-  name: string;
-  profileUrl: string;
-  imageUrl: string;
-  content: string;
+  postId: number;
+  memberId: number;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
 }
 
-interface Account {
-  id: number;
-  name: string;
-  userId: string;
-  profileUrl: string;
-}
+// interface Account {
+//   id: number;
+//   name: string;
+//   userId: string;
+//   profileUrl: string;
+// }
 
 interface PostDetailsProps {
   post: Post;
   account: Account | null;
 }
 
-const PostContents: React.FC<PostDetailsProps> = ({ post, account }) => {
+const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -72,7 +74,7 @@ const PostContents: React.FC<PostDetailsProps> = ({ post, account }) => {
 
   return (
     <>
-      <PostImage src={post.imageUrl} alt="게시글" width={412} height={412} />
+      <PostImage src={post.image} alt="게시글" width={412} height={412} />
       <PostDetails>
         <ButtonArea>
           <Left>
@@ -83,13 +85,16 @@ const PostContents: React.FC<PostDetailsProps> = ({ post, account }) => {
               style={{ color: isLiked ? "red" : "inherit" }}
             />
             <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
-            {account ? (
+            <Link href={`/direct/in`}>
+              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+            </Link>
+            {/* {account ? (
               <Link href={`/direct/in/${account.id}`}>
                 <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
               </Link>
             ) : (
               <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
-            )}
+            )} */}
           </Left>
           <Right>
             <FontAwesomeIcon
@@ -104,8 +109,8 @@ const PostContents: React.FC<PostDetailsProps> = ({ post, account }) => {
 
         <CommentsArea>
           <Details>
-            <Name>{post.name}</Name>
-            <Comments>{post.content}</Comments>
+            <Name>{post.memberId}</Name>
+            <Contents>{post.contents}</Contents>
           </Details>
           <MoreComments>댓글 13개 모두 보기</MoreComments>
           <CreatedAt>2일전</CreatedAt>
@@ -177,7 +182,7 @@ const Name = styled.span`
   font-weight: 600;
 `;
 
-const Comments = styled.span``;
+const Contents = styled.span``;
 
 const MoreComments = styled.button`
   display: flex;
