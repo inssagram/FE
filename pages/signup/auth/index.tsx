@@ -3,11 +3,18 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { useSelector } from "react-redux";
 
 const Auth: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [authNumber, setAuthNumber] = useState("");
+  const userState = useSelector((state: UserState) => state.user)
+  interface UserState {
+    user: string
+  }
+  console.log(userState)
+
 
   useEffect(() => {
     axios

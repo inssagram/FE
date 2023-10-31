@@ -3,9 +3,13 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { reduceEmail } from "./emailState";
+import { useDispatch } from "react-redux";
 
 const Signup: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch()
+  const BASE_URL = process.env.BASE_URL
   let [email, setEmail] = useState("");
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,26 +35,17 @@ const Signup: React.FC = () => {
     if (!emailPattern.test(email)) {
       alert("올바른 이메일 형식이 아닙니다");
     } else {
-      axios
-        .get("http://localhost:5000/email")
-        .then((response) => {
-          const data = response.data;
-          const filtered = data.filter((v: any) => v.email === email);
-          if (filtered.length === 0) {
-            axios
-              .post("http://localhost:5000/email", { email: `${email}` })
-              .then(() => {
-                router.push("/signup/auth");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          } else {
-            alert("중복된 이메일이 있습니다.");
-          }
+      axios.post(`${BASE_URL}/signup/check/email`, {
+        email: email
+      })
+        .then(() => {
+            dispatch( reduceEmail({ email: email }) )
+            router.push("/signup/auth");
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status === 409) {
+            alert("중복된 이메일이 있습니다.");
+          } 
         });
     }
   };

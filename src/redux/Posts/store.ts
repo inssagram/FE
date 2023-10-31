@@ -8,6 +8,7 @@ import commentsReducer from './commentSlice';
 import profileReducer from './userProfileSlice';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import emailState from '@/pages/signup/emailState';
 
 const persistConfig = {
   key: "root",
@@ -26,7 +27,10 @@ const reducers = combineReducers({
 const persistedReducer = persistReducer(persistConfig, reducers)
 
 const store = configureStore({
-  reducer: persistedReducer,
+  reducer: {
+    persistedReducer,
+    user: emailState
+  },
   middleware: [thunk, logger],
 });
 
