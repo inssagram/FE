@@ -45,11 +45,10 @@ const My: React.FC = () => {
   }, []);
 
   const repeatData = useCallback(() => {
-    const currentDataLength = posts.length;
     const newPosts = posts.map((post, index) => {
       return {
         ...post,
-        id: post.id + currentDataLength,
+        id: post.id 
       };
     });
     setPosts((prev) => [...prev, ...newPosts]);

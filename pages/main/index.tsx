@@ -7,11 +7,14 @@ import { faPaperPlane } from "@fortawesome/free-regular-svg-icons/faPaperPlane";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons/faBookmark";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import Layout from "@/components/Layout";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect} from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
+import Modal from "./modal";
+import { PostType, editPost, deletePost } from "@/src/redux/Posts/postSlice";
+import { Link } from "react-router-dom";
 
 const Main: React.FC = () => {
   const router = useRouter();
@@ -19,10 +22,36 @@ const Main: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(Array(SC.Stories.length).fill(false));
   const [pointerBlock, setPointerBlock] = useState<boolean>(false)
   const postData = useSelector((state: RootState) => state.posts);
-  const latestPost = postData.posts[postData.posts.length - 1];
-  
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null); // 선택된 아이템의 ID를 저장하는 상태
+  const dispatch = useDispatch();
+
   console.log(postData)
 
+  const handleOptionClick = (postId:number) => {
+    setSelectedPostId(postId);
+    setModalOpen(true);
+  }
+
+  const handleDeletePost = () => {
+  if (selectedPostId !== null) {
+    dispatch(deletePost(selectedPostId)); // 선택된 postId를 dispatch합니다.
+  }
+  setModalOpen(false);
+  };
+
+  const handleEditPost = (postId: number, updatedPostData: PostType) => {
+    const action = editPost(updatedPostData); // editPost 액션을 dispatch하고 해당 액션을 변수에 저장
+    dispatch(action); // dispatch로 저장된 액션을 전송
+
+    router.push('/create/details/[id]');
+  };
+
+
+  const handleCancelDelete = () => {
+    // 모달 닫기 로직 구현
+    setModalOpen(false);
+  };
 
   const spinnerHandler = (index: number) => {
     const newIsAnimating = [...isAnimating];
@@ -75,6 +104,7 @@ const Main: React.FC = () => {
                   </SC.ImageCUT>
                 </SC.ImageICN>
               }
+              
               <SC.StoryID>{item.userId}</SC.StoryID>
             </SC.Story>
           ))}
@@ -94,17 +124,21 @@ const Main: React.FC = () => {
                 />
                 <SC.ID>정호다</SC.ID>
               </SC.Profile>
-              <SC.More>
+              <SC.More onClick={() => handleOptionClick(item.postId)}>
                 <FontAwesomeIcon icon={faEllipsis} />
               </SC.More>
             </SC.Head>
+            {isModalOpen && selectedPostId !== null && (
+        <Modal onEdit={handleEditPost} onDelete={handleDeletePost} onCancel={handleCancelDelete} />
+      )}
             <SC.Contents>
               <SC.ImageContent>
                 <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                  src={item.image}
                   alt="개"
                   fill={true}
                 />
+
               </SC.ImageContent>
             </SC.Contents>
             <SC.Details>
@@ -125,6 +159,7 @@ const Main: React.FC = () => {
             </SC.Details>
             </SC.Article>
             ))}
+              
       </SC.Container>
     </Layout>
   );
