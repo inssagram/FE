@@ -6,26 +6,16 @@ import { BackArrow } from "@/components/atoms/Icon";
 import { useSelector } from "react-redux";
 
 const Auth: React.FC = () => {
+  const BASE_URL = process.env.BASE_URL
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [authNumber, setAuthNumber] = useState("");
   const userState = useSelector((state: UserState) => state.user)
   interface UserState {
-    user: string
+    user: {
+      email: string
+    }
   }
-  console.log(userState)
-
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/email")
-      .then((response) => {
-        const data = response.data;
-        const selectedEmail = data[data.length - 1].email;
-        setEmail(selectedEmail);
-      })
-      .catch((error) => console.log(error));
-  });
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthNumber(e.target.value);
@@ -35,16 +25,14 @@ const Auth: React.FC = () => {
     if (authNumber === "") {
       alert("인증번호를 입력해주세요");
     } else {
-      axios.get("http://localhost:5000/auth").then((response) => {
-        const data = response.data[0].number;
-        console.log(data);
-        if (authNumber === data) {
-          alert("인증되었습니다.");
-          router.push("/signup/details");
-        } else {
-          alert("인증번호가 맞지 않습니다.");
-        }
-      });
+      axios.post(`${BASE_URL}/signup/check/code`,{
+        email: userState.email,
+        code: authNumber,
+      }).then(() => {
+        router.push('/signup/details')
+      }).catch((error) => {
+        alert(error.response.data.message)
+      })
     }
   };
 

@@ -39,8 +39,14 @@ const Signup: React.FC = () => {
         email: email
       })
         .then(() => {
-            dispatch( reduceEmail({ email: email }) )
-            router.push("/signup/auth");
+            dispatch( reduceEmail(email) )
+            axios.post(`${BASE_URL}/signup/auth`,{
+              email: email
+            }).then(() => {
+              router.push("/signup/auth");
+            }).catch((error) => {
+              console.error(error)
+            })
         })
         .catch((error) => {
           if (error.response.status === 409) {
