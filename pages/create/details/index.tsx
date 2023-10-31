@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { ImageUrlFunction, CreatePostType } from "@/src/redux/Posts/postSlice";
+import { CreatePostType } from "@/src/redux/Posts/postSlice";
 import { useDispatch } from "react-redux";
 import {addPost} from "@/src/redux/Posts/postSlice";
 import { useSelector } from "react-redux";
@@ -41,11 +41,11 @@ const Details: React.FC = ()=> {
       // 게시글 데이터 생성
       const createdPost: CreatePostType = {
         memberId: memberId,
-        image: [
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg"
-        ],
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg",
         contents: contents, // 이 부분을 입력 내용으로 수정해야 함
-
+        likeCount: 0,
+        commentsCounts: 0,
+        postId: postData.posts.length + 1, // 새로운 글의 ID를 정의
       };
       const token = sessionStorage.getItem("token");
       const apiUrl = 'http://3.36.239.69:8080/post/create';
