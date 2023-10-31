@@ -6,15 +6,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { EllipsisModal, AccountInfoModal } from "../atoms/Modal";
 
-interface Post {
-  id: string;
-  name: string;
-  profileUrl: string;
-  imageUrl: string;
-  content: string;
+interface PostData {
+  postId: number;
+  memberId: number;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
 }
 
-const PostTop: React.FC<{ post: Post }> = ({ post }) => {
+const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
@@ -58,13 +60,13 @@ const PostTop: React.FC<{ post: Post }> = ({ post }) => {
     <Top>
       <Account>
         <ProfileImage
-          src={post.profileUrl}
+          src="/images/noProfile.jpg"
           alt="프로필"
           width={32}
           height={32}
           style={{ borderRadius: "100%" }}
         />
-        <Id>{post.name}</Id>
+        <Id>{post.memberId}</Id>
         <FollowBtn
           onClick={handleFollowClick}
           style={{
@@ -90,8 +92,6 @@ const PostTop: React.FC<{ post: Post }> = ({ post }) => {
     </Top>
   );
 };
-
-export default PostTop;
 
 const Top = styled.div`
   display: flex;
@@ -143,3 +143,5 @@ const Loading = styled.div`
   top: 25%;
   left: 50%;
 `;
+
+export default PostTop;

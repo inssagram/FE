@@ -1,11 +1,19 @@
-import * as SC from "@/components/styled/main";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
 
-interface Post {
+interface UserInfo {
+  id: string;
+  email: string;
+  nickname: string;
+  profilePic: string;
+}
+
+interface PostData {
   postId: number;
   memberId: number;
   image: string;
@@ -16,31 +24,43 @@ interface Post {
 }
 
 const Main: React.FC = () => {
-  const [post, setPost] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostData[]>([]);
+  const userInfo = useSelector<UserInfo[]>((state) => state.user);
+  console.log("User Info:", userInfo);
 
-  const getPostAll = async () => {
+  const fetchPostData = async () => {
     try {
       const response = await getPostAllAxios();
-      setPost(response.data);
+      setPosts(response.data);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
   };
 
   useEffect(() => {
-    getPostAll();
+    fetchPostData();
   }, []);
 
   return (
     <Layout>
-      {post.map((item, index) => (
-        <SC.Article key={index}>
-          <PostTop post={item} />
-          <PostContents post={item} />
-        </SC.Article>
-      ))}
+      <PostArea>
+        {posts.map((post, index) => (
+          <Post key={index}>
+            <PostTop post={post} />
+            <PostContents userInfo={userInfo} post={post} />
+          </Post>
+        ))}
+      </PostArea>
     </Layout>
   );
 };
+
+const PostArea = styled.section`
+  padding: 44px 0 48px 0;
+`;
+
+const Post = styled.article`
+  border-bottom: 1px solid #ccc;
+`;
 
 export default Main;

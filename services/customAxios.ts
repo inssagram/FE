@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, AxiosError } from "axios";
+import axios, { AxiosInstance } from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.BASE_URL;
 
 const customAxios: AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -11,7 +11,6 @@ customAxios.interceptors.request.use(
   async (config) => {
     try {
       const accessToken = sessionStorage.getItem("token") || null;
-      console.log(accessToken);
 
       if (accessToken) {
         config.headers["Authorization"] = accessToken;
