@@ -25,7 +25,7 @@ interface PostData {
 
 const Main: React.FC = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
-  const userInfo = useSelector<UserInfo[]>((state) => state.user);
+  const userInfo = useSelector((state: any) => state.user);
   console.log("User Info:", userInfo);
 
   const fetchPostData = async () => {
