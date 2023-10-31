@@ -1,18 +1,14 @@
 import customAxios from "../customAxios";
 
-const getNotificationListAxios = async (
-  token: string,
-  pageParam: number
-): Promise<NotificationListType> => {
-  const response = await customAxios({
+const getNotificationListAllAxios = async (): Promise<string> => {
+  return await customAxios({
     method: "get",
-    url: "",
+    url: `/notification/all`,
     headers: {
       "Content-Type": "application/json",
-      Authorization: token,
+      charset: "utf-8",
     },
   });
-  return response;
 };
 
-export default getNotificationListAxios;
+export default getNotificationListAllAxios;
