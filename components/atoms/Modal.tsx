@@ -7,9 +7,40 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { CopyLinkButton } from "./Button";
 
+interface EllipsisModalProps {
+  handleAccountInfoClick: () => void;
+  handleEtcClick: () => void;
+  post: { postId: number };
+}
+
+export const EllipsisModal: React.FC<EllipsisModalProps> = ({
+  handleAccountInfoClick,
+  handleEtcClick,
+  post,
+}) => {
+  return (
+    <ModalBackdrop>
+      <ModalContent>
+        <CopyLink>
+          <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
+        </CopyLink>
+        <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
+        <CloseBtn onClick={handleEtcClick}>취소</CloseBtn>
+      </ModalContent>
+    </ModalBackdrop>
+  );
+};
+
+interface PostWriterInfo {
+  postId: string;
+  memberId: string;
+  // nickname: string;
+  // profile: string;
+}
+
 interface AccountInfoModalProps {
+  post: PostWriterInfo;
   handleInfoClose: () => void;
-  post: { profileUrl: string; name: string };
 }
 
 export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
@@ -24,14 +55,14 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
           <AccountArea>
             <Profile>
               <Image
-                src={post.profileUrl}
+                src="/images/noProfile.jpg"
                 alt="프로필"
                 width={78}
                 height={78}
                 style={{ borderRadius: "100%" }}
               />
             </Profile>
-            <Id>{post.name}</Id>
+            {/* <Id>{post.nickname}닉네임</Id> */}
           </AccountArea>
           <InfoArea>
             <Detail>
@@ -51,30 +82,6 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
           </InfoArea>
         </InfoContent>
         <CloseBtn onClick={handleInfoClose}>닫기</CloseBtn>
-      </ModalContent>
-    </ModalBackdrop>
-  );
-};
-
-interface EllipsisModalProps {
-  handleAccountInfoClick: () => void;
-  handleEtcClick: () => void;
-  post: { id: string };
-}
-
-export const EllipsisModal: React.FC<EllipsisModalProps> = ({
-  handleAccountInfoClick,
-  handleEtcClick,
-  post,
-}) => {
-  return (
-    <ModalBackdrop>
-      <ModalContent>
-        <CopyLink>
-          <CopyLinkButton linkToCopy={`localhost:3000/post/${post.id}`} />
-        </CopyLink>
-        <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
-        <CloseBtn onClick={handleEtcClick}>취소</CloseBtn>
       </ModalContent>
     </ModalBackdrop>
   );
