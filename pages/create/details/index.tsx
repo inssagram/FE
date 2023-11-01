@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { CreatePostType } from "@/src/redux/Posts/postSlice";
+import { ImageUrlFunction, CreatePostType } from "@/src/redux/Posts/postSlice";
 import { useDispatch } from "react-redux";
 import {addPost} from "@/src/redux/Posts/postSlice";
 import { useSelector } from "react-redux";
@@ -51,7 +51,7 @@ const Details: React.FC = ()=> {
       const apiUrl = 'http://3.36.239.69:8080/post/create';
       const response = await axios.post(apiUrl, createdPost, {
         headers: {
-          Authorization: `${token}`, // 토큰을 헤더에 추가
+          Authorization: `Bearer ${token}`, // 토큰을 헤더에 추가
         },
       });
       console.log('API 응답 데이터:', response.data);

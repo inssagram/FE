@@ -15,7 +15,14 @@ import {
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-interface Post {
+interface UserInfo {
+  // id: string;
+  // email: string;
+  // nickname: string;
+  // profilePic: string;
+}
+
+interface PostData {
   postId: number;
   memberId: number;
   image: string;
@@ -25,19 +32,12 @@ interface Post {
   hashTags: string;
 }
 
-// interface Account {
-//   id: number;
-//   name: string;
-//   userId: string;
-//   profileUrl: string;
-// }
-
-interface PostDetailsProps {
-  post: Post;
-  account: Account | null;
+interface PostContentsProps {
+  userInfo: UserInfo;
+  post: PostData;
 }
 
-const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
+const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -46,6 +46,7 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
     axios
       .post("http://localhost:3001/likeStatus", {
         like: !isLiked,
+        user: userInfo,
       })
       .then((response) => {
         console.log("좋아요 상태가 서버에 업데이트되었습니다.", response);
@@ -60,6 +61,7 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
     axios
       .post("http://localhost:3001/saveStatus", {
         save: !isSaved,
+        user: userInfo,
       })
       .then((response) => {
         console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
@@ -74,7 +76,12 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
 
   return (
     <>
-      <PostImage src={post.image} alt="게시글" width={412} height={412} />
+      <PostImage
+        src="/images/noImage.svg"
+        alt="게시글"
+        width={412}
+        height={412}
+      />
       <PostDetails>
         <ButtonArea>
           <Left>
@@ -85,11 +92,11 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
               style={{ color: isLiked ? "red" : "inherit" }}
             />
             <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
-            <Link href={`/direct/in`}>
+            <Link href={`/direct/in/${post.memberId}`}>
               <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
             </Link>
             {/* {account ? (
-              <Link href={`/direct/in/${account.id}`}>
+              <Link href={`/direct/in/${post.memberId}`}>
                 <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
               </Link>
             ) : (
@@ -105,14 +112,14 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
           </Right>
         </ButtonArea>
 
-        <LikesArea>godchaani님 여러 명이 좋아합니다</LikesArea>
+        <LikesArea>godchaani님 외 {post.likeCount}명이 좋아합니다</LikesArea>
 
         <CommentsArea>
           <Details>
             <Name>{post.memberId}</Name>
             <Contents>{post.contents}</Contents>
           </Details>
-          <MoreComments>댓글 13개 모두 보기</MoreComments>
+          <MoreComments>댓글 {post.commentsCounts} 개 모두 보기</MoreComments>
           <CreatedAt>2일전</CreatedAt>
         </CommentsArea>
       </PostDetails>
@@ -123,6 +130,8 @@ const PostContents: React.FC<PostDetailsProps> = ({ post }) => {
 export default PostContents;
 
 const PostImage = styled(Image)`
+  min-width: 412px;
+  min-height: 412px;
   width: 100%;
 `;
 
