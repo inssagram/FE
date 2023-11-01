@@ -1,6 +1,6 @@
 import customAxios from "../customAxios";
 
-const getPostDetailAxios = async (id: string): Promise<string> => {
+const getPostDetailAxios = async (id: string): Promise<any> => {
   return await customAxios({
     method: "get",
     url: `/post/${id}/detail`,

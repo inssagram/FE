@@ -1,6 +1,6 @@
 import customAxios from "../customAxios";
 
-const getNotificationListAllAxios = async (): Promise<string> => {
+const getNotificationListAllAxios = async (): Promise<any> => {
   return await customAxios({
     method: "get",
     url: `/notification/all`,
