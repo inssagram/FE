@@ -22,7 +22,7 @@ interface PostData {
 }
 
 const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: any) => state.user.member);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);

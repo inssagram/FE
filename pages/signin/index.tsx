@@ -19,14 +19,17 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${backendAPI}/signin`, {
-          email: email,
-          password: password,
+        email: email,
+        password: password,
       });
 
       if (response.status === 200) {
+        console.log(response);
         const token = response.headers.authorization;
         sessionStorage.setItem("token", token);
-        dispatch(login({ email, password }));
+
+        const memberInfo = response.data.data;
+        dispatch(login(memberInfo));
         console.log("토큰: ", token);
         router.push("/main");
       } else {
@@ -37,16 +40,22 @@ const Login: React.FC = () => {
     }
   };
 
-
-
   return (
     <SC.Container>
       <SC.Notification>
         <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
         <SC.Title>Inssagram</SC.Title>
         <SC.LoginCont>
-          <SC.Id alt="이메일입력" placeholder="이메일을 입력하세요" onChange={(e) => setEmail(e.target.value)} />
-          <SC.Password alt="비밀번호입력" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)} />
+          <SC.Id
+            alt="이메일입력"
+            placeholder="이메일을 입력하세요"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <SC.Password
+            alt="비밀번호입력"
+            placeholder="비밀번호를 입력하세요"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword>
           <SC.Login onClick={handleLogin}>로그인</SC.Login>
         </SC.LoginCont>
