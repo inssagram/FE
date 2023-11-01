@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const registerSlice = createSlice({
-  name: "user",
+  name: "registerSlice",
   initialState: {
     email: "",
+    nickName: "",
     password: "",
     job: "",
   },
   reducers: {
     reduceEmail(state, email) {
       state.email = email.payload;
+    },
+    reduceNickname(state,nickName){
+      state.nickName = nickName.payload
     },
     reducePassword(state, password) {
       state.password = password.payload;
@@ -21,4 +25,4 @@ export const registerSlice = createSlice({
 });
 
 export default registerSlice.reducer;
-export const { reduceEmail, reducePassword, reduceJob } = registerSlice.actions;
+export const { reduceEmail,reduceNickname, reducePassword, reduceJob } = registerSlice.actions;
