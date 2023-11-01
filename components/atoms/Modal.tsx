@@ -31,6 +31,32 @@ export const EllipsisModal: React.FC<EllipsisModalProps> = ({
   );
 };
 
+interface MyEllipsisModalProps {
+  handleAccountInfoClick: () => void;
+  handleEtcClick: () => void;
+  post: { postId: number };
+}
+
+export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
+  handleAccountInfoClick,
+  handleEtcClick,
+  post,
+}) => {
+  return (
+    <ModalBackdrop>
+      <ModalContent>
+        <DeletePost>삭제하기</DeletePost>
+        <EditPost>수정하기</EditPost>
+        <MyCopyLink>
+          <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
+        </MyCopyLink>
+        <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
+        <CloseBtn onClick={handleEtcClick}>취소</CloseBtn>
+      </ModalContent>
+    </ModalBackdrop>
+  );
+};
+
 interface PostWriterInfo {
   postId: string;
   memberId: string;
@@ -200,6 +226,21 @@ const CopyLink = styled.button`
   ${Link}
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+`;
+
+const MyCopyLink = styled.button`
+  ${Link}
+`;
+
+const EditPost = styled.button`
+  ${Link}
+`;
+
+const DeletePost = styled.button`
+  ${Link}
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: red;
 `;
 
 const AccountInfo = styled.button`
