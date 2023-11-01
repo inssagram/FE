@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 import axios from "axios";
 import Link from "next/link";
 import { useCallback } from "react";
+import { RootState } from "@/src/redux/Posts/store";
+import { useSelector } from "react-redux";
+import { ImageType, IntroType } from "@/src/redux/Posts/userProfileSlice";
 
 export interface Post {
   id: number;
@@ -20,6 +23,12 @@ const My: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
   const sentinelRef = useRef(null);
   const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
+  const userProfile = useSelector((state: RootState) => {
+    const contents = state.profile.contents as ImageType[];
+    const latestProfile = contents.slice().reverse()[0];
+    return latestProfile;
+  });
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,8 +98,10 @@ const My: React.FC = () => {
       </SC.Header>
       <SC.Container>
         <SC.ProfileLeft>
-          <SC.MyProfile />
+        <SC.MyProfile style={{ backgroundSize: 'cover', backgroundImage: `url(${userProfile?.image})` }} />
+
           <SC.UserName>조유리</SC.UserName>
+          <SC.Intro>{userProfile?.content}</SC.Intro>
         </SC.ProfileLeft>
         <SC.MyIdContainer>
           <SC.UserId>gummy_bear</SC.UserId>
@@ -104,8 +115,11 @@ const My: React.FC = () => {
               <SC.ProfileBox>보관된 스토리 보기</SC.ProfileBox>
             </SC.ProfileEdit>
           </SC.MyIdGroup>
+          
         </SC.MyIdContainer>
+        
       </SC.Container>
+      
       <SC.MyDataContainer>
         <SC.MyDataValue>
           <SC.DataName>게시물</SC.DataName>

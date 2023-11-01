@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   compiler: {
@@ -14,6 +15,7 @@ const nextConfig = {
   },
   env: {
     JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
+    BASE_URL: process.env.BASE_URL,
   },
 };
 

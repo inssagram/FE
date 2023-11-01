@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import PageHeader from "@/components/atoms/PageHeader";
+import { PageHeader } from "@/components/atoms/Header";
 
 const Tags: React.FC = () => {
   const router = useRouter();

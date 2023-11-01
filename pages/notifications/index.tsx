@@ -1,8 +1,30 @@
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import * as SC from "@/components/styled/notifications";
-import { BackChevron } from "@/components/atoms/Icons";
+import { BackChevron } from "@/components/atoms/Icon";
+import getNotificationListAllAxios from "@/services/notificationInfo/getNotificationList";
+
+interface NotificationData {
+  memberNickname: string;
+}
 
 const Notifications: React.FC = () => {
+  const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  console.log(notifications);
+
+  const fetchNotificationData = async () => {
+    try {
+      const response = await getNotificationListAllAxios();
+      setNotifications(response.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotificationData();
+  }, []);
+
   return (
     <>
       <SC.Header>
@@ -11,28 +33,31 @@ const Notifications: React.FC = () => {
       </SC.Header>
       <SC.Notifications>
         <SC.Date>오늘</SC.Date>
-        <SC.ContentArea>
-          <SC.Account>
-            <Image
-              src="/images/profile.jpg"
-              alt="프로필"
-              width={44}
-              height={44}
-              style={{ borderRadius: "100%" }}
-            />
-          </SC.Account>
-          <SC.Content>
-            king_jungho님이 회원님의 스토리를 좋아합니다. 2시간
-          </SC.Content>
-          <SC.Board>
-            <Image
-              src="/images/coffee.jpg"
-              alt="게시물"
-              width={44}
-              height={44}
-            />
-          </SC.Board>
-        </SC.ContentArea>
+        {notifications.map((notification, index) => (
+          <SC.ContentArea key={index}>
+            <SC.Account>
+              <Image
+                src="/images/noProfile.jpg"
+                alt="프로필"
+                width={44}
+                height={44}
+                style={{ borderRadius: "100%" }}
+              />
+            </SC.Account>
+            <SC.Content>
+              {notification.memberNickname}님이 회원님의 스토리를 좋아합니다.
+              2시간
+            </SC.Content>
+            <SC.Board>
+              <Image
+                src="/images/coffee.jpg"
+                alt="게시물"
+                width={44}
+                height={44}
+              />
+            </SC.Board>
+          </SC.ContentArea>
+        ))}
         <SC.ContentArea>
           <SC.Account>
             <Image

@@ -4,12 +4,53 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
+import {useState} from 'react';
+import { useDispatch } from "react-redux";
+import { addPicture, addIntro } from "@/src/redux/Posts/userProfileSlice";
+import { ImageType } from "@/src/redux/Posts/userProfileSlice";
 
 const Profile: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [introContent, setIntroContent] = useState<string>("");
+
   const handlePrevClick = () => {
     router.push("/my");
+    localStorage.clear();
+
   };
+
+  const handleSubmit = () => {
+    router.push("/my")
+  }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+  
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const image = reader.result as string;
+        
+        // 이미지 읽기가 완료된 후에 액션을 디스패치
+        dispatch(addPicture({ image, content: "" } as ImageType));
+        // 상태 업데이트
+        setProfileImage(image);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleIntroChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const content = e.target.value;
+
+    setIntroContent(content);
+
+    //store에 소개 업데이트
+    dispatch(addIntro({content}))
+  }
+  
   return (
     <>
       <SC.Header>
@@ -24,16 +65,24 @@ const Profile: React.FC = () => {
         </SC.ProfileCont>
         <SC.ProfileCont>
           <SC.MyProfile>
-            <SC.ProfileImage />
+            <SC.ProfileImage style={{  backgroundSize: 'cover', backgroundImage: `url(${profileImage})` }}  />
             <SC.IdCont>
               <SC.MyId>gummy_jelly</SC.MyId>F
-              <SC.ChangeProfile>프로필 사진 바꾸기</SC.ChangeProfile>
+              <SC.ChangeProfile><label htmlFor="profileImageInput">프로필 사진 바꾸기</label>
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  accept="image/*"
+                  id="profileImageInput"
+                  style={{ display: 'none' }}
+                />
+              </SC.ChangeProfile>
             </SC.IdCont>
           </SC.MyProfile>
         </SC.ProfileCont>
         <SC.IntroduceCont>
           <SC.Aside>소개</SC.Aside>
-          <SC.TextArea placeholder="나를 소개하세요" />
+          <SC.TextArea value={introContent} onChange={handleIntroChange} placeholder="나를 소개하세요" />
         </SC.IntroduceCont>
         <SC.IntroduceCont>
           <SC.Aside>성별</SC.Aside>
@@ -56,7 +105,7 @@ const Profile: React.FC = () => {
             </SC.CheckboxDesc>
           </SC.CheckboxCont>
         </SC.RecommendCont>
-        <SC.SubmitCont>
+        <SC.SubmitCont onClick={handleSubmit}>
           <SC.Submit type="submit">제출</SC.Submit>
         </SC.SubmitCont>
       </SC.Container>

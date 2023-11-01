@@ -17,11 +17,13 @@ interface Item {
 
 const SearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
   const [results, setResults] = useState<Item[]>([]);
+  console.log(results);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (searchTerm) {
-      setIsLoading(false);
+      setIsLoading(true);
+
       axios
         .get<Item[]>(`http://localhost:3001/accounts`)
         .then((response) => response.data)
@@ -37,14 +39,7 @@ const SearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
           console.error("데이터를 불러오는 중 오류 발생:", error);
           setIsLoading(false);
         });
-    } else {
-      setResults([]);
-    }
-  }, [searchTerm]);
 
-  useEffect(() => {
-    if (searchTerm) {
-      setIsLoading(false);
       axios
         .get<Item[]>(`http://localhost:3001/hashtags`)
         .then((response) => response.data)
@@ -53,7 +48,7 @@ const SearchList: React.FC<{ searchTerm: string }> = ({ searchTerm }) => {
             (item) =>
               item.type === "hashtag" && item.name.startsWith(searchTerm)
           );
-          setResults(filteredResults);
+          setResults((prevResults) => [...prevResults, ...filteredResults]);
           setIsLoading(false);
         })
         .catch((error) => {

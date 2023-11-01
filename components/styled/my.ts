@@ -27,7 +27,7 @@ export const HeaderCon = styled.div`
 
 export const Container = styled.div`
   width: 100%;
-  height: 20vh;
+  height: 22vh;
   background-color: white;
   border-bottom: 1px solid #e2e2e2;
   display: flex;
@@ -51,6 +51,8 @@ export const ProfileLeft = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
+    height: 180px;
 `;
 
 export const MyIdContainer = styled.section`
@@ -68,6 +70,14 @@ export const MyIdGroup = styled.div`
   justify-content: space-between;
   margin: 5px 15px 0 15px;
 `;
+
+export const Intro = styled.div`
+width: 100%;
+height: 30px;
+display: flex;
+    justify-content: center;
+    align-items: center;
+`
 
 export const ProfileEdit = styled.button`
   width: 138px;
@@ -145,7 +155,7 @@ export const FeedViewCon = styled.div`
   background-color: white;
   display: grid;
   grid-template-columns: repeat(3, 136px);
-  grid-template-rows: repeat(4, 136px);
+  grid-template-rows: repeat(4, 131px);
   gap: 10px;
   justify-content: center;
   align-content: center;
