@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
-import { reduceCompanyName } from "../emailState";
+import { reduceJob } from "../emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 
@@ -14,17 +14,18 @@ const Job = () => {
   const [jobList, setJobList] = useState<string[]>([]);
   const router = useRouter();
   const dispatch = useDispatch();
-  const userState = useSelector((state: UserState) => state.user)
+  const register = useSelector((state: registerState) => state.register)
 
-  interface UserState {
-    user: {
+  interface registerState {
+    register: {
       email: string,
       password: string,
       nickname: string,
-      companyName: string
+      job: string
     }
   }
 
+  console.log(register)
   interface JobData {
     job: string;
   }
@@ -62,15 +63,15 @@ const Job = () => {
   };
 
   const submitButtonHandler = async () => {
-    dispatch(reduceCompanyName(inputValue))
+    dispatch(reduceJob(inputValue))
     try{
       await axios.post(`${BASE_URL}/signup`, {
-        email: userState.email,
-        password: userState.password,
-        nickname: userState.nickname,
-        companyName: userState.companyName
+        email: register.email,
+        password: register.password,
+        nickname: register.nickname,
+        job: register.job
       })
-        alert("직업이 설정 되었습니다");
+        alert("계정이 생성되었습니다");
         router.push("/");
       } catch (error) {
         console.log(error);
