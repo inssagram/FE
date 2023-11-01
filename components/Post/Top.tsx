@@ -10,6 +10,15 @@ import {
   MyEllipsisModal,
   AccountInfoModal,
 } from "../atoms/Modal";
+import { RootState } from "@/src/redux/Posts/store";
+
+interface UserInfo {
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+  profilePic: string;
+}
 
 interface PostData {
   postId: number;
@@ -22,7 +31,9 @@ interface PostData {
 }
 
 const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
-  const userInfo = useSelector((state: any) => state.user.member);
+  const userInfo = useSelector(
+    (state: RootState) => state.user.member
+  ) as UserInfo;
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
@@ -72,6 +83,13 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
           height={32}
           style={{ borderRadius: "100%" }}
         />
+        {/* <ProfileImage
+          src={userInfo.profilePic}
+          alt="프로필"
+          width={32}
+          height={32}
+          style={{ borderRadius: "100%" }}
+        /> */}
         <Id>{post.memberId}</Id>
         <FollowBtn
           onClick={handleFollowClick}
@@ -85,7 +103,7 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
       <EtcIcon onClick={handleEtcClick}>
         <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
       </EtcIcon>
-      {userInfo.id === post?.memberId
+      {post?.memberId === userInfo.member_id
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
               handleAccountInfoClick={handleAccountInfoClick}

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "@/src/redux/Posts/userSlice";
+import { loginUser, logoutUser } from "@/src/redux/Posts/userSlice";
 import { RootState } from "@/src/redux/Posts/store";
 
 const Login: React.FC = () => {
@@ -26,7 +26,9 @@ const Login: React.FC = () => {
       if (response.status === 200) {
         const token = response.headers.authorization;
         sessionStorage.setItem("token", token);
-        dispatch(login({ email, password }));
+
+        const memberInfo = response.data.data;
+        dispatch(loginUser(memberInfo));
         console.log("토큰: ", token);
         router.push("/main");
       } else {

@@ -1,17 +1,11 @@
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
-
-interface UserInfo {
-  id: string;
-  email: string;
-  nickname: string;
-  profilePic: string;
-}
+import { RootState } from "@/src/redux/Posts/store";
 
 interface PostData {
   postId: number;
@@ -25,8 +19,8 @@ interface PostData {
 
 const Main: React.FC = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
-  const userInfo = useSelector((state: any) => state.user.member);
-  console.log("User Info:", userInfo);
+  const userInfo: any = useSelector((state: RootState) => state.user.member);
+  console.log("UserInfo:", userInfo);
 
   const fetchPostData = async () => {
     try {

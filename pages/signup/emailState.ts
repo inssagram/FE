@@ -1,28 +1,24 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-let user = createSlice({
+export const registerSlice = createSlice({
   name: "user",
   initialState: {
     email: "",
     password: "",
-    nickname: "",
-    companyName: "",
+    job: "",
   },
   reducers: {
-    reduceEmail(state, email){
-     state.email = email.payload   
+    reduceEmail(state, email) {
+      state.email = email.payload;
     },
-    reducePassword(state, password){
-        state.password = password.payload
+    reducePassword(state, password) {
+      state.password = password.payload;
     },
-    reduceNickname(state, nickname){
-        state.nickname = nickname.payload
+    reduceJob(state, job) {
+      state.job, job.payload;
     },
-    reduceCompanyName(state, companyName){
-        state.companyName, companyName.payload
-    }
   },
 });
 
-export default user.reducer;
-export const {reduceEmail, reducePassword, reduceNickname, reduceCompanyName} = user.actions;
+export default registerSlice.reducer;
+export const { reduceEmail, reducePassword, reduceJob } = registerSlice.actions;

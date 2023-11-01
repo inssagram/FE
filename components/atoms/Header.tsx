@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faUserPlus,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { BackArrow, BackChevron } from "@/components/atoms/Icon";
 
 export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
@@ -14,12 +18,26 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
   );
 };
 
+export const MyPageHeader: React.FC = ({ userInfo }) => {
+  return (
+    <>
+      <MyHeader>
+        <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+        <h2>{userInfo.nickname}</h2>
+        <Link href="my/recommend" passHref>
+          <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
+        </Link>
+      </MyHeader>
+    </>
+  );
+};
+
 export const DirectHeader: React.FC = () => {
   return (
     <>
       <DmHeader>
         <BackArrow />
-        <div>februaar</div>
+        <h2>februaar</h2>
         <div>
           <Link href="/direct/new">
             <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
@@ -78,7 +96,7 @@ const Title = styled.span`
 `;
 
 // Direct
-const Header = styled.div`
+const Header = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -89,6 +107,11 @@ const Header = styled.div`
   letter-spacing: 0.3px;
   padding: 0 16px;
   border-bottom: 1px solid #ccc;
+`;
+
+// My
+const MyHeader = styled(Header)`
+  justify-content: space-between;
 `;
 
 const DmHeader = styled(Header)`
