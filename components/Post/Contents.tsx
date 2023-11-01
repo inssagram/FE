@@ -16,10 +16,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface UserInfo {
-  // id: string;
-  // email: string;
-  // nickname: string;
-  // profilePic: string;
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+  profilePic: string;
 }
 
 interface PostData {
@@ -82,6 +83,7 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
         width={412}
         height={412}
       />
+      {/* <PostImage src={post.image} alt="게시글" width={412} height={412} /> */}
       <PostDetails>
         <ButtonArea>
           <Left>
@@ -92,16 +94,13 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
               style={{ color: isLiked ? "red" : "inherit" }}
             />
             <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
-            <Link href={`/direct/in/${post.memberId}`}>
-              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
-            </Link>
-            {/* {account ? (
+            {userInfo ? (
               <Link href={`/direct/in/${post.memberId}`}>
                 <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
               </Link>
             ) : (
               <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
-            )} */}
+            )}
           </Left>
           <Right>
             <FontAwesomeIcon

@@ -5,17 +5,18 @@ import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
 import { useSelector } from "react-redux";
 
+interface UserState {
+  user: {
+    email: string;
+  };
+}
+
 const Auth: React.FC = () => {
-  const BASE_URL = process.env.BASE_URL
+  const BASE_URL = process.env.BASE_URL;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [authNumber, setAuthNumber] = useState("");
-  const userState = useSelector((state: UserState) => state.user)
-  interface UserState {
-    user: {
-      email: string
-    }
-  }
+  const userState = useSelector((state: UserState) => state.user);
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthNumber(e.target.value);
@@ -25,14 +26,17 @@ const Auth: React.FC = () => {
     if (authNumber === "") {
       alert("인증번호를 입력해주세요");
     } else {
-      axios.post(`${BASE_URL}/signup/check/code`,{
-        email: userState.email,
-        code: authNumber,
-      }).then(() => {
-        router.push('/signup/details')
-      }).catch((error) => {
-        alert(error.response.data.message)
-      })
+      axios
+        .post(`${BASE_URL}/signup/check/code`, {
+          email: userState.email,
+          code: authNumber,
+        })
+        .then(() => {
+          router.push("/signup/details");
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
     }
   };
 

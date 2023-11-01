@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "@/src/redux/Posts/userSlice";
+import { loginUser, logoutUser } from "@/src/redux/Posts/userSlice";
 import { RootState } from "@/src/redux/Posts/store";
 
 const Login: React.FC = () => {
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
         sessionStorage.setItem("token", token);
 
         const memberInfo = response.data.data;
-        dispatch(login(memberInfo));
+        dispatch(loginUser(memberInfo));
         console.log("토큰: ", token);
         router.push("/main");
       } else {

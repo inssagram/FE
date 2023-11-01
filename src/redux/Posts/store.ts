@@ -1,43 +1,37 @@
-// store.ts
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from "redux-persist/lib/storage" //로컬
-import postsReducer from './postSlice';
-import userReducer from './userSlice';
-import commentsReducer from './commentSlice';
-import profileReducer from './userProfileSlice';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
-import emailState from '@/pages/signup/emailState';
+import thunk from "redux-thunk";
+import logger from "redux-logger";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { userSlice } from "./userSlice";
+import { registerSlice } from "@/pages/signup/emailState";
+import profileReducer from "./userProfileSlice";
+// import postsReducer from "./postSlice";
+// import commentsReducer from "./commentSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["profile"], //영속성 유지할 리듀서 이름
-  // blacklist: 유지하지 않을 리듀서 이름
-}
+  whitelist: ["profile"],
+};
 
 const reducers = combineReducers({
-    user: userReducer,
-    posts: postsReducer,
-    comments: commentsReducer,
-    profile: profileReducer,
-})
+  user: userSlice.reducer,
+  register: registerSlice.reducer,
+  profile: profileReducer,
+  // posts: postsReducer,
+  // comments: commentsReducer,
+});
 
-const persistedReducer = persistReducer(persistConfig, reducers)
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
-  reducer: {
-    persistedReducer,
-    user: emailState
-  },
+  reducer: persistedReducer,
   middleware: [thunk, logger],
 });
 
 const persistor = persistStore(store);
 
-// 타입스크립트에서 사용할 RootState 타입 정의
 export type RootState = ReturnType<typeof store.getState>;
 
-export {store, persistor};
-
+export { store, persistor };
