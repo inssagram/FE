@@ -19,7 +19,7 @@ export const HeaderCon = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 33%;
-  margin-top: 0.6rem;
+  // margin-top: 0.6rem;
   color: black;
   font-weight: bold;
   font-size: 1.4rem;
@@ -33,7 +33,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 16px;
+  padding: 44px 16px 0;
   border-top: 2px solid #e2e2e2;
 `;
 
@@ -52,7 +52,7 @@ export const ProfileLeft = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-    height: 180px;
+  height: 180px;
 `;
 
 export const MyIdContainer = styled.section`
@@ -72,12 +72,12 @@ export const MyIdGroup = styled.div`
 `;
 
 export const Intro = styled.div`
-width: 100%;
-height: 30px;
-display: flex;
-    justify-content: center;
-    align-items: center;
-`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const ProfileEdit = styled.button`
   width: 138px;

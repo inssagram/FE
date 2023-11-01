@@ -12,6 +12,7 @@ import {addPost} from "@/src/redux/Posts/postSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 
+
 const Details: React.FC = ()=> {
   const router = useRouter()
   const [post, setPost] = useState<CreatePostType | null>(null);
@@ -21,7 +22,6 @@ const Details: React.FC = ()=> {
   const dispatch = useDispatch();
   const memberId = 1;
   const postData = useSelector((state: RootState) => state.posts);
-
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContents(event.target.value);
@@ -47,17 +47,9 @@ const Details: React.FC = ()=> {
         commentsCounts: 0,
         postId: postData.posts.length + 1, // 새로운 글의 ID를 정의
       };
-      const token = sessionStorage.getItem("token");
-      const apiUrl = 'http://3.36.239.69:8080/post/create';
-      const response = await axios.post(apiUrl, createdPost, {
-        headers: {
-          Authorization: `Bearer ${token}`, // 토큰을 헤더에 추가
-        },
-      });
-      console.log('API 응답 데이터:', response.data);
-
+  
       dispatch(addPost(createdPost)); // 리덕스 스토어에 글 추가
-      router.push('/main');
+      router.push('/main'); // 페이지 이동은 여기서 호출하지 않고 상태 업데이트 후에 이동해야 함
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +73,6 @@ const Details: React.FC = ()=> {
     };
     fetchData();
   }, []);
-
   return (
     <>
       <SC.Header>

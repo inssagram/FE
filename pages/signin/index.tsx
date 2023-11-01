@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "@/src/redux/Posts/userSlice";
+import { login, logout } from "@/src/redux/Posts/userSlice";
 import { RootState } from "@/src/redux/Posts/store";
 
 const Login: React.FC = () => {
@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const router = useRouter();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch = useDispatch();
-  const backendAPI = "http://3.36.239.69:8080";
+  const backendAPI = process.env.BASE_URL;
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

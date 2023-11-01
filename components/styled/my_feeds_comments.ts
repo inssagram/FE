@@ -268,18 +268,6 @@ export const ModalButtons = styled.div`
     
 `
 
-export const EditButton = styled.button`
-    width: 200px;
-    height: 48px;
-    background-color: #e5e5e5; /* 삭제 버튼 배경색 변경 */
-    color: white; /* 텍스트 색상 변경 */
-    border: none;
-    border-radius: 8px; /* 둥근 테두리 설정 */
-    margin-bottom: 10px; /* 버튼 간 간격 지정 */
-    cursor: pointer;
-    border-radius: 16px;
-`
-
 export const DeleteButton = styled.button`
     width: 200px;
     height: 48px;

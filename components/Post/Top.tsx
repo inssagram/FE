@@ -2,9 +2,14 @@ import axios from "axios";
 import styled from "styled-components";
 import Image from "next/image";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { EllipsisModal, AccountInfoModal } from "../atoms/Modal";
+import {
+  EllipsisModal,
+  MyEllipsisModal,
+  AccountInfoModal,
+} from "../atoms/Modal";
 
 interface PostData {
   postId: number;
@@ -17,6 +22,7 @@ interface PostData {
 }
 
 const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
+  const userInfo = useSelector((state: any) => state.user);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
@@ -79,13 +85,21 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
       <EtcIcon onClick={handleEtcClick}>
         <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
       </EtcIcon>
-      {isEllipsisModalOpen && (
-        <EllipsisModal
-          handleAccountInfoClick={handleAccountInfoClick}
-          handleEtcClick={handleEtcClick}
-          post={post}
-        />
-      )}
+      {userInfo.id === post?.memberId
+        ? isEllipsisModalOpen && (
+            <MyEllipsisModal
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleEtcClick={handleEtcClick}
+              post={post}
+            />
+          )
+        : isEllipsisModalOpen && (
+            <EllipsisModal
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleEtcClick={handleEtcClick}
+              post={post}
+            />
+          )}
       {isAccountInfoModalOpen && (
         <AccountInfoModal handleInfoClose={handleInfoClose} post={post} />
       )}
