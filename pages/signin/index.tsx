@@ -48,7 +48,7 @@ const Login: React.FC = () => {
         <SC.Title>Inssagram</SC.Title>
         <SC.LoginCont>
           <SC.Id alt="이메일입력" placeholder="이메일을 입력하세요" onChange={(e) => setEmail(e.target.value)} />
-          <SC.Password alt="비밀번호입력" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)} />
+          <SC.Password alt="비밀번호입력" placeholder="비밀번호를 입력하세요" type="password" onChange={(e) => setPassword(e.target.value)} />
           <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword>
           <SC.Login onClick={handleLogin}>로그인</SC.Login>
         </SC.LoginCont>

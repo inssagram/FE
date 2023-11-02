@@ -146,7 +146,7 @@ const Details: React.FC = () => {
               onBlur={nicknameHandler}
               style={{ borderColor: wrongWayNickname ? "red" : "transparent" }}
             ></SC.Input>
-            <SC.Input
+            <SC.Password
               type="password"
               placeholder="비밀번호를 입력하세요"
               onChange={inputPasswordHandler}
@@ -156,8 +156,8 @@ const Details: React.FC = () => {
                 borderColor: wrongWayPassword ? "red" : "transparent",
                 fontFamily: "Aria",
               }}
-            ></SC.Input>
-            <SC.Input
+            ></SC.Password>
+            <SC.Password
               type="password"
               placeholder="비밀번호를 재확인 해주세요"
               onChange={inputPasswordCheckHandler}
@@ -167,7 +167,7 @@ const Details: React.FC = () => {
                 borderColor: wrongWayPasswordCheck ? "red" : "transparent",
                 fontFamily: "Aria",
               }}
-            ></SC.Input>
+            ></SC.Password>
           </SC.InputBox>
           <SC.ProcessState>
             {nicknameProcessState}

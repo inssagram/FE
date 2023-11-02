@@ -37,7 +37,7 @@ const Auth: React.FC = () => {
         })
         .catch((error) => {
           console.log(error)
-          alert('인증번호가 불일치 합니다');
+          alert(error.request.data.message);
         });
     }
   };
