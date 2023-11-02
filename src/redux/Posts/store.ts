@@ -6,8 +6,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./userSlice";
 import { registerSlice } from "@/pages/signup/emailState";
 import profileReducer from "./userProfileSlice";
-// import postsReducer from "./postSlice";
-// import commentsReducer from "./commentSlice";
+import { postsSlice } from "./postSlice";
 
 const persistConfig = {
   key: "root",
@@ -19,7 +18,7 @@ const reducers = combineReducers({
   user: userSlice.reducer,
   register: registerSlice.reducer,
   profile: profileReducer,
-  // posts: postsReducer,
+  posts: postsSlice.reducer,
   // comments: commentsReducer,
 });
 

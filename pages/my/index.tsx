@@ -173,11 +173,15 @@ const My: React.FC<MyProps> = () => {
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로워</SC.DataName>
+          <Link href="/my/followers">
           <SC.DataValue>485</SC.DataValue>
+          </Link>
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로우</SC.DataName>
+          <Link href="/my/follows">
           <SC.DataValue>557</SC.DataValue>
+          </Link>
         </SC.MyDataValue>
       </SC.MyDataContainer>
       <SC.IconContainer>

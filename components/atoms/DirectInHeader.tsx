@@ -1,0 +1,86 @@
+import Image from "next/image";
+import styled from "styled-components";
+import { BackArrow } from "@/components/atoms/Icons";
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 0 16px;
+  border-bottom: 1px solid #ccc;
+`;
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 12px;
+  height: 44px;
+  gap: 6px;
+`;
+
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 100%;
+`;
+
+const Recent = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+`;
+
+const Account = styled.span`
+  font-size: 16px;
+`;
+
+const RecentTime = styled.span`
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #737373;
+`;
+
+interface Item {
+  name: string;
+  profileUrl: string;
+}
+
+const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
+  selectedItem,
+}) => {
+  return (
+    <>
+      <Header>
+        <BackArrow />
+        <Info>
+          <Profile>
+            {selectedItem && (
+              <Image
+                src={selectedItem.profileUrl}
+                alt="프로필"
+                width={24}
+                height={24}
+              />
+            )}
+          </Profile>
+          <Recent>
+            <Account>
+              {selectedItem ? selectedItem.name : "No User Selected"}
+            </Account>
+            <RecentTime>1시간 전에 활동</RecentTime>
+          </Recent>
+        </Info>
+      </Header>
+    </>
+  );
+};
+
+export default DirectInHeader;
