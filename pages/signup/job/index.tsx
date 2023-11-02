@@ -71,8 +71,8 @@ const Job = () => {
         nickname: register.nickname,
         job: register.job
       })
-        alert("계정이 생성되었습니다");
-        router.push("/");
+        alert("계정이 생성되었습니다.");
+        router.push("/signin");
       } catch (error) {
         console.log(error);
       }
