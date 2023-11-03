@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"
 
 export const Container = styled.div`
   width: 100%;
@@ -42,7 +42,10 @@ export const Id = styled.input`
   border-style: none;
   background-color: whitesmoke;
   padding-left: 5px;
+  color: black;
 `;
+
+
 
 export const Password = styled.input`
   width: 205px;
@@ -51,6 +54,11 @@ export const Password = styled.input`
   border-style: none;
   background-color: whitesmoke;
   padding-left: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+  &::placeholder{
+    font-family: JejuGothic
+  }
 `;
 
 export const DownButton = styled.button`

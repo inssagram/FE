@@ -16,7 +16,6 @@ import { RootState } from "@/src/redux/Posts/store";
 const Details: React.FC = ()=> {
   const router = useRouter()
   const [post, setPost] = useState<CreatePostType | null>(null);
-  const [image, setImage] = useState("이미지");
   const [contents, setContents] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
@@ -38,22 +37,39 @@ const Details: React.FC = ()=> {
     event.preventDefault();
     
     try {
-      // 게시글 데이터 생성
+      const token = sessionStorage.getItem("token");
+
+      if (!token) {
+        // 토큰이 없으면 로그인 페이지로
+        router.push("/signin");
+        return;
+      }
       const createdPost: CreatePostType = {
         memberId: memberId,
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg",
-        contents: contents, // 이 부분을 입력 내용으로 수정해야 함
-        likeCount: 0,
-        commentsCounts: 0,
-        postId: postData.posts.length + 1, // 새로운 글의 ID를 정의
+        image: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg"],
+        contents: contents,
       };
+
+         const headers = {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        };
   
-      dispatch(addPost(createdPost)); // 리덕스 스토어에 글 추가
-      router.push('/main'); // 페이지 이동은 여기서 호출하지 않고 상태 업데이트 후에 이동해야 함
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        const response = await axios.post("http://3.36.239.69:8080/post/create", createdPost, {
+          headers: headers,
+        });
+  
+        if (response.status === 200) {
+          // dispatch(addPost(createdPost));
+          router.push("/main");
+        } else {
+          console.error("게시물 생성에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
   
   const handlePrevClick = () => {
     router.push('/create');
