@@ -1,25 +1,31 @@
 import styled from "styled-components";
 
-export const Header = styled.div`
-  width: 412px;
-  height: 44px;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
+export const ModalWrapper = styled.div`
   position: fixed;
-  background-color: #ffffff;
-  color: #222222;
-  z-index: 10;
-  border-bottom: 1px solid #e2e2e2;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+export const Header = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 export const H1 = styled.h1`
   font-size: 1.3rem;
   color: black;
   font-weight: lighter;
-  margin-left: 40%;
+  text-align: center;
+  margin: 0;
 `;
 
 export const Prev = styled.button`
@@ -35,7 +41,7 @@ export const Prev = styled.button`
   left: 5%; // 추가
 `;
 
-export const Next = styled.span`
+export const Next = styled.button`
   width: 35px;
   height: 35px;
   background-color: transparent;
@@ -45,16 +51,22 @@ export const Next = styled.span`
   display: flex;
   align-items: center;
   padding: 0;
+  right: 0;
+  position: absolute;
 `;
 
 export const Container = styled.section`
-  width: 100%;
-  min-height: 100vh;
   background-color: white;
-  color: black;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
+  width: 80%;
+  max-width: 400px;
+  padding: 20px 20px 150px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 `;
 
 // ----------------------------------------------------------------------------
@@ -96,8 +108,7 @@ export const FunctionFannels = styled.div`
   display: flex;
   flex-direction: row;
   bottom: 5%;
-  padding: 0 3rem 0 3rem;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 `;
 
@@ -113,7 +124,19 @@ export const Button = styled.button`
 export const Text = styled.span`
   font-size: 1rem;
   color: white;
-  margin-left: -10rem;
+  margin-left: -5rem;
+`;
+
+export const UserInput = styled.input`
+  width: 100%;
+  height: 40px;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border-style: none;
 `;
 
 export const ID = styled.span`
@@ -162,14 +185,9 @@ export const ContentsDate = styled.div`
 
 export const AddLocation = styled.span`
   position: absolute;
-  top: 10%;
-  left: 16%;
+  top: 20%;
+  left: 26%;
   color: #0095f6;
-`;
-
-export const CommentCont = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export const UserCont = styled.div`
@@ -180,69 +198,4 @@ export const UserCont = styled.div`
 export const UserId = styled.div`
   margin: 0.5rem 0.5rem 0.5rem;
   width: 18%;
-`;
-
-export const WriteReply = styled.span`
-  width: 50%;
-  padding-left: 3.8rem;
-  color: darkgray;
-`;
-
-export const AllComment = styled.div`
-  color: darkgray;
-  margin-top: 1rem;
-  position: relative; // relative positioning을 추가합니다.
-  padding-left: 7rem;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: 15%; // 이 값을 0으로 변경하세요
-    top: 50%;
-    transform: translateY(-50%);
-    height: 1px;
-    width: 15px;
-    background-color: darkgrey;
-  }
-`;
-
-export const UserComment = styled.span`
-  color: gray;
-  margin: 0 0 1rem 0;
-  width: 100%;
-  padding-left: 3.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-export const CommentsDate = styled.p`
-  color: gray;
-`;
-export const CommentsContainer = styled.div`
-  width: 100%;
-  height: 8vh;
-  border-top: 1px solid #e2e2e2;
-  display: flex;
-  align-items: center;
-  padding-left: 1rem;
-`;
-
-export const CommentsForm = styled.form`
-  width: 100%;
-  position: relative;
-  padding-left: 1rem;
-`;
-
-export const CommentsInput = styled.input`
-  width: 95%;
-  height: 4vh;
-  border-radius: 10px;
-  padding-left: 0.5rem;
-`;
-export const SmileIcon = styled.div`
-  position: absolute; // 이를 absolute로 설정합니다.
-  right: 10%; // 오른쪽에서 5px 떨어지게 설정합니다.
-  top: 50%; // 상위 컨테이너의 중앙에 위치시킵니다.
-  transform: translateY(-50%); // Y축을 중심으로 이를 조정하여 아이콘을 완벽하게 중앙에 위치시킵니다.
 `;
