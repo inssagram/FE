@@ -15,6 +15,17 @@ import {
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 
+interface PostData {
+  postId: number;
+  memberId: number;
+  nickname: string;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
+}
+
 interface UserInfo {
   email: string;
   member_id: number;
@@ -23,22 +34,17 @@ interface UserInfo {
   profilePic: string;
 }
 
-interface PostData {
-  postId: number;
-  memberId: number;
-  image: string;
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
-
 interface PostContentsProps {
-  userInfo: UserInfo;
   post: PostData;
+  userInfo: UserInfo;
+  handleCommentClick: () => void;
 }
 
-const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
+const PostContents: React.FC<PostContentsProps> = ({
+  post,
+  userInfo,
+  handleCommentClick,
+}) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -47,7 +53,6 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
     axios
       .post("http://localhost:3001/likeStatus", {
         like: !isLiked,
-        user: userInfo,
       })
       .then((response) => {
         console.log("좋아요 상태가 서버에 업데이트되었습니다.", response);
@@ -62,7 +67,6 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
     axios
       .post("http://localhost:3001/saveStatus", {
         save: !isSaved,
-        user: userInfo,
       })
       .then((response) => {
         console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
@@ -90,23 +94,23 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
             <FontAwesomeIcon
               onClick={handleLikeClick}
               icon={isLiked ? fasHeart : farHeart}
-              fontSize={"24px"}
+              fontSize={24}
               style={{ color: isLiked ? "red" : "inherit" }}
             />
-            <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
+            <FontAwesomeIcon icon={faComment} fontSize={24} />
             {userInfo ? (
               <Link href={`/direct/in/${post.memberId}`}>
-                <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+                <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
               </Link>
             ) : (
-              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+              <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
             )}
           </Left>
           <Right>
             <FontAwesomeIcon
               onClick={handleSaveClick}
               icon={isSaved ? fasBookmark : farBookmark}
-              fontSize={"24px"}
+              fontSize={24}
             />
           </Right>
         </ButtonArea>
@@ -115,10 +119,12 @@ const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
 
         <CommentsArea>
           <Details>
-            <Name>{post.memberId}</Name>
+            <Name>{post.nickname}</Name>
             <Contents>{post.contents}</Contents>
           </Details>
-          <MoreComments>댓글 {post.commentsCounts} 개 모두 보기</MoreComments>
+          <MoreComments onClick={handleCommentClick}>
+            댓글 {post.commentsCounts} 개 모두 보기
+          </MoreComments>
           <CreatedAt>2일전</CreatedAt>
         </CommentsArea>
       </PostDetails>

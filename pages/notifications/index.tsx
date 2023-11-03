@@ -2,19 +2,34 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import * as SC from "@/components/styled/notifications";
 import { BackChevron } from "@/components/atoms/Icon";
-import getNotificationListAllAxios from "@/services/notificationInfo/getNotificationList";
+import { PageHeader } from "@/components/atoms/Header";
+import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
+import getNotificationSubscribeAxios from "@/services/notificationInfo/getSubscribe";
 
 interface NotificationData {
-  memberNickname: string;
+  senderName: string;
+  createdAt: string;
+  message: string;
 }
 
 const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   console.log(notifications);
 
+  const pageTitle = "알림";
+
+  const startSSE = async () => {
+    try {
+      const response = await getNotificationSubscribeAxios();
+      setNotifications(response.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
   const fetchNotificationData = async () => {
     try {
-      const response = await getNotificationListAllAxios();
+      const response = await getNotificationAllAxios();
       setNotifications(response.data);
     } catch (error) {
       console.error("Error fetching notifications:", error);
@@ -23,14 +38,12 @@ const Notifications: React.FC = () => {
 
   useEffect(() => {
     fetchNotificationData();
+    startSSE();
   }, []);
 
   return (
     <>
-      <SC.Header>
-        <BackChevron />
-        <SC.PageTitle>알림</SC.PageTitle>
-      </SC.Header>
+      <PageHeader title={pageTitle} />
       <SC.Notifications>
         <SC.Date>오늘</SC.Date>
         {notifications.map((notification, index) => (
@@ -45,12 +58,12 @@ const Notifications: React.FC = () => {
               />
             </SC.Account>
             <SC.Content>
-              {notification.memberNickname}님이 회원님의 스토리를 좋아합니다.
-              2시간
+              {/* {notification.senderName} */}
+              {notification.message} 2시간
             </SC.Content>
             <SC.Board>
               <Image
-                src="/images/coffee.jpg"
+                src="/images/noImage.svg"
                 alt="게시물"
                 width={44}
                 height={44}
@@ -58,7 +71,7 @@ const Notifications: React.FC = () => {
             </SC.Board>
           </SC.ContentArea>
         ))}
-        <SC.ContentArea>
+        {/* <SC.ContentArea>
           <SC.Account>
             <Image
               src="/images/profile.jpg"
@@ -72,7 +85,7 @@ const Notifications: React.FC = () => {
             king_jungho님이 회원님의 스토리를 좋아합니다. 2시간
           </SC.Content>
           <SC.Follow>팔로우</SC.Follow>
-        </SC.ContentArea>
+        </SC.ContentArea> */}
       </SC.Notifications>
     </>
   );

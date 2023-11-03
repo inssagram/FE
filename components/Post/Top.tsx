@@ -23,6 +23,7 @@ interface UserInfo {
 interface PostData {
   postId: number;
   memberId: number;
+  nickname: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -30,7 +31,11 @@ interface PostData {
   hashTags: string;
 }
 
-const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
+interface PostContentsProps {
+  post: PostData;
+}
+
+const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const userInfo = useSelector(
     (state: RootState) => state.user.member
   ) as UserInfo;
@@ -90,7 +95,7 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
           height={32}
           style={{ borderRadius: "100%" }}
         /> */}
-        <Id>{post.memberId}</Id>
+        <Id>{post.nickname}</Id>
         <FollowBtn
           onClick={handleFollowClick}
           style={{

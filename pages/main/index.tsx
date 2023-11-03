@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
@@ -10,6 +11,7 @@ import { RootState } from "@/src/redux/Posts/store";
 interface PostData {
   postId: number;
   memberId: number;
+  nickname: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -18,9 +20,12 @@ interface PostData {
 }
 
 const Main: React.FC = () => {
-  const [posts, setPosts] = useState<PostData[]>([]);
   const userInfo: any = useSelector((state: RootState) => state.user.member);
   console.log("UserInfo:", userInfo);
+  const [posts, setPosts] = useState<PostData[]>([]);
+
+  const router = useRouter();
+  const { id } = router.query as { id: string };
 
   const fetchPostData = async () => {
     try {
@@ -35,13 +40,21 @@ const Main: React.FC = () => {
     fetchPostData();
   }, []);
 
+  const handleCommentClick = () => {
+    router.push(`/my/feeds/${id}/comments`);
+  };
+
   return (
     <Layout>
       <PostArea>
         {posts.map((post, index) => (
           <Post key={index}>
             <PostTop post={post} />
-            <PostContents userInfo={userInfo} post={post} />
+            <PostContents
+              post={post}
+              userInfo={userInfo}
+              handleCommentClick={handleCommentClick}
+            />
           </Post>
         ))}
       </PostArea>

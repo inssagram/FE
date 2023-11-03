@@ -12,7 +12,7 @@ import profileReducer from "./userProfileSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["profile"],
+  whitelist: ["profile", "user"],
 };
 
 const reducers = combineReducers({

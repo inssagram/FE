@@ -37,20 +37,21 @@ interface PostData {
 }
 
 interface MyProps {
-  userInfo: Object;
+  userInfo: UserInfo;
   post: PostData;
 }
 
 const My: React.FC<MyProps> = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
-  const userInfo: UserInfo | undefined = useSelector(
+  console.log([posts]);
+  const userInfo = useSelector(
     (state: RootState) => state.user.member
-  );
+  ) as UserInfo;
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchPostAllData = async () => {
+  const fetchMyPostAllData = async (memberId: number) => {
     try {
-      const response = await getPostAllAxios();
+      const response = await getMyPostAllAxios(memberId);
       setPosts(response.data);
       setLoading(false);
     } catch (error) {
@@ -59,24 +60,11 @@ const My: React.FC<MyProps> = () => {
     }
   };
 
-  // const fetchPostData = async (memberId: number) => {
-  //   try {
-  //     const response = await getMyPostAllAxios(memberId);
-  //     setPosts(response.data);
-  //   } catch (error) {
-  //     console.error("Error fetching posts:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (userInfo && userInfo.member_id) {
-  //     fetchPostData(userInfo.member_id);
-  //   }
-  // }, [userInfo]);
-
   useEffect(() => {
-    fetchPostAllData();
-  }, []);
+    if (userInfo && userInfo.member_id) {
+      fetchMyPostAllData(userInfo.member_id);
+    }
+  }, [userInfo]);
 
   // 무한스크롤
   // const [isClient, setIsClient] = useState(false);
@@ -152,7 +140,10 @@ const My: React.FC<MyProps> = () => {
         </SC.Profile>
 
         <SC.MyDescContainer>
-          <SC.Id>{userInfo.nickname}</SC.Id>
+          <SC.Intro>
+            <SC.Id>{userInfo.nickname}</SC.Id>
+            <SC.Company>{userInfo.job}</SC.Company>
+          </SC.Intro>
           <SC.EditArea>
             <SC.Edit>
               <Link href="my/settings/profile" passHref>

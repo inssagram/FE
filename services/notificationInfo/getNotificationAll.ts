@@ -1,17 +1,14 @@
 import customAxios from "../customAxios";
 
-const getMyPostAllAxios = async (memberId: number): Promise<any> => {
+const getNotificationAllAxios = async (): Promise<any> => {
   return await customAxios({
     method: "get",
-    url: `/post?`,
+    url: `/notification/all`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    params: {
-      "member-id": memberId,
-    },
   });
 };
 
-export default getMyPostAllAxios;
+export default getNotificationAllAxios;

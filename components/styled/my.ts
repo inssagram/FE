@@ -19,11 +19,25 @@ export const MyDescContainer = styled.div`
   flex-direction: column;
 `;
 
+export const Intro = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 export const Id = styled.h2`
   min-width: fit-content;
   min-height: 25px;
   font-size: 20px;
   font-weight: lighter;
+  padding-right: 8px;
+`;
+
+export const Company = styled.span`
+  display: flex;
+  align-items: center;
+  min-width: fit-content;
+  color: #0095f6;
+  font-weight: 600;
 `;
 
 export const EditArea = styled.div`

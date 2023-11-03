@@ -9,7 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { BackArrow, BackChevron } from "@/components/atoms/Icon";
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
+interface HeaderProps {
+  title?: string;
+}
+
+export const PageHeader: React.FC<HeaderProps> = ({ title }) => {
   return (
     <Header>
       <BackChevron />
@@ -18,7 +22,20 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
   );
 };
 
-export const MyPageHeader: React.FC = ({ userInfo }) => {
+export const SearchHistoryHeader: React.FC = () => {
+  return (
+    <HistoryHeader>
+      <HistoryTitle>최근 검색 항목</HistoryTitle>
+      <DeleteBtn>모두 지우기</DeleteBtn>
+    </HistoryHeader>
+  );
+};
+
+interface MyHeaderProps {
+  userInfo: any;
+}
+
+export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
   return (
     <>
       <MyHeader>
@@ -83,16 +100,32 @@ export const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
   );
 };
 
-interface PageHeaderProps {
-  title?: string;
-}
-
 // Page
 const Title = styled.span`
   margin: 0 auto;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.3px;
+`;
+
+// SearchHistory
+const HistoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 16px 0;
+  border-top: 1px solid #cccccc;
+`;
+
+const HistoryTitle = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const DeleteBtn = styled.button`
+  font-size: 14px;
+  color: #0095f6;
+  border: none;
+  background-color: transparent;
 `;
 
 // Direct
