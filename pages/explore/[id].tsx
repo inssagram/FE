@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { PageHeader } from "@/components/atoms/Header";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
 import Footer from "@/components/Footer";
-import getPostDetailAxios from "@/services/postInfo/getPostDetail";
 import { RootState } from "@/src/redux/Posts/store";
+import getPostDetailAxios from "@/services/postInfo/getPostDetail";
 
-interface PostData {
+interface ExplorePostData {
   postId: number;
   memberId: number;
-  nickname: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -19,13 +18,14 @@ interface PostData {
   hashTags: string;
 }
 
-const Feeds: React.FC = () => {
+const Post: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
-  const [post, setPost] = useState<PostData[]>([]);
+  console.log("UserInfo:", userInfo);
+  const [post, setPost] = useState<ExplorePostData | null>(null);
 
   const router = useRouter();
   const { id } = router.query as { id: string };
-  const pageTitle = "게시물";
+  const pageTitle = "탐색 탭";
 
   const fetchPostDetailData = async (id: string) => {
     try {
@@ -42,22 +42,14 @@ const Feeds: React.FC = () => {
     }
   }, [id]);
 
-  const handleCommentClick = () => {
-    router.push(`/my/feeds/${id}/comments`);
-  };
-
   return (
     <>
       <PageHeader title={pageTitle} />
-      <PostTop post={post} />
-      <PostContents
-        post={post}
-        userInfo={userInfo}
-        handleCommentClick={handleCommentClick}
-      />
+      {post && <PostTop post={post} />}
+      {post && <PostContents post={post} userInfo={userInfo} />}
       <Footer />
     </>
   );
 };
 
-export default Feeds;
+export default Post;

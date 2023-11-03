@@ -11,7 +11,7 @@ import { postsSlice } from "./postSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["profile"],
+  whitelist: ["profile", "user"],
 };
 
 const reducers = combineReducers({
