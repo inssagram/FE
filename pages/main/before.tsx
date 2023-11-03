@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
-import Modal from "./modal";
+import Modal from "./before";
 import { PostType, editPost, deletePost } from "@/src/redux/Posts/postSlice";
 import { Link } from "react-router-dom";
 
