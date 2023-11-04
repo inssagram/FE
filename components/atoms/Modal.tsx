@@ -1,11 +1,20 @@
 import Image from "next/image";
 import styled, { css } from "styled-components";
+import * as SC from "@/components/styled/my_feeds_edit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalendarDays,
   faLocationDot,
+  faChevronLeft,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { CopyLinkButton } from "./Button";
+import axios from "axios";
+import { useState } from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+
 
 interface EllipsisModalProps {
   handleAccountInfoClick: () => void;
@@ -34,19 +43,39 @@ export const EllipsisModal: React.FC<EllipsisModalProps> = ({
 interface MyEllipsisModalProps {
   handleAccountInfoClick: () => void;
   handleEtcClick: () => void;
+  handleEditClick: () => void;
   post: { postId: number };
 }
 
 export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
   handleAccountInfoClick,
   handleEtcClick,
+  handleEditClick,
   post,
 }) => {
+  const { postId } = post;
+  
+  const handleAccountInfoDelete = () => {
+    const token = sessionStorage.getItem("token");
+    axios
+      .delete(`http://3.36.239.69:8080/post/delete/${postId}`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("포스트가 성공적으로 삭제되었습니다.", response);
+      })
+      .catch((error) => {
+        console.error("포스트 삭제 중 오류가 발생했습니다.", error);
+      });
+  };
+
   return (
     <ModalBackdrop>
       <ModalContent>
-        <DeletePost>삭제하기</DeletePost>
-        <EditPost>수정하기</EditPost>
+        <DeletePost onClick={handleAccountInfoDelete}>삭제하기</DeletePost>
+        <EditPost onClick={handleEditClick}>수정하기</EditPost>
         <MyCopyLink>
           <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
         </MyCopyLink>
@@ -60,7 +89,6 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
 interface PostInfo {
   postId: number;
   memberId: number;
-  nickname: string;
 }
 
 interface AccountInfoModalProps {
@@ -87,7 +115,7 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
                 style={{ borderRadius: "100%" }}
               />
             </Profile>
-            <Id>{post.nickname}</Id>
+            <Id>{post.memberId}</Id>
           </AccountArea>
           <InfoArea>
             <Detail>
@@ -109,6 +137,137 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
         <CloseBtn onClick={handleInfoClose}>닫기</CloseBtn>
       </ModalContent>
     </ModalBackdrop>
+  );
+};
+
+interface EditModalProps {
+  handleEditClick?: () => void;
+  post: { postId: number; memberId: number };
+}
+
+
+export const EditModal: React.FC<EditModalProps> = ({post}) => {
+  const [formData, setFormData] = useState({
+    contents: "",
+    location: "",
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (post && post.postId) {
+      // 서버로부터 게시물 데이터를 가져오는 API 요청
+      const fetchPostData = async () => {
+        try {
+          const response = await axios.get(`http://3.36.239.69:8080/post/${post.postId}`);
+          if (response.status === 200) {
+            const postData = response.data;
+            // 가져온 데이터로 폼 필드를 채웁니다
+            setFormData({
+              contents: postData.contents,
+              location: postData.location,
+              // 기타 필요한 폼 필드들도 postData의 속성을 이용해 채워주세요
+            });
+          } else {
+            console.error("게시물 데이터를 불러오는데 실패했습니다.");
+          }
+        } catch (error) {
+          console.error("게시물 데이터를 불러오는 중 오류가 발생했습니다:", error);
+        }
+      };
+  
+      fetchPostData();
+    }
+  }, [post]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      contents: value,
+    }));
+  };
+
+  const handleEditDone = () => {
+    const token = sessionStorage.getItem("token");
+    
+    if (post) {
+      const { postId, memberId } = post;
+      axios
+        .put(`http://3.36.239.69:8080/post/update/${postId}`, {
+          headers: {
+            Authorization: `${token}`,
+          },
+          memberId: memberId, 
+          contents: formData.contents,
+          location: formData.location,
+        })
+        .then((response) => {
+          console.log("게시물이 성공적으로 업데이트되었습니다.", response);
+          router.push(`/my/feeds/${postId}`);
+        })
+        .catch((error) => {
+          console.error("게시물 업데이트 중 오류가 발생했습니다.", error);
+        });
+    } else {
+      console.error("유효한 게시물이 없습니다.");
+    }
+  };
+  
+  return (
+    <SC.ModalWrapper>
+      <SC.Container>
+        <SC.Header>
+          <SC.Prev>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </SC.Prev>
+          <SC.H1>게시글 수정</SC.H1>
+          <SC.Next onClick={() => handleEditDone()}>
+            <FontAwesomeIcon icon={faCheck} />
+          </SC.Next>
+        </SC.Header>
+
+        <SC.Head>
+          <SC.Profile>
+            <Image
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+              alt="개"
+              width={40}
+              height={40}
+              style={{ borderRadius: "100%" }}
+            />
+            <SC.ID>정호인척 하는 유리</SC.ID>
+
+            <SC.ContentsDate>16주</SC.ContentsDate>
+          </SC.Profile>
+          <SC.AddLocation>위치 찾기</SC.AddLocation>
+        </SC.Head>
+        <SC.Details>
+          <SC.Contents>
+            <SC.ImageContent>
+              <Image
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
+                alt="개"
+                layout="responsive"
+                width={10}
+                height={10}
+              />
+              <SC.FunctionFannels>
+                <SC.Button>
+                  <FontAwesomeIcon icon={faUser} fontSize={"2rem"} />
+                </SC.Button>
+                <SC.Text>사람 태그</SC.Text>
+              </SC.FunctionFannels>
+            </SC.ImageContent>
+            <SC.UserInput
+              type="text"
+              value={formData.contents}
+              placeholder={formData.contents}
+              onChange={handleInputChange}
+            />
+          </SC.Contents>
+        </SC.Details>
+      </SC.Container>
+    </SC.ModalWrapper>
   );
 };
 

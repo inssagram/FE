@@ -23,6 +23,7 @@ const Feeds: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
   const [post, setPost] = useState<PostData[]>([]);
 
+
   const router = useRouter();
   const { id } = router.query as { id: string };
   const pageTitle = "게시물";

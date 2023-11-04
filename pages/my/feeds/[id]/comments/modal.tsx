@@ -8,7 +8,7 @@ interface ModalProps {
 
 const Modal:React.FC<ModalProps> = ({onDelete, onCancel}) => {
     return(
-<SC.ModalWrapper>
+    <SC.ModalWrapper>
       <SC.ModalContent>
         <SC.ModalText>댓글을 삭제하시겠습니까?</SC.ModalText>
         <SC.ModalButtons>
