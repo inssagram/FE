@@ -1,26 +1,23 @@
-import axios from "../customAxios";
+// const token = sessionStorage.getItem("token") || "";
 
-const ws = new WebSocket("ws://localhost:8080/ws-stomp");
+const socket = new WebSocket("ws://localhost:8080/ws-stomp");
 
-ws.onopen = () => {
-  const accessToken = sessionStorage.getItem("token") || null;
-
-  axios
-    .post("/endpoint-to-send-token", { token: accessToken })
-    .then((response) => {
-      console.log("Token sent:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error sending token:", error);
-    });
+socket.onopen = function (event) {
+  console.log("웹소켓이 열렸습니다.");
 };
 
-ws.onmessage = (event) => {};
-
-ws.onclose = (event) => {
-  console.log("WebSocket connection closed:", event);
+socket.onmessage = function (event) {
+  console.log("메시지 수신:", event.data);
 };
 
-ws.onerror = (error) => {
-  console.error("WebSocket error:", error);
+socket.onclose = function (event) {
+  console.log("웹소켓이 닫혔습니다.");
 };
+
+socket.onerror = function (error) {
+  console.error("웹소켓 에러:", error);
+};
+
+socket.send("이건 테스트");
+
+socket.close();

@@ -7,10 +7,12 @@ import PostContents from "@/components/Post/Contents";
 import Footer from "@/components/Footer";
 import { RootState } from "@/src/redux/Posts/store";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
+import postLikePostAxios from "@/services/postInfo/postLikePost";
 
 interface ExplorePostData {
   postId: number;
   memberId: number;
+  nickname: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -36,6 +38,22 @@ const Post: React.FC = () => {
     }
   };
 
+  const handleLikeClick = (postId: number) => {
+    postLikePostAxios(postId)
+      .then((response) => {
+        console.log(
+          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
+          response
+        );
+      })
+      .catch((error) => {
+        console.error(
+          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
+          error
+        );
+      });
+  };
+
   useEffect(() => {
     if (id) {
       fetchPostDetailData(id);
@@ -46,7 +64,13 @@ const Post: React.FC = () => {
     <>
       <PageHeader title={pageTitle} />
       {post && <PostTop post={post} />}
-      {post && <PostContents post={post} userInfo={userInfo} />}
+      {post && (
+        <PostContents
+          post={post}
+          userInfo={userInfo}
+          handleLikeClick={handleLikeClick}
+        />
+      )}
       <Footer />
     </>
   );

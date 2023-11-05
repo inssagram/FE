@@ -11,6 +11,8 @@ const nextConfig = {
       "www.animals.or.kr",
       "www.chemicalnews.co.kr",
       "search.pstatic.net",
+      "images.khan.co.kr",
+      "images.vivino.com",
     ],
   },
   env: {
