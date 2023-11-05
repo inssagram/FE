@@ -16,6 +16,9 @@ const Story: React.FC = () => {
   const [imagesIndexArr, setImagesIndexArr] = useState<number[]>([]);
   const [flag, toggleFlag] = useState(false);
   const [availableIndex, setAvailableIndex] = useState<number[]>([]);
+  const [onFilter, setOnFilter] = useState(false)
+  const [animationStopped, setAnimationStopped] = useState(false)
+  
 
   interface dataItem{
     id: number,
@@ -30,9 +33,9 @@ const Story: React.FC = () => {
   }
 
   const Cube: React.FC<cubesItem> = ({ index }) => (
-    <SC.Article 
-      style={{ transform: `rotateY(${index * 90}deg) translateZ(calc(100vw / 2))`, zIndex: availableIndex.includes(index) ? 10 : 0}} 
-    >
+      <SC.Article 
+        style={{ transform: `rotateY(${index * 90}deg) translateZ(calc(100vw / 2))`, display: availableIndex.includes(index) ? "block" : "none"}} 
+      >
           <SC.ProgressBars>
             {data[index].image.map((_, i) => {
                 return(
@@ -41,6 +44,7 @@ const Story: React.FC = () => {
                       isComplete={imagesIndexArr[index] > i} 
                       isAnimating={imagesIndexArr[index] === i}
                       onAnimationEnd={flagHandler}
+                      animationStopped={animationStopped}
                       ></SC.BarCover>
                     </SC.Bar>
                   )
@@ -70,11 +74,29 @@ const Story: React.FC = () => {
               fill={true}
             />
           </SC.Contents>
-          <SC.Comment>
-            <SC.TextArea placeholder="메시지를 입력하세요" onClick={(e) => e.stopPropagation()}></SC.TextArea>
+          <SC.Comment onFilter={onFilter}>
+          <SC.TextBox onClick={() => {
+            setOnFilter(true)
+            setAnimationStopped(true)
+          }}>메시지를 입력하세요</SC.TextBox>
             <FontAwesomeIcon icon={faHeart} fontSize={"25px"} />
             <FontAwesomeIcon icon={faPaperPlane} fontSize={"25px"} />
           </SC.Comment>
+          <SC.DMfilter onClick={() => {
+            setOnFilter(false)
+            setAnimationStopped(false)
+          }}
+          onFilter={onFilter}>
+            <SC.TextArea 
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                  setOnFilter(false)
+                  setAnimationStopped(false)
+                }
+              }}
+            ></SC.TextArea>
+          </SC.DMfilter>
         </SC.Article>
   )
   
@@ -119,7 +141,6 @@ const Story: React.FC = () => {
     .then((response) => {
       setData(response.data)
     }).then(() => {
-      console.log(imagesIndexArr)
     }).catch((error) => {
       console.log(error)
     })
@@ -129,7 +150,6 @@ const Story: React.FC = () => {
     setImagesIndexArr(Array(data.length).fill(0))
   },[data])
   
-  console.log(imagesIndexArr)
   useEffect(() => {
     setAvailableIndex([contentsIndex - 1, contentsIndex, contentsIndex + 1])
   },[contentsIndex])
@@ -160,6 +180,8 @@ const Story: React.FC = () => {
   }, [flag,imagesIndexArr]);
 
 
+  const handleSendDM = () => {
+  }
  
   if(data.length !== 0){
   return (

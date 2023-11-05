@@ -9,6 +9,7 @@ import {
   EllipsisModal,
   MyEllipsisModal,
   AccountInfoModal,
+  EditModal,
 } from "../atoms/Modal";
 import { RootState } from "@/src/redux/Posts/store";
 
@@ -42,6 +43,8 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const handleFollowClick = () => {
     setIsFollowing(!isFollowing);
@@ -64,6 +67,11 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const handleAccountInfoClick = () => {
     setIsEllipsisModalOpen(false);
     setIsAccountInfoModalOpen(true);
+  };
+
+  const handleEditClick = () => {
+    setIsEllipsisModalOpen(false);
+    setIsEditModalOpen(true);
   };
 
   const handleInfoClose = () => {
@@ -112,6 +120,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
       {post?.memberId === userInfo.member_id
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
+              handleEditClick={handleEditClick}
               handleInfoClose={handleInfoClose}
               handleAccountInfoClick={handleAccountInfoClick}
               post={post}
@@ -126,6 +135,9 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
           )}
       {isAccountInfoModalOpen && (
         <AccountInfoModal handleInfoClose={handleInfoClose} post={post} />
+      )}
+      {isEditModalOpen&& (
+        <EditModal handleEditClick={handleEditClick} post={post} userData={userData} />
       )}
     </Top>
   );
