@@ -14,6 +14,8 @@ import {
   faHeart as fasHeart,
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface PostData {
   postId: number;
@@ -24,6 +26,10 @@ interface PostData {
   likeCount: number;
   commentsCounts: number;
   hashTags: string;
+}
+
+interface CommentData {
+  postId: number;
 }
 
 interface UserInfo {
@@ -38,18 +44,17 @@ interface PostContentsProps {
   post: PostData;
   userInfo: UserInfo;
   handleLikeClick: (postId: number) => void;
-  handleCommentClick?: () => void;
 }
 
 const PostContents: React.FC<PostContentsProps> = ({
   post,
   userInfo,
   handleLikeClick,
-  handleCommentClick,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-
+  const router = useRouter();
+  
   // const handleSaveClick = () => {
   //   setIsSaved(!isSaved);
   //   axios
@@ -66,6 +71,10 @@ const PostContents: React.FC<PostContentsProps> = ({
   //       );
   //     });
   // };
+
+  const handleCommentClick = () => {
+    router.push(`/my/feeds/${post.postId}/comments`);
+    };
 
   return (
     <>

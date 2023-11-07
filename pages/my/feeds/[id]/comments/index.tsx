@@ -1,61 +1,137 @@
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as SC from "@/components/styled/my_feeds_comments";
 import Image from "next/image";
 import { faHeart, faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import Footer from "@/components/Footer";
-import React, {useState} from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
-import { addComment, CommentType, deleteComment } from "@/src/redux/Posts/commentSlice"
+import { deleteComment } from "@/src/redux/Posts/commentSlice";
 import useLongPress from "./useLongPress";
+import getCommentAxios from "@/services/postInfo/getComment";
 import Modal from "./modal";
+import axios from "axios";
+
+interface CommentType {
+  id: number;
+  userId: string;
+  content: string;
+  profile:string;
+}
+
+interface PostData {
+  postId: number;
+  memberId: number;
+  nickname: string;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
+}
 
 const Comments: React.FC = () => {
-
   const router = useRouter();
-  const {id} = router.query;
+  const { id } = router.query;
   const [comment, setComment] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
-  const comments = useSelector((state: RootState) => state.comments.comments); // 전역 상태에서 댓글 가져오기
+  const comments = useSelector((state: RootState) => state.comments.comments);
   const dispatch = useDispatch();
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+  const [post, setPost] = useState<PostData | null>(null);
+  const [commentAll, setCommentAll] = useState([]);
+  console.log(commentAll);
 
-  const handleCommentChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-  }
+  };
+  
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`http://3.36.239.69:8080/post/search-detail/${id}`)
+        .then((response) => {
+          setPost(response.data.data);
+        })
+        .catch((error) => {
+          console.error("게시물 데이터를 불러오는 중 오류 발생:", error);
+        });
+    }
+  }, [id]);
+
 
 
   const handleCommentSubmit = () => {
     if (comment.trim() === "") {
       console.warn("빈 댓글은 제출할 수 없습니다.");
     } else {
-      const newComment: CommentType = {
-        id: comments.length + 1, // 댓글에 대한 고유 ID를 생성해야 합니다.
-        userId: "gummy_jelly", // 사용자 ID를 가져오는 방법은 해당 애플리케이션의 로그인 시스템에 따라 다를 수 있습니다.
-        profile: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg",
-        content: comment.trim(),
+      const postId = post?.postId;
+      const token = sessionStorage.getItem("token");
+  
+      if (!postId || !token) {
+        console.error("게시물 ID 또는 토큰이 유효하지 않습니다.");
+        return;
+      }
+  
+      // 쿼리 매개변수를 객체로 전달
+      const queryParams = {
+        params: {
+          "post-id": postId,
+        },
       };
-
-      dispatch(addComment(newComment));
-      setComment("");
+  
+      axios
+        .post(
+          `http://3.36.239.69:8080/comment/create`,
+          {
+            contents: comment.trim(),
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+            // 객체 형태의 쿼리 매개변수 전달
+            ...queryParams,
+          }
+        )
+        .then((response) => {
+          console.log("댓글이 성공적으로 제출되었습니다:", response.data);
+          setComment("");
+        })
+        .catch((error) => {
+          console.error("댓글 제출 중 오류 발생:", error);
+        });
     }
   };
+
+  const fetchCommentData = async (postId: number) => {
+    try {
+      const response = await getCommentAxios(postId);
+      setCommentAll(response.data);
+    } catch(error) {
+      console.error("error fetching comments", error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchCommentData(id);
+    }
+
+  }, [id]);
 
   const handleCommentLongPress = useLongPress(() => {
     setModalOpen(true);
   }, 1000);
 
-    // 댓글을 클릭할 때 호출되는 함수
-    const handleCommentClick = (commentId: number) => {
-      // 댓글을 클릭할 때마다 선택된 댓글의 ID를 업데이트합니다.
-      setSelectedCommentId(commentId);
-    };
-  
+  const handleCommentClick = (commentId: number) => {
+    setSelectedCommentId(commentId);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (comment.trim() !== "") {
         handleCommentSubmit();
       } else {
@@ -65,24 +141,25 @@ const Comments: React.FC = () => {
     }
   };
 
-    const handleDeleteComment = async () => {
-    if(selectedCommentId){
+  const handleDeleteComment = async () => {
+    if (selectedCommentId) {
       dispatch(deleteComment(selectedCommentId));
     }
     setModalOpen(false);
   };
 
   const handleCancelDelete = () => {
-    // 모달 닫기 로직 구현
     setModalOpen(false);
   };
 
   const handlePrev = () => {
-    if(id){
-    Router.push(`/my/feeds/${id}`)
+    if (id) {
+      router.push(`/my/feeds/${id}`);
     }
-  }
+  };
+
   return (
+    
     <SC.Container>
       <SC.Header>
         <SC.Prev onClick={handlePrev}>
@@ -100,14 +177,18 @@ const Comments: React.FC = () => {
             height={40}
             style={{ borderRadius: "100%" }}
           />
-          <SC.ID>정호인척 하는 유리</SC.ID>
-          <SC.Content>곱창 먹고 싶다고요옹</SC.Content>
+         {post && (
+      <>
+      <SC.ID>{post.nickname}</SC.ID>
+        <SC.Content>{post.contents}</SC.Content>
+      </>
+    )}
         </SC.Profile>
         <SC.ContentsDate>16주</SC.ContentsDate>
       </SC.Head>
       <SC.Details>
         <SC.CommentCont>
-        {comments.map((comment: CommentType) => (
+        {commentAll.map((comment: CommentType) => (
         <SC.UserCont key={comment.id} onMouseDown={handleCommentLongPress.onMouseDown} onClick={() => handleCommentClick(comment.id)} >
           <SC.UserProfile>
             <Image

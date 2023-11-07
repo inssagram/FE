@@ -39,10 +39,6 @@ const Main: React.FC = () => {
     fetchPostData();
   }, []);
 
-  const handleCommentClick = () => {
-    router.push(`/my/feeds/${id}/comments`);
-  };
-
   return (
     <Layout>
       <PostArea>
@@ -52,7 +48,6 @@ const Main: React.FC = () => {
             <PostContents
               post={post}
               userInfo={userInfo}
-              handleCommentClick={handleCommentClick}
             />
           </Post>
         ))}

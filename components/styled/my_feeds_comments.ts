@@ -77,7 +77,7 @@ export const UserProfile = styled.div`
   align-items: center;
 `;
 export const ID = styled.span`
-  flex: 1.8;
+  flex: 0.6;
   margin-left: 12px;
   position: relative;
 `;

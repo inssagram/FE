@@ -23,6 +23,7 @@ interface UserInfo {
   nickname: string;
   job: string;
   profilePic: string;
+  image: string;
 }
 
 interface PostData {
@@ -123,20 +124,23 @@ const My: React.FC<MyProps> = () => {
 
       <SC.Container>
         <SC.Profile>
-          <Image
-            src="/images/noProfile.jpg"
-            alt="프로필"
-            width={77}
-            height={77}
-            style={{ borderRadius: "100%" }}
-          />
-          {/* <Image
-            src={userInfo.profilePic}
-            alt="프로필"
-            width={77}
-            height={77}
-            style={{ borderRadius: "100%" }}
-          /> */}
+        {userInfo.image ? (
+        <Image
+          src={userInfo.image}
+          alt="프로필"
+          width={77}
+          height={77}
+          style={{ borderRadius: "100%" }}
+        />
+      ) : (
+        <Image
+        src="/images/noProfile.jpg"// 기본 이미지 파일 경로
+          alt="프로필"
+          width={77}
+          height={77}
+          style={{ borderRadius: "100%" }}
+        />
+      )}
         </SC.Profile>
 
         <SC.MyDescContainer>
