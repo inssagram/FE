@@ -44,6 +44,7 @@ interface MyEllipsisModalProps {
   handleAccountInfoClick: () => void;
   handleEtcClick: () => void;
   handleEditClick: () => void;
+  handleCommentSubmit: () => void;
   post: { postId: number };
 }
 
@@ -51,6 +52,7 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
   handleAccountInfoClick,
   handleEtcClick,
   handleEditClick,
+  handleCommentSubmit,
   post,
 }) => {
   const { postId } = post;

@@ -14,6 +14,8 @@ import {
   faHeart as fasHeart,
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface PostData {
   postId: number;
@@ -24,6 +26,10 @@ interface PostData {
   likeCount: number;
   commentsCounts: number;
   hashTags: string;
+}
+
+interface CommentData {
+  postId: number;
 }
 
 interface UserInfo {
@@ -37,16 +43,16 @@ interface UserInfo {
 interface PostContentsProps {
   post: PostData;
   userInfo: UserInfo;
-  handleCommentClick: () => void;
 }
 
 const PostContents: React.FC<PostContentsProps> = ({
   post,
   userInfo,
-  handleCommentClick,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const router = useRouter();
+  
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
@@ -61,6 +67,8 @@ const PostContents: React.FC<PostContentsProps> = ({
         console.error("좋아요 상태가 업데이트 중 오류가 발생했습니다", error);
       });
   };
+
+  
 
   const handleSaveClick = () => {
     setIsSaved(!isSaved);
@@ -78,6 +86,11 @@ const PostContents: React.FC<PostContentsProps> = ({
         );
       });
   };
+
+  const handleCommentClick = () => {
+    router.push(`/my/feeds/${post.postId}/comments`);
+    };
+
 
   return (
     <>
