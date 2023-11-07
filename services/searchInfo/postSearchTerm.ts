@@ -1,9 +1,9 @@
 import customAxios from "../customAxios";
 
-const getNotificationSubscribeAxios = async (): Promise<any> => {
+const postSearchTermAxios = async (memberId: number): Promise<any> => {
   return await customAxios({
-    method: "get",
-    url: `/notification/subscribe`,
+    method: "post",
+    url: `/search/save/${memberId}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const getNotificationSubscribeAxios = async (): Promise<any> => {
   });
 };
 
-export default getNotificationSubscribeAxios;
+export default postSearchTermAxios;

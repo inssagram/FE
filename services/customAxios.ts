@@ -31,7 +31,6 @@ customAxios.interceptors.request.use(
 customAxios.interceptors.response.use(
   (response) => {
     const res = response.data;
-    console.log(res);
     return res;
   },
   async (error) => {

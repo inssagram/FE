@@ -1,10 +1,6 @@
 import customAxios from "../customAxios";
 
-const getSearchHistoryAxios = async (memberId: number): Promise<any> => {
-  const searchData = {
-    memberId,
-  };
-
+const getSearchHistoryAxios = async (): Promise<any> => {
   return await customAxios({
     method: "get",
     url: `/search`,
@@ -12,7 +8,6 @@ const getSearchHistoryAxios = async (memberId: number): Promise<any> => {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    data: searchData,
   });
 };
 

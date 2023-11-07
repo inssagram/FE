@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({
   linkToCopy,
@@ -17,8 +19,42 @@ export const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({
   return <CopyLink onClick={copyToClipboard}>링크 복사</CopyLink>;
 };
 
-const CopyLink = styled.button`
+interface CloseButtonProps {
+  onClick?: () => void;
+}
+export const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
+  return (
+    <CloseBtn onClick={onClick}>
+      <FontAwesomeIcon
+        icon={faXmark}
+        fontSize={16}
+        style={{ color: "#737373" }}
+      />
+    </CloseBtn>
+  );
+};
+
+export const FollowButton: React.FC = () => {
+  return <FollowBtn>팔로우</FollowBtn>;
+};
+
+const CopyLink = styled.span`
+  width: 100%;
   border: none;
   padding: 4px 8px;
   background-color: transparent;
+`;
+
+const CloseBtn = styled.button`
+  padding: 8px;
+  border: none;
+  background-color: transparent;
+`;
+
+const FollowBtn = styled.button`
+  padding: 7px 16px;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  background-color: #0095f6;
 `;

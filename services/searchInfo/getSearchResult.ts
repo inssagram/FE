@@ -1,9 +1,9 @@
 import customAxios from "../customAxios";
 
-const getPostDetailAxios = async (id: string): Promise<any> => {
+const getSearchResultAxios = async (keyword: string): Promise<any> => {
   return await customAxios({
     method: "get",
-    url: `/post/search-detail/${id}`,
+    url: `/search/${keyword}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const getPostDetailAxios = async (id: string): Promise<any> => {
   });
 };
 
-export default getPostDetailAxios;
+export default getSearchResultAxios;

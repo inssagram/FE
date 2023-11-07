@@ -1,10 +1,8 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import * as SC from "@/components/styled/notifications";
-import { BackChevron } from "@/components/atoms/Icon";
 import { PageHeader } from "@/components/atoms/Header";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
-import getNotificationSubscribeAxios from "@/services/notificationInfo/getSubscribe";
 
 interface NotificationData {
   senderName: string;
@@ -13,21 +11,10 @@ interface NotificationData {
 }
 
 const Notifications: React.FC = () => {
-  const [notifications, setNotifications] = useState<NotificationData[]>([]);
-  console.log(notifications);
-
   const pageTitle = "알림";
+  const [notifications, setNotifications] = useState<NotificationData[]>([]);
 
-  const startSSE = async () => {
-    try {
-      const response = await getNotificationSubscribeAxios();
-      setNotifications(response.data);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  };
-
-  const fetchNotificationData = async () => {
+  const fetchNotificationAllData = async () => {
     try {
       const response = await getNotificationAllAxios();
       setNotifications(response.data);
@@ -37,8 +24,7 @@ const Notifications: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchNotificationData();
-    startSSE();
+    fetchNotificationAllData();
   }, []);
 
   return (

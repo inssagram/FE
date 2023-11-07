@@ -1,36 +1,5 @@
 import styled from "styled-components";
 
-export const Header = styled.div`
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  height: 44px;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  padding: 0 16px;
-  border-bottom: 1px solid #ccc;
-`;
-
-export const BackIcon = styled.div`
-  padding-right: 8px;
-`;
-
-export const PageTitle = styled.h1`
-  display: block;
-  flex-basis: 0px;
-  flex-grow: 1;
-  flex-shrink: 1;
-  padding: 0;
-  text-align: center;
-  text-overflow: ellipsis;
-  vertical-align: baseline;
-  white-space: nowrap;
-  font-size: 16px;
-`;
-
 export const Notifications = styled.div`
   position: absolute;
   top: 44px;

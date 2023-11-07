@@ -37,47 +37,35 @@ interface UserInfo {
 interface PostContentsProps {
   post: PostData;
   userInfo: UserInfo;
-  handleCommentClick: () => void;
+  handleLikeClick: (postId: number) => void;
+  handleCommentClick?: () => void;
 }
 
 const PostContents: React.FC<PostContentsProps> = ({
   post,
   userInfo,
+  handleLikeClick,
   handleCommentClick,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  const handleLikeClick = () => {
-    setIsLiked(!isLiked);
-    axios
-      .post("http://localhost:3001/likeStatus", {
-        like: !isLiked,
-      })
-      .then((response) => {
-        console.log("좋아요 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error("좋아요 상태가 업데이트 중 오류가 발생했습니다", error);
-      });
-  };
-
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
-    axios
-      .post("http://localhost:3001/saveStatus", {
-        save: !isSaved,
-      })
-      .then((response) => {
-        console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error(
-          "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
-          error
-        );
-      });
-  };
+  // const handleSaveClick = () => {
+  //   setIsSaved(!isSaved);
+  //   axios
+  //     .post("http://localhost:3001/saveStatus", {
+  //       save: !isSaved,
+  //     })
+  //     .then((response) => {
+  //       console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(
+  //         "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
+  //         error
+  //       );
+  //     });
+  // };
 
   return (
     <>
@@ -92,7 +80,7 @@ const PostContents: React.FC<PostContentsProps> = ({
         <ButtonArea>
           <Left>
             <FontAwesomeIcon
-              onClick={handleLikeClick}
+              onClick={() => handleLikeClick(post.postId)}
               icon={isLiked ? fasHeart : farHeart}
               fontSize={24}
               style={{ color: isLiked ? "red" : "inherit" }}
@@ -108,7 +96,7 @@ const PostContents: React.FC<PostContentsProps> = ({
           </Left>
           <Right>
             <FontAwesomeIcon
-              onClick={handleSaveClick}
+              // onClick={handleSaveClick}
               icon={isSaved ? fasBookmark : farBookmark}
               fontSize={24}
             />
