@@ -13,6 +13,8 @@ const nextConfig = {
       "search.pstatic.net",
       'avatars.githubusercontent.com',
       "mblogthumb-phinf.pstatic.net"
+      "images.khan.co.kr",
+      "images.vivino.com",
     ],
   },
   env: {

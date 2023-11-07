@@ -17,14 +17,14 @@ import { useRouter } from "next/router";
 
 
 interface EllipsisModalProps {
-  handleAccountInfoClick: () => void;
-  handleEtcClick: () => void;
+  handleAccountInfoClick?: () => void;
+  handleInfoClose?: () => void;
   post: { postId: number };
 }
 
 export const EllipsisModal: React.FC<EllipsisModalProps> = ({
   handleAccountInfoClick,
-  handleEtcClick,
+  handleInfoClose,
   post,
 }) => {
   return (
@@ -34,7 +34,7 @@ export const EllipsisModal: React.FC<EllipsisModalProps> = ({
           <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
         </CopyLink>
         <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
-        <CloseBtn onClick={handleEtcClick}>취소</CloseBtn>
+        <CloseBtn onClick={handleInfoClose}>취소</CloseBtn>
       </ModalContent>
     </ModalBackdrop>
   );
@@ -42,7 +42,7 @@ export const EllipsisModal: React.FC<EllipsisModalProps> = ({
 
 interface MyEllipsisModalProps {
   handleAccountInfoClick: () => void;
-  handleEtcClick: () => void;
+  handleInfoClose?: () => void;
   handleEditClick: () => void;
   handleCommentSubmit: () => void;
   post: { postId: number };
@@ -50,7 +50,7 @@ interface MyEllipsisModalProps {
 
 export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
   handleAccountInfoClick,
-  handleEtcClick,
+  handleInfoClose,
   handleEditClick,
   handleCommentSubmit,
   post,
@@ -82,7 +82,7 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
           <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
         </MyCopyLink>
         <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
-        <CloseBtn onClick={handleEtcClick}>취소</CloseBtn>
+        <CloseBtn onClick={handleInfoClose}>취소</CloseBtn>
       </ModalContent>
     </ModalBackdrop>
   );
@@ -95,7 +95,7 @@ interface PostInfo {
 
 interface AccountInfoModalProps {
   post: PostInfo;
-  handleInfoClose: () => void;
+  handleInfoClose?: () => void;
 }
 
 export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
@@ -388,8 +388,10 @@ const CopyLink = styled.button`
   border-top-right-radius: 10px;
 `;
 
-const MyCopyLink = styled.button`
+const MyCopyLink = styled.div`
   ${Link}
+  display: flex;
+  justify-content: center;
 `;
 
 const EditPost = styled.button`

@@ -43,54 +43,38 @@ interface UserInfo {
 interface PostContentsProps {
   post: PostData;
   userInfo: UserInfo;
+  handleLikeClick: (postId: number) => void;
 }
 
 const PostContents: React.FC<PostContentsProps> = ({
   post,
   userInfo,
+  handleLikeClick,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
   
-
-  const handleLikeClick = () => {
-    setIsLiked(!isLiked);
-    axios
-      .post("http://localhost:3001/likeStatus", {
-        like: !isLiked,
-      })
-      .then((response) => {
-        console.log("좋아요 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error("좋아요 상태가 업데이트 중 오류가 발생했습니다", error);
-      });
-  };
-
-  
-
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
-    axios
-      .post("http://localhost:3001/saveStatus", {
-        save: !isSaved,
-      })
-      .then((response) => {
-        console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error(
-          "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
-          error
-        );
-      });
-  };
+  // const handleSaveClick = () => {
+  //   setIsSaved(!isSaved);
+  //   axios
+  //     .post("http://localhost:3001/saveStatus", {
+  //       save: !isSaved,
+  //     })
+  //     .then((response) => {
+  //       console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(
+  //         "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
+  //         error
+  //       );
+  //     });
+  // };
 
   const handleCommentClick = () => {
     router.push(`/my/feeds/${post.postId}/comments`);
     };
-
 
   return (
     <>
@@ -105,7 +89,7 @@ const PostContents: React.FC<PostContentsProps> = ({
         <ButtonArea>
           <Left>
             <FontAwesomeIcon
-              onClick={handleLikeClick}
+              onClick={() => handleLikeClick(post.postId)}
               icon={isLiked ? fasHeart : farHeart}
               fontSize={24}
               style={{ color: isLiked ? "red" : "inherit" }}
@@ -121,7 +105,7 @@ const PostContents: React.FC<PostContentsProps> = ({
           </Left>
           <Right>
             <FontAwesomeIcon
-              onClick={handleSaveClick}
+              // onClick={handleSaveClick}
               icon={isSaved ? fasBookmark : farBookmark}
               fontSize={24}
             />

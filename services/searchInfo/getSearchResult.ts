@@ -1,9 +1,9 @@
 import customAxios from "../customAxios";
 
-const getSearchHistoryAxios = async (): Promise<any> => {
+const getSearchResultAxios = async (keyword: string): Promise<any> => {
   return await customAxios({
     method: "get",
-    url: `/search`,
+    url: `/search/${keyword}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const getSearchHistoryAxios = async (): Promise<any> => {
   });
 };
 
-export default getSearchHistoryAxios;
+export default getSearchResultAxios;

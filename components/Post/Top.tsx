@@ -61,7 +61,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   };
 
   const handleEtcClick = () => {
-    setIsEllipsisModalOpen(!isEllipsisModalOpen);
+    setIsEllipsisModalOpen(true);
   };
 
   const handleAccountInfoClick = () => {
@@ -75,6 +75,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   };
 
   const handleInfoClose = () => {
+    setIsEllipsisModalOpen(false);
     setIsAccountInfoModalOpen(false);
   };
 
@@ -119,16 +120,16 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
       {post?.memberId === userInfo.member_id
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
-              handleAccountInfoClick={handleAccountInfoClick}
-              handleEtcClick={handleEtcClick}
               handleEditClick={handleEditClick}
+              handleInfoClose={handleInfoClose}
+              handleAccountInfoClick={handleAccountInfoClick}
               post={post}
             />
           )
         : isEllipsisModalOpen && (
             <EllipsisModal
+              handleInfoClose={handleInfoClose}
               handleAccountInfoClick={handleAccountInfoClick}
-              handleEtcClick={handleEtcClick}
               post={post}
             />
           )}

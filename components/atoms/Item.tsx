@@ -1,46 +1,52 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { CloseButton } from "@/components/atoms/Button";
+
+interface SearchItemData {
+  memberId: number;
+  email: string;
+  nickName: string;
+  friendStatus: boolean;
+  job: string;
+  image: string;
+}
 
 interface SearchItemProps {
-  searchTerm: string;
-  onClick?: () => void;
+  result: SearchItemData;
+  onClick?: (memberId: number) => void;
   isHistory?: boolean;
 }
 
 export const SearchItem: React.FC<SearchItemProps> = ({
-  searchTerm,
+  result,
   onClick,
   isHistory,
 }) => {
+  const handleItemClick = () => {
+    if (onClick) {
+      onClick(result.memberId);
+    }
+  };
   return (
     <>
       <ItemContainer>
-        <ClickTo href="/my">
-          <ContentImg
-            src="/images/noProfile.jpg"
+        <ClickTo href="/" onClick={handleItemClick}>
+          <AccountImg
+            src={result.image}
             alt="프로필 이미지"
             width={44}
             height={44}
           />
           <ContentArea>
             <AccountInfo>
-              <Id>{searchTerm}</Id>
-              <Follow>팔로우</Follow>
+              <Id>{result.nickName}</Id>
+              <Status>
+                <Job>{result.job}</Job>
+                <Follow>{result.friendStatus ? "" : "팔로잉"}</Follow>
+              </Status>
             </AccountInfo>
-            {isHistory ? (
-              <CloseBtn onClick={onClick}>
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  fontSize={16}
-                  style={{ color: "#737373" }}
-                />
-              </CloseBtn>
-            ) : (
-              <FollowBtn>팔로우</FollowBtn>
-            )}
+            {isHistory ? <CloseButton onClick={onClick} /> : ""}
           </ContentArea>
         </ClickTo>
       </ItemContainer>
@@ -62,7 +68,7 @@ const ClickTo = styled(Link)`
   padding: 8px 16px;
 `;
 
-const ContentImg = styled(Image)`
+const AccountImg = styled(Image)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -93,21 +99,18 @@ const Id = styled.span`
   padding-bottom: 3px;
 `;
 
+const Status = styled.p`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Job = styled.span`
+  padding-right: 5px;
+  font-size: inherit;
+  color: #0095f6;
+`;
+
 const Follow = styled.span`
   font-size: inherit;
   color: #7c7c7c;
-`;
-
-const CloseBtn = styled.button`
-  padding: 8px;
-  border: none;
-  background-color: transparent;
-`;
-
-const FollowBtn = styled.button`
-  padding: 7px 16px;
-  border: none;
-  border-radius: 10px;
-  color: #ffffff;
-  background-color: #0095f6;
 `;

@@ -21,7 +21,6 @@ interface PostData {
 
 const Main: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
-  console.log("UserInfo:", userInfo);
   const [posts, setPosts] = useState<PostData[]>([]);
 
   const router = useRouter();

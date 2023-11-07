@@ -39,7 +39,9 @@ export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
   return (
     <>
       <MyHeader>
-        <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+        <Link href="/my/settings">
+          <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+        </Link>
         <h2>{userInfo.nickname}</h2>
         <Link href="my/recommend" passHref>
           <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
@@ -49,12 +51,12 @@ export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
   );
 };
 
-export const DirectHeader: React.FC = () => {
+export const DirectHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
   return (
     <>
       <DmHeader>
         <BackArrow />
-        <h2>februaar</h2>
+        <h2>{userInfo.nickname}</h2>
         <div>
           <Link href="/direct/new">
             <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
