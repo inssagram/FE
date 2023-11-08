@@ -5,9 +5,16 @@ import { PageHeader } from "@/components/atoms/Header";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
 
 interface NotificationData {
-  senderName: string;
-  createdAt: string;
+  id: number;
+  created_at: string;
+  friend_status: boolean;
+  read_status: boolean;
+  post_id: number;
+  post_image: string;
   message: string;
+  sender_id: number;
+  sender_image: string;
+  sender_name: string;
 }
 
 const Notifications: React.FC = () => {
@@ -35,25 +42,47 @@ const Notifications: React.FC = () => {
         {notifications.map((notification, index) => (
           <SC.ContentArea key={index}>
             <SC.Account>
-              <Image
-                src="/images/noProfile.jpg"
-                alt="프로필"
-                width={44}
-                height={44}
-                style={{ borderRadius: "100%" }}
-              />
+              {notification.sender_image ? (
+                <Image
+                  src={notification.sender_image}
+                  alt="프로필"
+                  width={44}
+                  height={44}
+                  style={{ borderRadius: "100%" }}
+                />
+              ) : (
+                <Image
+                  src="/images/noProfile.jpg"
+                  alt="프로필"
+                  width={44}
+                  height={44}
+                  style={{ borderRadius: "100%" }}
+                />
+              )}
             </SC.Account>
             <SC.Content>
-              {/* {notification.senderName} */}
-              {notification.message} 2시간
+              {notification.message} {notification.created_at}
             </SC.Content>
-            <SC.Board>
-              <Image
-                src="/images/noImage.svg"
-                alt="게시물"
-                width={44}
-                height={44}
-              />
+            <SC.Board
+            // style={{ borderRadius: "100%", border: "1px solid #ccc" }}
+            >
+              {notification.post_image ? (
+                <Image
+                  src={notification.post_image}
+                  alt="프로필"
+                  width={44}
+                  height={44}
+                  style={{ borderRadius: "100%" }}
+                />
+              ) : (
+                <Image
+                  src="/images/noImage.svg"
+                  alt="프로필"
+                  width={44}
+                  height={44}
+                  style={{ borderRadius: "100%" }}
+                />
+              )}
             </SC.Board>
           </SC.ContentArea>
         ))}

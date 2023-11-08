@@ -1,8 +1,9 @@
 import axios from "axios";
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as farHeart,
@@ -14,14 +15,16 @@ import {
   faHeart as fasHeart,
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { HeartButton } from "@/components/atoms/Button";
+import postLikePostAxios from "@/services/postInfo/postLikePost";
+import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
+import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
 
 interface PostData {
   postId: number;
   memberId: number;
   nickname: string;
-  image: string;
+  image: [string];
   contents: string;
   likeCount: number;
   commentsCounts: number;
@@ -40,61 +43,97 @@ interface UserInfo {
   profilePic: string;
 }
 
+type HandleLikeClick = (postId: number) => void;
+
 interface PostContentsProps {
   post: PostData;
   userInfo: UserInfo;
-  handleLikeClick: (postId: number) => void;
+  handleLikeClick: HandleLikeClick;
 }
 
-const PostContents: React.FC<PostContentsProps> = ({
-  post,
-  userInfo,
-  handleLikeClick,
-}) => {
-  const [isLiked, setIsLiked] = useState(false);
+const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
+  const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
-  
-  // const handleSaveClick = () => {
-  //   setIsSaved(!isSaved);
-  //   axios
-  //     .post("http://localhost:3001/saveStatus", {
-  //       save: !isSaved,
-  //     })
-  //     .then((response) => {
-  //       console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
-  //     })
-  //     .catch((error) => {
-  //       console.error(
-  //         "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
-  //         error
-  //       );
-  //     });
-  // };
+
+  const handleLikeClick = (postId: number) => {
+    postLikePostAxios(postId)
+      .then((response) => {
+        console.log(
+          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
+          response
+        );
+        setIsLiked(!isLiked);
+      })
+      .catch((error) => {
+        console.error(
+          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
+          error
+        );
+      });
+  };
+
+  const handleBookmarkClick = (postId: number) => {
+    postBookmarkPostAxios(postId)
+      .then((response) => {
+        console.log(
+          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
+          response
+        );
+        setIsSaved(true);
+      })
+      .catch((error) => {
+        console.error(
+          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
+          error
+        );
+      });
+  };
+
+  const handleDeleteBookmarkClick = (postId: number) => {
+    deleteBookmarkPostAxios(postId)
+      .then((response) => {
+        console.log(
+          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
+          response
+        );
+        setIsSaved(!isSaved);
+      })
+      .catch((error) => {
+        console.error(
+          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
+          error
+        );
+      });
+  };
 
   const handleCommentClick = () => {
     router.push(`/my/feeds/${post.postId}/comments`);
-    };
+  };
 
   return (
     <>
-      <PostImage
-        src="/images/noImage.svg"
-        alt="게시글"
-        width={412}
-        height={412}
-      />
-      {/* <PostImage src={post.image} alt="게시글" width={412} height={412} /> */}
+      {post.image ? (
+        <PostImage src={post.image[0]} alt="게시글" width={412} height={412} />
+      ) : (
+        <PostImage
+          src={"/images/noImage.svg"}
+          alt="게시글"
+          width={412}
+          height={412}
+        />
+      )}
       <PostDetails>
         <ButtonArea>
           <Left>
-            <FontAwesomeIcon
-              onClick={() => handleLikeClick(post.postId)}
-              icon={isLiked ? fasHeart : farHeart}
-              fontSize={24}
-              style={{ color: isLiked ? "red" : "inherit" }}
+            <HeartButton
+              isLiked={isLiked}
+              handleLikeClick={handleLikeClick}
+              postId={post.postId}
             />
-            <FontAwesomeIcon icon={faComment} fontSize={24} />
+            <Link href={`/my/feeds/${post.postId}/comments`}>
+              <FontAwesomeIcon icon={faComment} fontSize={24} />
+            </Link>
             {userInfo ? (
               <Link href={`/direct/in/${post.memberId}`}>
                 <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
@@ -105,23 +144,29 @@ const PostContents: React.FC<PostContentsProps> = ({
           </Left>
           <Right>
             <FontAwesomeIcon
-              // onClick={handleSaveClick}
+              onClick={() => {
+                isSaved
+                  ? handleDeleteBookmarkClick(post.postId)
+                  : handleBookmarkClick(post.postId);
+              }}
               icon={isSaved ? fasBookmark : farBookmark}
               fontSize={24}
             />
           </Right>
         </ButtonArea>
-
-        <LikesArea>godchaani님 외 {post.likeCount}명이 좋아합니다</LikesArea>
-
+        {post.likeCount > 0 && (
+          <LikesArea>{post.likeCount}명이 좋아합니다</LikesArea>
+        )}
         <CommentsArea>
           <Details>
             <Name>{post.nickname}</Name>
             <Contents>{post.contents}</Contents>
           </Details>
-          <MoreComments onClick={handleCommentClick}>
-            댓글 {post.commentsCounts} 개 모두 보기
-          </MoreComments>
+          {post.commentsCounts > 0 && (
+            <MoreComments onClick={handleCommentClick}>
+              댓글 {post.commentsCounts}개 보기
+            </MoreComments>
+          )}
           <CreatedAt>2일전</CreatedAt>
         </CommentsArea>
       </PostDetails>
@@ -185,7 +230,7 @@ const CommentsArea = styled.div`
 
 const Details = styled.div`
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 13px;
 `;
 
 const Name = styled.span`

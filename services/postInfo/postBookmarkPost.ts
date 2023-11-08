@@ -1,19 +1,18 @@
 import customAxios from "../customAxios";
 
-const postSearchTermAxios = async (memberId: number): Promise<any> => {
-  const SearchData = {
-    memberId,
+const postBookmarkPostAxios = async (postId: number): Promise<any> => {
+  const postData = {
+    postId,
   };
-
   return await customAxios({
     method: "post",
-    url: `/search/save`,
+    url: `/bookmark/save`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    data: SearchData,
+    data: postData,
   });
 };
 
-export default postSearchTermAxios;
+export default postBookmarkPostAxios;

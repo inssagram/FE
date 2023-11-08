@@ -11,6 +11,7 @@ import {
   AccountInfoModal,
   EditModal,
 } from "../atoms/Modal";
+import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 import { RootState } from "@/src/redux/Posts/store";
 
 interface UserInfo {
@@ -44,19 +45,21 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
+
+  const isCurrentUserPost = userInfo.member_id === post.memberId;
 
   const handleFollowClick = () => {
-    setIsFollowing(!isFollowing);
-    axios
-      .post("http://localhost:3001/followStatus", {
-        follow: !isFollowing,
-      })
+    const followId = post.memberId;
+    postMemberFollowAxios(followId)
       .then((response) => {
-        console.log("팔로우 상태가 서버에 업데이트되었습니다.", response);
+        console.log("팔로우 요청이 성공적으로 전송되었습니다.", response);
+        setIsFollowing(!isFollowing);
       })
       .catch((error) => {
-        console.error("팔로우 상태가 업데이트 중 오류가 발생했습니다.", error);
+        console.error(
+          "팔로우를 서버로 전송하는 중 오류가 발생했습니다.",
+          error
+        );
       });
   };
 
@@ -105,14 +108,16 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
           style={{ borderRadius: "100%" }}
         /> */}
         <Id>{post.nickname}</Id>
-        <FollowBtn
-          onClick={handleFollowClick}
-          style={{
-            color: isFollowing ? "#262626" : "#0095f6",
-          }}
-        >
-          {isFollowing ? `팔로잉` : `팔로우`}
-        </FollowBtn>
+        {!isCurrentUserPost && (
+          <FollowBtn
+            onClick={handleFollowClick}
+            style={{
+              color: isFollowing ? "#262626" : "#0095f6",
+            }}
+          >
+            {isFollowing ? `팔로잉` : `팔로우`}
+          </FollowBtn>
+        )}
       </Account>
       <EtcIcon onClick={handleEtcClick}>
         <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
@@ -120,24 +125,24 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
       {post?.memberId === userInfo.member_id
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
-              handleEditClick={handleEditClick}
-              handleInfoClose={handleInfoClose}
-              handleAccountInfoClick={handleAccountInfoClick}
               post={post}
+              handleEditClick={handleEditClick}
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleInfoClose={handleInfoClose}
             />
           )
         : isEllipsisModalOpen && (
             <EllipsisModal
-              handleInfoClose={handleInfoClose}
-              handleAccountInfoClick={handleAccountInfoClick}
               post={post}
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleInfoClose={handleInfoClose}
             />
           )}
       {isAccountInfoModalOpen && (
-        <AccountInfoModal handleInfoClose={handleInfoClose} post={post} />
+        <AccountInfoModal post={post} handleInfoClose={handleInfoClose} />
       )}
-      {isEditModalOpen&& (
-        <EditModal handleEditClick={handleEditClick} post={post} userData={userData} />
+      {isEditModalOpen && (
+        <EditModal post={post} handleEditClick={handleEditClick} />
       )}
     </Top>
   );

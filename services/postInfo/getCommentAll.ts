@@ -1,6 +1,6 @@
 import customAxios from "../customAxios";
 
-const getCommentAxios = async (postId: number): Promise<any> => {
+const getCommentAllAxios = async (postId: number): Promise<any> => {
   return await customAxios({
     method: "get",
     url: `/comment/search`,
@@ -9,9 +9,9 @@ const getCommentAxios = async (postId: number): Promise<any> => {
       charset: "utf-8",
     },
     params: {
-        "post-id": postId,
+      "post-id": postId,
     },
   });
 };
 
-export default getCommentAxios;
+export default getCommentAllAxios;

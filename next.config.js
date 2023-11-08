@@ -11,15 +11,16 @@ const nextConfig = {
       "www.animals.or.kr",
       "www.chemicalnews.co.kr",
       "search.pstatic.net",
-      'avatars.githubusercontent.com',
-      "mblogthumb-phinf.pstatic.net"
+      "avatars.githubusercontent.com",
+      "mblogthumb-phinf.pstatic.net",
       "images.khan.co.kr",
       "images.vivino.com",
     ],
   },
   env: {
-    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
     BASE_URL: process.env.BASE_URL,
+    WebSocket_URL: process.env.WebSocket_URL,
+    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
   },
 };
 

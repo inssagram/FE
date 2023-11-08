@@ -20,11 +20,9 @@ interface ExplorePostData {
 }
 
 const Explore: React.FC = () => {
-  const [randomPosts, setRandomPosts] = useState<ExplorePostData[]>([]);
-  console.log(randomPosts);
-  const [loading, setLoading] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>();
-  console.log(searchValue);
+  const [randomPosts, setRandomPosts] = useState<ExplorePostData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchExplorePostData = async () => {
     try {
@@ -60,12 +58,21 @@ const Explore: React.FC = () => {
           ) : (
             randomPosts.map((post) => (
               <Link key={post.postId} href={`/explore/${post.postId}`}>
-                <Image
-                  src="/images/noImage.svg"
-                  alt="게시글"
-                  width={135}
-                  height={135}
-                />
+                {post.image ? (
+                  <Image
+                    src={post.image[0]}
+                    alt="게시글"
+                    width={135}
+                    height={135}
+                  />
+                ) : (
+                  <Image
+                    src="/images/noImage.svg"
+                    alt="게시글"
+                    width={135}
+                    height={135}
+                  />
+                )}
               </Link>
             ))
           )}
@@ -77,6 +84,7 @@ const Explore: React.FC = () => {
 };
 
 const Container = styled.section`
+  width: 100%;
   min-height: 870px;
   display: flex;
   flex-direction: column;

@@ -9,11 +9,11 @@ import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import getSearchHistoryAxios from "@/services/searchInfo/getSearchHistory";
 import postSearchTermAxios from "@/services/searchInfo/postSearchTerm";
 import deleteSearchHistoryAxios from "@/services/searchInfo/deleteSearchHistory";
-import { RootState } from "@/src/redux/Posts/store";
 
 interface SearchItemData {
   memberId: number;
   email: string;
+  searched: string;
   nickName: string;
   friendStatus: boolean;
   job: string;
@@ -21,19 +21,16 @@ interface SearchItemData {
 }
 
 const Search: React.FC = () => {
-  // const userInfo = useSelector((state: RootState) => state.user.member);
   const [searchTerm, setSearchTerm] = useState("");
   const [newSearchTerm, setNewSearchTerm] = useState("");
-  console.log(newSearchTerm);
   const [searchResults, setSearchResults] = useState<SearchItemData[]>([]);
-  console.log(searchResults);
   const [searchHistory, setSearchHistory] = useState<SearchItemData[]>([]);
-  console.log(searchHistory);
 
   const handleSearch = (searchValue: string) => {
     setSearchTerm(searchValue);
   };
 
+  // 검색 결과 조회
   const fetchSearchResultData = async (keyword: string) => {
     try {
       const response = await getSearchResultAxios(keyword);
@@ -43,21 +40,7 @@ const Search: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchSearchHistoryData = async () => {
-      try {
-        const response = await getSearchHistoryAxios();
-        setSearchHistory(response.data);
-      } catch (error) {
-        console.error("Error loading search history:", error);
-      }
-    };
-
-    if (searchHistory.length > 0) {
-      fetchSearchHistoryData();
-    }
-  }, [searchHistory]);
-
+  // 검색 결과 저장
   const postSearchTermData = async (memberId: number) => {
     try {
       const response = await postSearchTermAxios(memberId);
@@ -71,22 +54,33 @@ const Search: React.FC = () => {
     postSearchTermData(memberId);
   };
 
-  // const deleteSearchHistoryData = async (keyword: string) => {
-  //   try {
-  //     const deletedTerm = searchHistory[keyword].searched;
-  //     const response = await deleteSearchHistoryAxios(deletedTerm);
-  //     if (response) {
-  //       const newSearchHistory = searchHistory.filter((_, i) => i !== index);
-  //       setSearchHistory(newSearchHistory);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting search history:", error);
-  //   }
-  // };
+  // 최근 검색 기록 조회
+  const fetchSearchHistoryData = async () => {
+    try {
+      const response = await getSearchHistoryAxios();
+      setSearchHistory(response);
+    } catch (error) {
+      console.error("Error loading search history:", error);
+    }
+  };
 
-  // const handleSearchItemDelete = (keyword: string) => {
-  //   postSearchTermData(keyword);
-  // };
+  useEffect(() => {
+    fetchSearchHistoryData();
+  }, []);
+
+  // 최근 검색 기록 삭제
+  const handleSearchItemDeleteClick = async (searched: string) => {
+    try {
+      const response = await deleteSearchHistoryAxios(searched);
+
+      if (response) {
+        const updatedSearchHistory = await getSearchHistoryAxios();
+        setSearchHistory(updatedSearchHistory);
+      }
+    } catch (error) {
+      console.error("검색 기록 삭제 중 오류 발생:", error);
+    }
+  };
 
   useEffect(() => {
     if (searchTerm) {
@@ -105,22 +99,22 @@ const Search: React.FC = () => {
             <SearchItem
               key={index}
               result={result}
-              onClick={() => handleSearchItemClick(result.memberId)}
+              handleClick={() => handleSearchItemClick(result.memberId)}
             />
           ))}
         {searchResults.length > 0 ? "" : <SearchHistoryHeader />}
-        {/* {searchResults.length > 0 ? (
+        {searchHistory.length > 0 ? (
           searchHistory.map((history, index) => (
             <SearchItem
               key={index}
-              history={history}
-              onClick={() => handleSearchItemDelete(history.keyword)}
+              result={history}
+              handleDelete={() => handleSearchItemDeleteClick(history.searched)}
               isHistory
             />
           ))
         ) : (
           <NoHistory>최근 검색 기록이 없습니다.</NoHistory>
-        )} */}
+        )}
       </Container>
       <Footer />
     </>

@@ -36,18 +36,18 @@ const In: React.FC = () => {
     console.log(`전달된 메시지: ${message}`);
   };
 
-  useEffect(() => {
-    if (id) {
-      axios
-        .get<Partner>(`http://localhost:3001/accounts/${id}`)
-        .then((response) => {
-          setPartner(response.data);
-        })
-        .catch((error) => {
-          console.error("데이터를 불러오는 중 오류 발생:", error);
-        });
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   if (id) {
+  //     axios
+  //       .get<Partner>(`http://localhost:3001/accounts/${id}`)
+  //       .then((response) => {
+  //         setPartner(response.data);
+  //       })
+  //       .catch((error) => {
+  //         console.error("데이터를 불러오는 중 오류 발생:", error);
+  //       });
+  //   }
+  // }, [id]);
 
   return (
     <>

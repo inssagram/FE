@@ -1,40 +1,5 @@
 import styled from "styled-components";
 
-export const Header = styled.div`
-  width: 412px;
-  height: 44px;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 16px;
-  position: fixed;
-  background-color: #ffffff;
-  color: #222222;
-  z-index: 10;
-  border-bottom: 1px solid #e2e2e2;
-`;
-
-export const H1 = styled.h1`
-  font-size: 1.3rem;
-  color: black;
-  font-weight: lighter;
-  margin-left: 45%;
-`;
-
-export const Prev = styled.button`
-  width: 35px;
-  height: 35px;
-  background-color: transparent;
-  border-style: none;
-  font-size: 1.3rem;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  position: absolute; // 추가
-  left: 5%; // 추가
-`;
-
 export const Container = styled.section`
   width: 100%;
   min-height: 100vh;
@@ -43,9 +8,16 @@ export const Container = styled.section`
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  padding: 16px;
 `;
 
-// ----------------------------------------------------------------------------
+export const ReplyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  width: 100%;
+  min-height: 670px;
+`;
 
 export const Article = styled.article`
   width: 100%;
@@ -53,33 +25,10 @@ export const Article = styled.article`
   display: flex;
   flex-direction: column;
 `;
-// ----------------------------------------------------------------------------
-
-export const Head = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #e2e2e2;
-  height: auto;
-  min-height: 12vh;
-  margin-top: 2rem;
-`;
-
-export const Profile = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 0 1rem 0 1rem;
-`;
 
 export const UserProfile = styled.div`
   display: flex;
   align-items: center;
-`;
-export const ID = styled.span`
-  flex: 0.6;
-  margin-left: 12px;
-  position: relative;
 `;
 
 export const More = styled.div`
@@ -100,14 +49,6 @@ export const ImageContent = styled.div`
 `;
 
 // ----------------------------------------------------------------------------
-
-export const Details = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex: 0.9;
-  padding: 0 1rem 0 1rem;
-`;
 
 // ----------------------------------------------------------------------------
 
@@ -135,11 +76,6 @@ export const RightIcon = styled.div`
 
 export const Likes = styled.div`
   flex: 1;
-`;
-
-export const Content = styled.span`
-  flex: 4;
-  color: #555;
 `;
 
 export const ContentsDate = styled.div`
@@ -226,68 +162,66 @@ export const SmileIcon = styled.div`
   position: absolute; // 이를 absolute로 설정합니다.
   right: 10%; // 오른쪽에서 5px 떨어지게 설정합니다.
   top: 50%; // 상위 컨테이너의 중앙에 위치시킵니다.
-  transform: translateY(-50%); // Y축을 중심으로 이를 조정하여 아이콘을 완벽하게 중앙에 위치시킵니다.
+  transform: translateY(
+    -50%
+  ); // Y축을 중심으로 이를 조정하여 아이콘을 완벽하게 중앙에 위치시킵니다.
 `;
 
 // modal창
 
-export const ModalWrapper= styled.div` 
-    position:absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100%;
-    top:0;
-    width: 412px;
-    margin: -12px;
-    background-color: black;
-    opacity: 0.9;
-    z-index:9;
-`
+export const ModalWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  top: 0;
+  width: 412px;
+  margin: -12px;
+  background-color: black;
+  opacity: 0.9;
+  z-index: 9;
+`;
 
 export const ModalContent = styled.div`
-    height:110px;
-    text-align: center;
-    margin-bottom:3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
-`
+  height: 110px;
+  text-align: center;
+  margin-bottom: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 export const ModalText = styled.span`
-font-size: 1.5rem;
-color: white;
-
-`
+  font-size: 1.5rem;
+  color: white;
+`;
 
 export const ModalButtons = styled.div`
-    width: 324px;
-    height: 96px;
-    margin-top: 3rem;
-    
-`
+  width: 324px;
+  height: 96px;
+  margin-top: 3rem;
+`;
 
 export const DeleteButton = styled.button`
-    width: 200px;
-    height: 48px;
-    background-color: #0095f6; /* 삭제 버튼 배경색 변경 */
-    color: white; /* 텍스트 색상 변경 */
-    border: none;
-    border-radius: 8px; /* 둥근 테두리 설정 */
-    margin-bottom: 10px; /* 버튼 간 간격 지정 */
-    cursor: pointer;
-    border-radius: 16px;
-`
+  width: 200px;
+  height: 48px;
+  background-color: #0095f6; /* 삭제 버튼 배경색 변경 */
+  color: white; /* 텍스트 색상 변경 */
+  border: none;
+  border-radius: 8px; /* 둥근 테두리 설정 */
+  margin-bottom: 10px; /* 버튼 간 간격 지정 */
+  cursor: pointer;
+  border-radius: 16px;
+`;
 
 export const CancelButton = styled.button`
-    width: 200px;
-    height: 48px;
-    background-color: #e5e5e5; /* 취소 버튼 배경색 변경 */
-    color: black; /* 텍스트 색상 변경 */
-    border: none;
-    border-radius: 8px; /* 둥근 테두리 설정 */
-    cursor: pointer;
-    border-radius: 16px;
-`
-
+  width: 200px;
+  height: 48px;
+  background-color: #e5e5e5; /* 취소 버튼 배경색 변경 */
+  color: black; /* 텍스트 색상 변경 */
+  border: none;
+  border-radius: 8px; /* 둥근 테두리 설정 */
+  cursor: pointer;
+  border-radius: 16px;
+`;

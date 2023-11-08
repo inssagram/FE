@@ -45,10 +45,7 @@ const Main: React.FC = () => {
         {posts.map((post, index) => (
           <Post key={index}>
             <PostTop post={post} />
-            <PostContents
-              post={post}
-              userInfo={userInfo}
-            />
+            <PostContents post={post} userInfo={userInfo} />
           </Post>
         ))}
       </PostArea>
