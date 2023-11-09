@@ -1,7 +1,7 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const getSearchResultAxios = async (keyword: string): Promise<any> => {
-  return await customAxios({
+  return await axiosInstance({
     method: "get",
     url: `/search/${keyword}`,
     headers: {

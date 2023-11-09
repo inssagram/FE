@@ -15,48 +15,21 @@ import { useState } from "react";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-
-interface EllipsisModalProps {
-  handleAccountInfoClick?: () => void;
-  handleInfoClose?: () => void;
-  post: { postId: number };
-}
-
-export const EllipsisModal: React.FC<EllipsisModalProps> = ({
-  handleAccountInfoClick,
-  handleInfoClose,
-  post,
-}) => {
-  return (
-    <ModalBackdrop>
-      <ModalContent>
-        <CopyLink>
-          <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
-        </CopyLink>
-        <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
-        <CloseBtn onClick={handleInfoClose}>취소</CloseBtn>
-      </ModalContent>
-    </ModalBackdrop>
-  );
-};
-
 interface MyEllipsisModalProps {
+  post: { postId: number };
+  handleEditClick: () => void;
   handleAccountInfoClick: () => void;
   handleInfoClose?: () => void;
-  handleEditClick: () => void;
-  handleCommentSubmit: () => void;
-  post: { postId: number };
 }
 
 export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
+  post,
+  handleEditClick,
   handleAccountInfoClick,
   handleInfoClose,
-  handleEditClick,
-  handleCommentSubmit,
-  post,
 }) => {
   const { postId } = post;
-  
+
   const handleAccountInfoDelete = () => {
     const token = sessionStorage.getItem("token");
     axios
@@ -88,9 +61,39 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
   );
 };
 
+interface EllipsisModalProps {
+  post: { postId: number };
+  handleAccountInfoClick?: () => void;
+  handleInfoClose?: () => void;
+}
+
+export const EllipsisModal: React.FC<EllipsisModalProps> = ({
+  post,
+  handleAccountInfoClick,
+  handleInfoClose,
+}) => {
+  return (
+    <ModalBackdrop>
+      <ModalContent>
+        <CopyLink>
+          <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />
+        </CopyLink>
+        <AccountInfo onClick={handleAccountInfoClick}>이 계정 정보</AccountInfo>
+        <CloseBtn onClick={handleInfoClose}>취소</CloseBtn>
+      </ModalContent>
+    </ModalBackdrop>
+  );
+};
+
 interface PostInfo {
   postId: number;
   memberId: number;
+  nickName: string;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
 }
 
 interface AccountInfoModalProps {
@@ -99,8 +102,8 @@ interface AccountInfoModalProps {
 }
 
 export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
-  handleInfoClose,
   post,
+  handleInfoClose,
 }) => {
   return (
     <ModalBackdrop>
@@ -117,7 +120,7 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
                 style={{ borderRadius: "100%" }}
               />
             </Profile>
-            <Id>{post.memberId}</Id>
+            <Id>{post.nickName}</Id>
           </AccountArea>
           <InfoArea>
             <Detail>
@@ -143,12 +146,11 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
 };
 
 interface EditModalProps {
-  handleEditClick?: () => void;
   post: { postId: number; memberId: number };
+  handleEditClick?: () => void;
 }
 
-
-export const EditModal: React.FC<EditModalProps> = ({post}) => {
+export const EditModal: React.FC<EditModalProps> = ({ post }) => {
   const [formData, setFormData] = useState({
     contents: "",
     location: "",
@@ -160,7 +162,9 @@ export const EditModal: React.FC<EditModalProps> = ({post}) => {
       // 서버로부터 게시물 데이터를 가져오는 API 요청
       const fetchPostData = async () => {
         try {
-          const response = await axios.get(`http://3.36.239.69:8080/post/${post.postId}`);
+          const response = await axios.get(
+            `http://3.36.239.69:8080/post/${post.postId}`
+          );
           if (response.status === 200) {
             const postData = response.data;
             // 가져온 데이터로 폼 필드를 채웁니다
@@ -173,10 +177,13 @@ export const EditModal: React.FC<EditModalProps> = ({post}) => {
             console.error("게시물 데이터를 불러오는데 실패했습니다.");
           }
         } catch (error) {
-          console.error("게시물 데이터를 불러오는 중 오류가 발생했습니다:", error);
+          console.error(
+            "게시물 데이터를 불러오는 중 오류가 발생했습니다:",
+            error
+          );
         }
       };
-  
+
       fetchPostData();
     }
   }, [post]);
@@ -191,7 +198,7 @@ export const EditModal: React.FC<EditModalProps> = ({post}) => {
 
   const handleEditDone = () => {
     const token = sessionStorage.getItem("token");
-    
+
     if (post) {
       const { postId, memberId } = post;
       axios
@@ -199,7 +206,7 @@ export const EditModal: React.FC<EditModalProps> = ({post}) => {
           headers: {
             Authorization: `${token}`,
           },
-          memberId: memberId, 
+          memberId: memberId,
           contents: formData.contents,
           location: formData.location,
         })
@@ -214,7 +221,7 @@ export const EditModal: React.FC<EditModalProps> = ({post}) => {
       console.error("유효한 게시물이 없습니다.");
     }
   };
-  
+
   return (
     <SC.ModalWrapper>
       <SC.Container>
@@ -388,10 +395,10 @@ const CopyLink = styled.button`
   border-top-right-radius: 10px;
 `;
 
-const MyCopyLink = styled.div`
+const MyCopyLink = styled.button`
   ${Link}
   display: flex;
-  justify-content: center;
+  align-items: center;
 `;
 
 const EditPost = styled.button`

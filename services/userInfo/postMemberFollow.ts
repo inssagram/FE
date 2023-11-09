@@ -1,19 +1,18 @@
 import axiosInstance from "../axiosInstance";
 
-const postSearchTermAxios = async (memberId: number): Promise<any> => {
-  const SearchData = {
-    memberId,
+const postMemberFollowAxios = async (followId: number): Promise<any> => {
+  const followData = {
+    followId,
   };
-
   return await axiosInstance({
     method: "post",
-    url: `/search/save`,
+    url: `/member/follow`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    data: SearchData,
+    data: followData,
   });
 };
 
-export default postSearchTermAxios;
+export default postMemberFollowAxios;

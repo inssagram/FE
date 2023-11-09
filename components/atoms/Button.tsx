@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+  faHeart as fasHeart,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({
   linkToCopy,
@@ -36,6 +40,27 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
 
 export const FollowButton: React.FC = () => {
   return <FollowBtn>팔로우</FollowBtn>;
+};
+
+interface HeartButtonProps {
+  isLiked: boolean;
+  postId: number;
+  handleLikeClick: (postId: number) => void;
+}
+
+export const HeartButton: React.FC<HeartButtonProps> = ({
+  isLiked,
+  handleLikeClick,
+  postId,
+}) => {
+  return (
+    <FontAwesomeIcon
+      onClick={() => handleLikeClick(postId)}
+      icon={isLiked ? fasHeart : farHeart}
+      fontSize={24}
+      style={{ color: isLiked ? "red" : "inherit" }}
+    />
+  );
 };
 
 const CopyLink = styled.span`

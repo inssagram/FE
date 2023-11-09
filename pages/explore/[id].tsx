@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
 import Footer from "@/components/Footer";
-import { RootState } from "@/src/redux/Posts/store";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
-import postLikePostAxios from "@/services/postInfo/postLikePost";
+import { RootState } from "@/src/redux/Posts/store";
 
 interface ExplorePostData {
   postId: number;
@@ -31,27 +31,11 @@ const Post: React.FC = () => {
 
   const fetchPostDetailData = async (id: string) => {
     try {
-      const response = await getPostDetailAxios(id);
-      setPost(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+      const res = await getPostDetailAxios(id);
+      setPost(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
     }
-  };
-
-  const handleLikeClick = (postId: number) => {
-    postLikePostAxios(postId)
-      .then((response) => {
-        console.log(
-          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
-          response
-        );
-      })
-      .catch((error) => {
-        console.error(
-          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
-      });
   };
 
   useEffect(() => {
@@ -64,13 +48,7 @@ const Post: React.FC = () => {
     <>
       <PageHeader title={pageTitle} />
       {post && <PostTop post={post} />}
-      {post && (
-        <PostContents
-          post={post}
-          userInfo={userInfo}
-          handleLikeClick={handleLikeClick}
-        />
-      )}
+      {post && <PostContents post={post} userInfo={userInfo} />}
       <Footer />
     </>
   );

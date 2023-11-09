@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 
-const deleteSearchHistoryAxios = async (keyword: string): Promise<any> => {
+const getUserDetailAxios = async (nickname: string): Promise<any> => {
   return await axiosInstance({
-    method: "delete",
-    url: `/search/${keyword}`,
+    method: "get",
+    url: `/member/detail/${nickname}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const deleteSearchHistoryAxios = async (keyword: string): Promise<any> => {
   });
 };
 
-export default deleteSearchHistoryAxios;
+export default getUserDetailAxios;
