@@ -1,17 +1,14 @@
 import axiosInstance from "../axiosInstance";
 
-const getCommentAllAxios = async (postId: number): Promise<any> => {
+const getUserDetailAxios = async (nickname: string): Promise<any> => {
   return await axiosInstance({
     method: "get",
-    url: `/comment/search`,
+    url: `/member/detail/${nickname}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    params: {
-      "post-id": postId,
-    },
   });
 };
 
-export default getCommentAllAxios;
+export default getUserDetailAxios;

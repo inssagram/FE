@@ -33,16 +33,20 @@ export const SearchHistoryHeader: React.FC = () => {
 
 interface MyHeaderProps {
   userInfo: any;
+  isNotMe: boolean;
 }
 
-export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
+export const MyPageHeader: React.FC<MyHeaderProps> = ({
+  userInfo,
+  isNotMe,
+}) => {
   return (
     <>
       <MyHeader>
         <Link href="/my/settings">
           <FontAwesomeIcon icon={faGear} fontSize={"24"} />
         </Link>
-        <h2>{userInfo.nickname}</h2>
+        <h2>{isNotMe ? "" : userInfo.nickname}</h2>
         <Link href="my/recommend" passHref>
           <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
         </Link>

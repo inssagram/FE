@@ -1,8 +1,9 @@
-import axios from "axios";
-import styled from "styled-components";
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -25,7 +26,7 @@ interface UserInfo {
 interface PostData {
   postId: number;
   memberId: number;
-  nickname: string;
+  nickName: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -47,6 +48,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const isCurrentUserPost = userInfo.member_id === post.memberId;
+  const isCurrentUser = userInfo.nickname === post.nickName;
 
   const handleFollowClick = () => {
     const followId = post.memberId;
@@ -93,13 +95,16 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   return (
     <Top>
       <Account>
-        <ProfileImage
-          src="/images/noProfile.jpg"
-          alt="프로필"
-          width={32}
-          height={32}
-          style={{ borderRadius: "100%" }}
-        />
+        <Link href={isCurrentUser ? "/my" : `/user/${post.nickName}`}>
+          <ProfileImage
+            src="/images/noProfile.jpg"
+            alt="프로필"
+            width={32}
+            height={32}
+            style={{ borderRadius: "100%" }}
+          />
+        </Link>
+
         {/* <ProfileImage
           src={userInfo.profilePic}
           alt="프로필"
@@ -107,7 +112,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
           height={32}
           style={{ borderRadius: "100%" }}
         /> */}
-        <Id>{post.nickname}</Id>
+        <Id>{post.nickName}</Id>
         {!isCurrentUserPost && (
           <FollowBtn
             onClick={handleFollowClick}
@@ -122,7 +127,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
       <EtcIcon onClick={handleEtcClick}>
         <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
       </EtcIcon>
-      {post?.memberId === userInfo.member_id
+      {isCurrentUserPost
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
               post={post}

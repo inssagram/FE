@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { handleError } from "@/utils/errorHandler";
 import { SearchHistoryHeader } from "@/components/atoms/Header";
 import { SearchItem } from "@/components/atoms/Item";
 import SearchBar from "@/components/input/SearchBar";
@@ -33,20 +33,20 @@ const Search: React.FC = () => {
   // 검색 결과 조회
   const fetchSearchResultData = async (keyword: string) => {
     try {
-      const response = await getSearchResultAxios(keyword);
-      setSearchResults(response);
-    } catch (error) {
-      console.error("Error creating post:", error);
+      const res = await getSearchResultAxios(keyword);
+      setSearchResults(res);
+    } catch (err) {
+      handleError(err, "Error creating post:");
     }
   };
 
   // 검색 결과 저장
   const postSearchTermData = async (memberId: number) => {
     try {
-      const response = await postSearchTermAxios(memberId);
-      setNewSearchTerm(response.data);
-    } catch (error) {
-      console.error("Error posting search value:", error);
+      const res = await postSearchTermAxios(memberId);
+      setNewSearchTerm(res.data);
+    } catch (err) {
+      handleError(err, "Error posting search value:");
     }
   };
 
@@ -57,10 +57,10 @@ const Search: React.FC = () => {
   // 최근 검색 기록 조회
   const fetchSearchHistoryData = async () => {
     try {
-      const response = await getSearchHistoryAxios();
-      setSearchHistory(response);
-    } catch (error) {
-      console.error("Error loading search history:", error);
+      const res = await getSearchHistoryAxios();
+      setSearchHistory(res);
+    } catch (err) {
+      handleError(err, "Error loading search history:");
     }
   };
 
@@ -71,14 +71,13 @@ const Search: React.FC = () => {
   // 최근 검색 기록 삭제
   const handleSearchItemDeleteClick = async (searched: string) => {
     try {
-      const response = await deleteSearchHistoryAxios(searched);
-
-      if (response) {
+      const res = await deleteSearchHistoryAxios(searched);
+      if (res) {
         const updatedSearchHistory = await getSearchHistoryAxios();
         setSearchHistory(updatedSearchHistory);
       }
-    } catch (error) {
-      console.error("검색 기록 삭제 중 오류 발생:", error);
+    } catch (err) {
+      handleError(err, "검색 기록 삭제 중 오류 발생:");
     }
   };
 

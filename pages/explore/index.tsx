@@ -1,10 +1,10 @@
-import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { handleError } from "@/utils/errorHandler";
 import SearchBar from "@/components/input/SearchBar";
 import Footer from "@/components/Footer";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
@@ -26,12 +26,12 @@ const Explore: React.FC = () => {
 
   const fetchExplorePostData = async () => {
     try {
-      const response = await getPostAllAxios();
-      const randomOrderPosts = response.data.sort(() => Math.random() - 0.5);
+      const res = await getPostAllAxios();
+      const randomOrderPosts = res.data.sort(() => Math.random() - 0.5);
       setRandomPosts(randomOrderPosts);
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
       setLoading(true);
     }
   };

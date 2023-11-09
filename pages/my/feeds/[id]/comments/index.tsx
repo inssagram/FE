@@ -1,7 +1,7 @@
 import axios from "axios";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import * as SC from "@/components/styled/my_feeds_comments";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile, faHeart } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { deleteComment } from "@/src/redux/Posts/commentSlice";
 import Modal from "./modal";
 import useLongPress from "./useLongPress";
+import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
 import { CommentItem } from "@/components/atoms/Item";
 import Footer from "@/components/Footer";
@@ -44,14 +45,15 @@ interface CommentItemData {
 
 const Comments: React.FC = () => {
   // const comments = useSelector((state: RootState) => state.comments.comments);
-  const [postDetail, setPostDetail] = useState<PostItemData | null>(null);
+  const [post, setPost] = useState<PostItemData | null>(null);
   const [comment, setComment] = useState("");
   const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
   const [isLikeComment, setIsLikeComment] = useState<boolean>(false);
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
   );
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
@@ -60,38 +62,32 @@ const Comments: React.FC = () => {
   // 게시글 상세 조회
   const fetchPostDetailData = async (postId: number) => {
     try {
-      const response = await getPostDetailAxios(postId);
-      setPostDetail(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+      const res = await getPostDetailAxios(postId);
+      setPost(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
     }
   };
 
   // 게시글 모든 댓글 조회
   const fetchCommentAllData = async (postId: number) => {
     try {
-      const response = await getCommentAllAxios(postId);
-      setCommentAll(response.data);
-    } catch (error) {
-      console.error("error fetching comments", error);
+      const res = await getCommentAllAxios(postId);
+      setCommentAll(res.data);
+    } catch (err) {
+      handleError(err, "error fetching comments");
     }
   };
 
   // 댓글 좋아요
   const handleLikeCommentClick = (commentId: number) => {
     postLikeCommentAxios(commentId)
-      .then((response) => {
-        console.log(
-          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
-          response
-        );
+      .then((res) => {
+        console.log("게시물 좋아요가 서버에 성공적으로 전송되었습니다.", res);
         setIsLikeComment(true);
       })
-      .catch((error) => {
-        console.error(
-          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
+      .catch((err) => {
+        handleError(err, "error fetching comments like:");
       });
   };
 
@@ -111,7 +107,7 @@ const Comments: React.FC = () => {
     } else {
       const token = sessionStorage.getItem("token");
       if (!id || !token) {
-        console.error("게시물 ID 또는 토큰이 유효하지 않습니다.");
+        console.error("postId or token is not available");
         return;
       }
       axios
@@ -135,7 +131,7 @@ const Comments: React.FC = () => {
           setComment("");
         })
         .catch((error) => {
-          console.error("댓글 제출 중 오류 발생:", error);
+          handleError("댓글 제출 중 오류 발생:", error);
         });
     }
   };
@@ -145,7 +141,7 @@ const Comments: React.FC = () => {
   };
 
   const handleCommentLongPress = useLongPress(() => {
-    setModalOpen(true);
+    setIsEditModalOpen(true);
   }, 1000);
 
   const handleEditCommentClick = (commentId: number) => {
@@ -167,19 +163,19 @@ const Comments: React.FC = () => {
     if (selectedCommentId) {
       dispatch(deleteComment(selectedCommentId));
     }
-    setModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   const handleCancelDelete = () => {
-    setModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   return (
-    <SC.Container>
+    <Container>
       <PageHeader title={pageTitle} />
 
-      <SC.CommentsContainer>
-        <SC.UserProfile>
+      <CommentsContainer>
+        <UserProfile>
           <Image
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
             alt="개"
@@ -187,23 +183,23 @@ const Comments: React.FC = () => {
             height={40}
             style={{ borderRadius: "100%" }}
           />
-        </SC.UserProfile>
-        <SC.CommentsForm>
-          <SC.CommentsInput
+        </UserProfile>
+        <CommentsForm>
+          <CommentsInput
             value={comment}
             onKeyDown={handleKeyDown}
             onChange={handleCommentChange}
             placeholder="댓글 달기..."
           />
 
-          <SC.SmileIcon>
+          <SmileIcon>
             <FontAwesomeIcon icon={faFaceSmile} fontSize={"2rem"} />
-          </SC.SmileIcon>
-        </SC.CommentsForm>
-      </SC.CommentsContainer>
+          </SmileIcon>
+        </CommentsForm>
+      </CommentsContainer>
 
-      {postDetail && <CommentItem post={postDetail} />}
-      {commentAll.length > 0 ? (
+      {post && <CommentItem post={post} isReply={false} />}
+      {commentAll ? (
         commentAll.map((comment, index) => (
           <div
             key={index}
@@ -211,23 +207,73 @@ const Comments: React.FC = () => {
             onClick={() => handleEditCommentClick(comment.commentId)}
           >
             <CommentItem
-              post={postDetail}
+              post={post}
               comment={comment}
               isLikeComment={isLikeComment}
               handleLikeCommentClick={handleLikeCommentClick}
-              isReply
+              isReply={true}
             />
           </div>
         ))
       ) : (
-        <div>댓글이 없습니다.</div>
+        <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
       )}
-      {isModalOpen && selectedCommentId !== null && (
+      {isEditModalOpen && selectedCommentId !== null && (
         <Modal onDelete={handleDeleteComment} onCancel={handleCancelDelete} />
       )}
       <Footer />
-    </SC.Container>
+    </Container>
   );
 };
 
 export default Comments;
+
+const Container = styled.section`
+  width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+`;
+
+const CommentsContainer = styled.div`
+  width: 100%;
+  height: 8vh;
+  border-top: 1px solid #e2e2e2;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+`;
+
+const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CommentsForm = styled.form`
+  width: 100%;
+  position: relative;
+  padding-left: 1rem;
+`;
+
+const CommentsInput = styled.input`
+  width: 95%;
+  height: 4vh;
+  border-radius: 10px;
+  padding-left: 0.5rem;
+`;
+
+const SmileIcon = styled.div`
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const Empty = styled.span`
+  padding: 12px;
+  color: #22222;
+`;

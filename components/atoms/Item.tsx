@@ -187,7 +187,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
               </Desc>
               <Desc>
                 <Date>16주</Date>
-                <Likes>좋아요 0개</Likes>
+                <Likes>좋아요 {comment.likeCount}개</Likes>
                 <MoreComment>답글달기</MoreComment>
               </Desc>
             </Info>

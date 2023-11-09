@@ -1,10 +1,10 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const postBookmarkPostAxios = async (postId: number): Promise<any> => {
   const postData = {
     postId,
   };
-  return await customAxios({
+  return await axiosInstance({
     method: "post",
     url: `/bookmark/save`,
     headers: {

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import * as SC from "@/components/styled/notifications";
+import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
 
@@ -23,10 +24,10 @@ const Notifications: React.FC = () => {
 
   const fetchNotificationAllData = async () => {
     try {
-      const response = await getNotificationAllAxios();
-      setNotifications(response.data);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
+      const res = await getNotificationAllAxios();
+      setNotifications(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching notifications:");
     }
   };
 
@@ -66,23 +67,17 @@ const Notifications: React.FC = () => {
             <SC.Board
             // style={{ borderRadius: "100%", border: "1px solid #ccc" }}
             >
-              {notification.post_image ? (
-                <Image
-                  src={notification.post_image}
-                  alt="프로필"
-                  width={44}
-                  height={44}
-                  style={{ borderRadius: "100%" }}
-                />
-              ) : (
-                <Image
-                  src="/images/noImage.svg"
-                  alt="프로필"
-                  width={44}
-                  height={44}
-                  style={{ borderRadius: "100%" }}
-                />
-              )}
+              <Image
+                src={
+                  notification.post_image
+                    ? notification.post_image
+                    : "/images/noImage.svg"
+                }
+                alt="프로필"
+                width={44}
+                height={44}
+                style={{ borderRadius: "100%" }}
+              />
             </SC.Board>
           </SC.ContentArea>
         ))}

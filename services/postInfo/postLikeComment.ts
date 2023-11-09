@@ -1,7 +1,7 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const postLikeCommentAxios = async (commentId: number): Promise<any> => {
-  return await customAxios({
+  return await axiosInstance({
     method: "post",
     url: `/like/comment`,
     headers: {

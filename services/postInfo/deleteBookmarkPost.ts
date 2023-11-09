@@ -1,10 +1,10 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const deleteBookmarkPostAxios = async (postId: number): Promise<any> => {
   const postData = {
     postId,
   };
-  return await customAxios({
+  return await axiosInstance({
     method: "delete",
     url: `/bookmark/delete`,
     headers: {

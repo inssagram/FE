@@ -1,10 +1,10 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const postMemberFollowAxios = async (followId: number): Promise<any> => {
   const followData = {
     followId,
   };
-  return await customAxios({
+  return await axiosInstance({
     method: "post",
     url: `/member/follow`,
     headers: {

@@ -88,7 +88,12 @@ export const EllipsisModal: React.FC<EllipsisModalProps> = ({
 interface PostInfo {
   postId: number;
   memberId: number;
-  nickname: string;
+  nickName: string;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  hashTags: string;
 }
 
 interface AccountInfoModalProps {
@@ -115,7 +120,7 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
                 style={{ borderRadius: "100%" }}
               />
             </Profile>
-            <Id>{post.nickname}</Id>
+            <Id>{post.nickName}</Id>
           </AccountArea>
           <InfoArea>
             <Detail>
