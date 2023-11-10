@@ -169,7 +169,7 @@ export const DMfilter = styled.section<filterProps>`
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.3fea);
     top: 0;
     position: absolute;
     z-index: 10;

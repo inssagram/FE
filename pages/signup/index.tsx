@@ -57,7 +57,11 @@ const Signup: React.FC = () => {
           if (error.response.status === 409) {
             alert("중복된 이메일이 있습니다.");
             setButtonDisabled(false)
-          } 
+          }
+          if(error.response.status === 500) {
+            alert("잘못된 접근입니다.")
+            setButtonDisabled(false)
+          }
         });
     }
   };
