@@ -124,18 +124,17 @@ const Message = styled.div`
   border: 1px solid #ccc;
   border-radius: 20px;
   background-color: #fff;
-
-  ${({ filesSelected }) =>
-    filesSelected
-      ? css`
-          display: flex;
-          flex-direction: row;
-        `
-      : css`
-          display: flex;
-          flex-direction: column;
-        `};
 `;
+// ${({ filesSelected }) =>
+//   filesSelected
+//     ? css`
+//         display: flex;
+//         flex-direction: row;
+//       `
+//     : css`
+//         display: flex;
+//         flex-direction: column;
+//       `};
 
 const Input = styled.div`
   display: flex;

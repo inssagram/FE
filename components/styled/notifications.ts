@@ -20,12 +20,12 @@ export const ContentArea = styled.div`
   align-items: center;
   height: 60px;
   padding: 8px 16px;
-  transform: ${({ isSwiping }) =>
-    isSwiping
-      ? "translateX(-100px)"
-      : "none"}; /* Adjust the value to your preference */
-  transition: transform 0.3s ease;
 `;
+// transform: ${({ isSwiping }) =>
+//   isSwiping
+//     ? "translateX(-100px)"
+//     : "none"}; /* Adjust the value to your preference */
+// transition: transform 0.3s ease;
 
 export const Account = styled.div`
   margin-right: 14px;

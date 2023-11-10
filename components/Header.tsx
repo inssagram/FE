@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = (props) => {
 
   useEffect(() => {
     const eventSource = new EventSource(
-      `${process.env.BASE_URL}/notification/subscribe/${userInfo.member_id}`
+      `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
     );
 
     eventSource.addEventListener("sse", (event) => {

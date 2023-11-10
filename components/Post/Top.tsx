@@ -19,7 +19,6 @@ interface UserInfo {
   member_id: number;
   nickname: string;
   job: string;
-  profilePic: string;
 }
 
 interface PostData {
