@@ -25,6 +25,7 @@ const Details: React.FC = () => {
   const [passwordCheckProcessState, setPasswordCheckProcessState] =
     useState("");
   const [wrongWayPasswordCheck, setWrongWayPasswordCheck] = useState(false);
+
   const inputNicknameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
@@ -70,7 +71,8 @@ const Details: React.FC = () => {
         setNicknameSet(true);
       })
       .catch((error) => {
-        console.log(error.response.data.message)
+        alert(error.response.data.message)
+        console.log(error)
         setWrongWayNickname(true);
         setNicknameSet(false); 
       });
