@@ -15,11 +15,42 @@ export const Header = styled.div`
   border-bottom: 1px solid #e2e2e2;
 `;
 
-export const body = styled.div`
+interface textProps {
+  isTexting: boolean;
+ }
+
+export const body = styled.div<textProps>`
   position: relative;
   width: 100%;
   height: 915px;
+  background-color: ${(props) => props.isTexting ? "transparent" : "rgba(0,0,0,0.5)"};
 `;
+
+export const TextArea = styled.textarea<textProps>`
+  position: absolute;
+  display: ${(props) => props.isTexting ? "inline" : "none"};
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  border: none;
+  font-size: 20px;
+  top: 20%;
+  left: 50%;
+  &:focus{
+    border: none;
+    outline: none;
+  }
+`
+
+export const TextBox = styled.span`
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  border: none;
+  font-size: 20px;
+`
+
 
 export const H1 = styled.h1`
   font-size: 1.3rem;
@@ -44,7 +75,31 @@ export const IconPannels = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   gap: 3rem;
+  position: relative;
 `;
+
+export const UploadBox = styled.div`
+  position: relative;
+`
+
+export const Empty = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  position: absolute;
+`
+
+export const HiddenInput = styled.input.attrs({
+  type: "file",
+  accept: "image/*",
+})`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+`
 
 export const Footer = styled.div`
   width: 100%;
@@ -52,11 +107,20 @@ export const Footer = styled.div`
   bottom: 0;
   height: 100px;
   text-align: center;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Button = styled.button`
+  text-align: center;
+  background-color: transparent;
+  border: none;
   font-weight: bold;
   color: white;
   font-size: 1.5rem;
   text-shadow: 2px 2px 1px black;
   display: flex;
   align-items: center;
-  justify-content: center;
-`;
+`
