@@ -33,14 +33,20 @@ export const SearchHistoryHeader: React.FC = () => {
 
 interface MyHeaderProps {
   userInfo: any;
+  isNotMe: boolean;
 }
 
-export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
+export const MyPageHeader: React.FC<MyHeaderProps> = ({
+  userInfo,
+  isNotMe,
+}) => {
   return (
     <>
       <MyHeader>
-        <FontAwesomeIcon icon={faGear} fontSize={"24"} />
-        <h2>{userInfo.nickname}</h2>
+        <Link href="/my/settings">
+          <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+        </Link>
+        <h2>{isNotMe ? "" : userInfo.nickname}</h2>
         <Link href="my/recommend" passHref>
           <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
         </Link>
@@ -49,13 +55,26 @@ export const MyPageHeader: React.FC<MyHeaderProps> = ({ userInfo }) => {
   );
 };
 
-export const DirectHeader: React.FC = () => {
+interface UserInfo {
+  memberId: number;
+  nickname: string;
+}
+
+interface MyDirectHeaderProps {
+  userInfo: UserInfo;
+  onCreateChatRoom: () => void;
+}
+
+export const DirectHeader: React.FC<MyDirectHeaderProps> = ({
+  userInfo,
+  onCreateChatRoom,
+}) => {
   return (
     <>
       <DmHeader>
         <BackArrow />
-        <h2>februaar</h2>
-        <div>
+        <h2>{userInfo.nickname}</h2>
+        <div onClick={onCreateChatRoom}>
           <Link href="/direct/new">
             <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
           </Link>

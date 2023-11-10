@@ -7,6 +7,7 @@ import PostContents from "@/components/Post/Contents";
 import Footer from "@/components/Footer";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
 import { RootState } from "@/src/redux/Posts/store";
+import getCommentAxios from "@/services/postInfo/getCommentAll";
 
 interface PostData {
   postId: number;
@@ -22,7 +23,6 @@ interface PostData {
 const Feeds: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
   const [post, setPost] = useState<PostData[]>([]);
-
   const router = useRouter();
   const { id } = router.query as { id: string };
   const pageTitle = "게시물";
@@ -42,19 +42,11 @@ const Feeds: React.FC = () => {
     }
   }, [id]);
 
-  const handleCommentClick = () => {
-    router.push(`/my/feeds/${id}/comments`);
-  };
-
   return (
     <>
       <PageHeader title={pageTitle} />
       <PostTop post={post} />
-      <PostContents
-        post={post}
-        userInfo={userInfo}
-        handleCommentClick={handleCommentClick}
-      />
+      <PostContents post={post} userInfo={userInfo} />
       <Footer />
     </>
   );

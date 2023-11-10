@@ -1,61 +1,155 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as SC from "@/components/styled/my_feeds_comments";
+import axios from "axios";
 import Image from "next/image";
-import { faHeart, faFaceSmile } from "@fortawesome/free-regular-svg-icons";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import Footer from "@/components/Footer";
-import React, {useState} from "react";
-import Router, { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/src/redux/Posts/store";
-import { addComment, CommentType, deleteComment } from "@/src/redux/Posts/commentSlice"
-import useLongPress from "./useLongPress";
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFaceSmile, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { deleteComment } from "@/src/redux/Posts/commentSlice";
 import Modal from "./modal";
+import useLongPress from "./useLongPress";
+import { handleError } from "@/utils/errorHandler";
+import { PageHeader } from "@/components/atoms/Header";
+import { CommentItem } from "@/components/atoms/Item";
+import Footer from "@/components/Footer";
+import postLikeCommentAxios from "@/services/postInfo/postLikeComment";
+import getCommentAllAxios from "@/services/postInfo/getCommentAll";
+import getPostDetailAxios from "@/services/postInfo/getPostDetail";
+
+interface PostItemData {
+  commentsCounts: number;
+  contents: string;
+  createdAt: number;
+  hashTags: string;
+  image: string;
+  likeCount: number;
+  memberId: number;
+  nickname: string;
+  postId: number;
+  taggedMemberId: string;
+}
+
+interface CommentItemData {
+  commentId: number;
+  postId: number;
+  memberId: number;
+  nickname: string;
+  content: string;
+  likeCount: number;
+  replyFlag: boolean;
+  createdAt: number;
+  mentionList: string[];
+  image: string;
+}
 
 const Comments: React.FC = () => {
-
-  const router = useRouter();
-  const {id} = router.query;
+  // const comments = useSelector((state: RootState) => state.comments.comments);
+  const [post, setPost] = useState<PostItemData | null>(null);
   const [comment, setComment] = useState("");
-  const [isModalOpen, setModalOpen] = useState(false);
-  const comments = useSelector((state: RootState) => state.comments.comments); // 전역 상태에서 댓글 가져오기
+  const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
+  const [isLikeComment, setIsLikeComment] = useState<boolean>(false);
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null
+  );
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const dispatch = useDispatch();
-  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(null);
+  const router = useRouter();
+  const { id } = router.query;
+  const pageTitle = "댓글";
 
-  const handleCommentChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value);
-  }
+  // 게시글 상세 조회
+  const fetchPostDetailData = async (postId: number) => {
+    try {
+      const res = await getPostDetailAxios(postId);
+      setPost(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
+    }
+  };
 
+  // 게시글 모든 댓글 조회
+  const fetchCommentAllData = async (postId: number) => {
+    try {
+      const res = await getCommentAllAxios(postId);
+      setCommentAll(res.data);
+    } catch (err) {
+      handleError(err, "error fetching comments");
+    }
+  };
 
+  // 댓글 좋아요
+  const handleLikeCommentClick = (commentId: number) => {
+    postLikeCommentAxios(commentId)
+      .then((res) => {
+        console.log("게시물 좋아요가 서버에 성공적으로 전송되었습니다.", res);
+        setIsLikeComment(true);
+      })
+      .catch((err) => {
+        handleError(err, "error fetching comments like:");
+      });
+  };
+
+  const postId = Number(id);
+
+  useEffect(() => {
+    if (!isNaN(postId)) {
+      fetchPostDetailData(postId);
+      fetchCommentAllData(postId);
+    }
+  }, [postId]);
+
+  // 댓글 작성
   const handleCommentSubmit = () => {
     if (comment.trim() === "") {
       console.warn("빈 댓글은 제출할 수 없습니다.");
     } else {
-      const newComment: CommentType = {
-        id: comments.length + 1, // 댓글에 대한 고유 ID를 생성해야 합니다.
-        userId: "gummy_jelly", // 사용자 ID를 가져오는 방법은 해당 애플리케이션의 로그인 시스템에 따라 다를 수 있습니다.
-        profile: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg",
-        content: comment.trim(),
-      };
+      const token = sessionStorage.getItem("token");
+      if (!id || !token) {
+        console.error("postId or token is not available");
+        return;
+      }
+      axios
+        .post(
+          `http://3.36.239.69:8080/comment/create`,
+          {
+            contents: comment.trim(),
+            postId: id,
+          },
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log("댓글이 성공적으로 제출되었습니다:", response.data);
 
-      dispatch(addComment(newComment));
-      setComment("");
+          const newComment = response.data;
+          setCommentAll([...commentAll, newComment]);
+          setComment("");
+        })
+        .catch((error) => {
+          handleError("댓글 제출 중 오류 발생:", error);
+        });
     }
   };
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value);
+  };
+
   const handleCommentLongPress = useLongPress(() => {
-    setModalOpen(true);
+    setIsEditModalOpen(true);
   }, 1000);
 
-    // 댓글을 클릭할 때 호출되는 함수
-    const handleCommentClick = (commentId: number) => {
-      // 댓글을 클릭할 때마다 선택된 댓글의 ID를 업데이트합니다.
-      setSelectedCommentId(commentId);
-    };
-  
+  const handleEditCommentClick = (commentId: number) => {
+    setSelectedCommentId(commentId);
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (comment.trim() !== "") {
         handleCommentSubmit();
       } else {
@@ -65,34 +159,23 @@ const Comments: React.FC = () => {
     }
   };
 
-    const handleDeleteComment = async () => {
-    if(selectedCommentId){
+  const handleDeleteComment = async () => {
+    if (selectedCommentId) {
       dispatch(deleteComment(selectedCommentId));
     }
-    setModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   const handleCancelDelete = () => {
-    // 모달 닫기 로직 구현
-    setModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
-  const handlePrev = () => {
-    if(id){
-    Router.push(`/my/feeds/${id}`)
-    }
-  }
   return (
-    <SC.Container>
-      <SC.Header>
-        <SC.Prev onClick={handlePrev}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </SC.Prev>
-        <SC.H1>댓글</SC.H1>
-      </SC.Header>
+    <Container>
+      <PageHeader title={pageTitle} />
 
-      <SC.Head>
-        <SC.Profile>
+      <CommentsContainer>
+        <UserProfile>
           <Image
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
             alt="개"
@@ -100,77 +183,97 @@ const Comments: React.FC = () => {
             height={40}
             style={{ borderRadius: "100%" }}
           />
-          <SC.ID>정호인척 하는 유리</SC.ID>
-          <SC.Content>곱창 먹고 싶다고요옹</SC.Content>
-        </SC.Profile>
-        <SC.ContentsDate>16주</SC.ContentsDate>
-      </SC.Head>
-      <SC.Details>
-        <SC.CommentCont>
-        {comments.map((comment: CommentType) => (
-        <SC.UserCont key={comment.id} onMouseDown={handleCommentLongPress.onMouseDown} onClick={() => handleCommentClick(comment.id)} >
-          <SC.UserProfile>
-            <Image
-              src={comment.profile}
-              alt="프로필 이미지"
-              width={40}
-              height={40}
-              style={{ borderRadius: "100%" }}
-            />
-            <SC.UserId>{comment.userId}</SC.UserId>
-            <SC.CommentsDate>8주 전</SC.CommentsDate>
-          </SC.UserProfile>
-          <SC.UserComment>
-            {comment.content}
-            <FontAwesomeIcon icon={faHeart} fontSize={"20px"} />
-          </SC.UserComment>
-          <SC.WriteReply>답글 달기</SC.WriteReply>
-        </SC.UserCont>
-      ))}
-          <SC.UserCont>
-            <SC.UserProfile>
-              <Image
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-                alt="개"
-                width={40}
-                height={40}
-                style={{ borderRadius: "100%" }}
-              />
-              <SC.UserId>Ahnjanhee</SC.UserId>
-              <SC.CommentsDate>12주</SC.CommentsDate>
-            </SC.UserProfile>
-            <SC.UserComment>이 분 지금 뭐함?</SC.UserComment>
-            <SC.WriteReply>답글 달기</SC.WriteReply>
-          </SC.UserCont>
-          <SC.AllComment>답글 4개 모두 보기</SC.AllComment>
-        </SC.CommentCont>
-         {/* 모달 */}
-      {isModalOpen && selectedCommentId !== null && (
-        <Modal onDelete={handleDeleteComment} onCancel={handleCancelDelete} /> // 모달 컴포넌트를 렌더링하고 삭제 및 취소 버튼의 이벤트 핸들러 전달
-      )}
-      </SC.Details>
-      <SC.CommentsContainer>
-        <SC.UserProfile>
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/280px-Golde33443.jpg"
-            alt="개"
-            width={40}
-            height={40}
-            style={{ borderRadius: "100%" }}
+        </UserProfile>
+        <CommentsForm>
+          <CommentsInput
+            value={comment}
+            onKeyDown={handleKeyDown}
+            onChange={handleCommentChange}
+            placeholder="댓글 달기..."
           />
-        </SC.UserProfile>
-        <SC.CommentsForm>
-        <SC.CommentsInput value={comment} onKeyDown={handleKeyDown} onChange={handleCommentChange} placeholder="댓글 달기..." />
 
-          <SC.SmileIcon>
+          <SmileIcon>
             <FontAwesomeIcon icon={faFaceSmile} fontSize={"2rem"} />
-          </SC.SmileIcon>
-        </SC.CommentsForm>
-      </SC.CommentsContainer>
+          </SmileIcon>
+        </CommentsForm>
+      </CommentsContainer>
 
+      {post && <CommentItem post={post} isReply={false} />}
+      {commentAll ? (
+        commentAll.map((comment, index) => (
+          <div
+            key={index}
+            // onMouseDown={handleCommentLongPress.onMouseDown}
+            onClick={() => handleEditCommentClick(comment.commentId)}
+          >
+            <CommentItem
+              post={post}
+              comment={comment}
+              isLikeComment={isLikeComment}
+              handleLikeCommentClick={handleLikeCommentClick}
+              isReply={true}
+            />
+          </div>
+        ))
+      ) : (
+        <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
+      )}
+      {isEditModalOpen && selectedCommentId !== null && (
+        <Modal onDelete={handleDeleteComment} onCancel={handleCancelDelete} />
+      )}
       <Footer />
-    </SC.Container>
+    </Container>
   );
 };
 
 export default Comments;
+
+const Container = styled.section`
+  width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+`;
+
+const CommentsContainer = styled.div`
+  width: 100%;
+  height: 8vh;
+  border-top: 1px solid #e2e2e2;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+`;
+
+const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CommentsForm = styled.form`
+  width: 100%;
+  position: relative;
+  padding-left: 1rem;
+`;
+
+const CommentsInput = styled.input`
+  width: 95%;
+  height: 4vh;
+  border-radius: 10px;
+  padding-left: 0.5rem;
+`;
+
+const SmileIcon = styled.div`
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+`;
+
+const Empty = styled.span`
+  padding: 12px;
+  color: #22222;
+`;

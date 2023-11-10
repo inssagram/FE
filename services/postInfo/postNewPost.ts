@@ -1,4 +1,4 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const postNewPostAxios = async (
   memberId: number,
@@ -15,7 +15,7 @@ const postNewPostAxios = async (
     hashTags,
   };
 
-  return await customAxios({
+  return await axiosInstance({
     method: "post",
     url: `/post/create`,
     headers: {
@@ -25,13 +25,5 @@ const postNewPostAxios = async (
     data: postData,
   });
 };
-
-// 호출 페이지에서 try-catch 블록 사용
-// try {
-//   const response = await postNewPostAxios(memberId, image, contents, location, hashTags);
-//   console.log("Post created:", response);
-// } catch (error) {
-//   console.error("Error creating post:", error);
-// }
 
 export default postNewPostAxios;
