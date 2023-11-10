@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 
-const getPostAllAxios = async (): Promise<any> => {
-  return await axiosInstance({
+const getPostAllAxios = (): Promise<any> => {
+  return axiosInstance({
     method: "get",
-    url: `/post/all`,
+    url: "/post/all",
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",

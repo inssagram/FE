@@ -15,6 +15,7 @@ import {
   faHeart as fasHeart,
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { handleError } from "@/utils/errorHandler";
 import { HeartButton } from "@/components/atoms/Button";
 import postLikePostAxios from "@/services/postInfo/postLikePost";
 import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
@@ -56,55 +57,27 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
 
-  const handleLikeClick = (postId: number) => {
-    postLikePostAxios(postId)
-      .then((response) => {
-        console.log(
-          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
-          response
-        );
-        setIsLiked(!isLiked);
-      })
-      .catch((error) => {
-        console.error(
-          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
-      });
-  };
-
-  const handleBookmarkClick = (postId: number) => {
-    postBookmarkPostAxios(postId)
-      .then((response) => {
-        console.log(
-          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
-          response
-        );
-        setIsSaved(true);
-      })
-      .catch((error) => {
-        console.error(
-          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
-      });
-  };
-
-  const handleDeleteBookmarkClick = (postId: number) => {
-    deleteBookmarkPostAxios(postId)
-      .then((response) => {
-        console.log(
-          "게시물 좋아요가 서버에 성공적으로 전송되었습니다.",
-          response
-        );
-        setIsSaved(!isSaved);
-      })
-      .catch((error) => {
-        console.error(
-          "게시물 좋아요를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
-      });
+  const handleActionClick = async (postId: number, actionType: string) => {
+    try {
+      let res;
+      switch (actionType) {
+        case "like":
+          res = await postLikePostAxios(postId);
+          setIsLiked(!isLiked);
+          break;
+        case "bookmark":
+          res = await (isSaved
+            ? deleteBookmarkPostAxios(postId)
+            : postBookmarkPostAxios(postId));
+          setIsSaved(!isSaved);
+          break;
+        default:
+          break;
+      }
+      console.log("success", res);
+    } catch (err) {
+      handleError(err, "error");
+    }
   };
 
   const handleCommentClick = () => {
@@ -112,7 +85,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
   };
 
   return (
-    <>
+    <div>
       {post.image ? (
         <PostImage src={post.image[0]} alt="게시글" width={412} height={412} />
       ) : (
@@ -128,8 +101,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
           <Left>
             <HeartButton
               isLiked={isLiked}
-              handleLikeClick={handleLikeClick}
-              postId={post.postId}
+              handleLikeClick={() => handleActionClick(post.postId, "like")}
             />
             <Link href={`/my/feeds/${post.postId}/comments`}>
               <FontAwesomeIcon icon={faComment} fontSize={24} />
@@ -144,11 +116,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
           </Left>
           <Right>
             <FontAwesomeIcon
-              onClick={() => {
-                isSaved
-                  ? handleDeleteBookmarkClick(post.postId)
-                  : handleBookmarkClick(post.postId);
-              }}
+              onClick={() => handleActionClick(post.postId, "bookmark")}
               icon={isSaved ? fasBookmark : farBookmark}
               fontSize={24}
             />
@@ -170,7 +138,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
           <CreatedAt>2일전</CreatedAt>
         </CommentsArea>
       </PostDetails>
-    </>
+    </div>
   );
 };
 

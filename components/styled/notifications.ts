@@ -20,6 +20,11 @@ export const ContentArea = styled.div`
   align-items: center;
   height: 60px;
   padding: 8px 16px;
+  transform: ${({ isSwiping }) =>
+    isSwiping
+      ? "translateX(-100px)"
+      : "none"}; /* Adjust the value to your preference */
+  transition: transform 0.3s ease;
 `;
 
 export const Account = styled.div`
@@ -27,7 +32,8 @@ export const Account = styled.div`
   border-radius: 100%;
 `;
 
-export const Content = styled.span`
+export const Content = styled.p`
+  min-width: 200px;
   font-size: 14px;
 `;
 
@@ -35,12 +41,19 @@ export const Board = styled.div`
   margin-left: 14px;
 `;
 
-export const Follow = styled.div`
+export const DeleteIcon = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0 7px;
+`;
+
+export const Follow = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 82px;
-  height: 32px;
+  min-width: 82px;
+  min-height: 32px;
+  font-size: 14px;
   margin-left: 12px;
   padding: 7px 16px;
   border-radius: 10px;

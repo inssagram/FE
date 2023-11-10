@@ -40,14 +40,15 @@ const User: React.FC<MyProps> = () => {
   const feedViewConRef = useRef(null);
 
   const router = useRouter();
-  const { nickname } = router.query;
+  const { id } = router.query;
 
   // const userNameFromQuery = router.query.userName as string;
   // const userIdFromPath = router.query.id as string;
 
-  const fetchUserDetailData = async (nickname: string) => {
+  // 회원 상세 정보 조회
+  const fetchUserDetailData = async (id: number) => {
     try {
-      const res = await getUserDetailAxios(nickname);
+      const res = await getUserDetailAxios(id);
       setUserInfo(res);
     } catch (err) {
       handleError(err, "Error fetcing member detail:");
@@ -55,11 +56,12 @@ const User: React.FC<MyProps> = () => {
   };
 
   useEffect(() => {
-    if (nickname) {
-      fetchUserDetailData(nickname);
+    if (userInfo && userInfo.memberId) {
+      fetchUserDetailData(userInfo.memberId);
     }
-  }, [nickname]);
+  }, [userInfo]);
 
+  // 내가 작성한 게시글 조회
   const fetchMyPostAllData = async (memberId: number) => {
     try {
       const res = await getMyPostAllAxios(memberId);

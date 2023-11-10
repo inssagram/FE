@@ -122,3 +122,8 @@ export const Sentinel = styled.div`
   height: 10px;
   visibility: hidden;
 `;
+
+export const Text = styled.span`
+  width: 412px;
+  padding: 12px;
+`;

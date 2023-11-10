@@ -12,8 +12,37 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { CopyLinkButton } from "./Button";
 import axios from "axios";
 import { useState } from "react";
-import React, { useEffect } from "react";
+import React, { useEffect, ReactNode } from "react";
 import { useRouter } from "next/router";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
+export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  return (
+    <ModalContainer isOpen={isOpen} onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()}>{children}</div>
+    </ModalContainer>
+  );
+};
+
+const ModalContainer = styled.div<{ isOpen: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+export default Modal;
 
 interface MyEllipsisModalProps {
   post: { postId: number };

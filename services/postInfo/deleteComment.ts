@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 
-const getSearchHistoryAxios = (): Promise<any> => {
+const deleteCommentAxios = (id: number): Promise<any> => {
   return axiosInstance({
-    method: "get",
-    url: `/search`,
+    method: "delete",
+    url: `/comment/delete/${id}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const getSearchHistoryAxios = (): Promise<any> => {
   });
 };
 
-export default getSearchHistoryAxios;
+export default deleteCommentAxios;

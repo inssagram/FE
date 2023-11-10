@@ -1,17 +1,17 @@
 import axiosInstance from "../axiosInstance";
 
-const postLikePostAxios = (postId: number): Promise<any> => {
+const getTaggedPostAllAxios = (memberId: number): Promise<any> => {
   return axiosInstance({
-    method: "post",
-    url: `/like/post`,
+    method: "get",
+    url: `/tagged-post-list`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
     params: {
-      "post-id": postId,
+      "tagged-member-id": memberId,
     },
   });
 };
 
-export default postLikePostAxios;
+export default getTaggedPostAllAxios;

@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.BASE_URL,
-  timeout: 5000,
+  timeout: 0,
 });
 
 axiosInstance.interceptors.request.use(

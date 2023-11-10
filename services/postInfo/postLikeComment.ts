@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const postLikeCommentAxios = async (commentId: number): Promise<any> => {
-  return await axiosInstance({
+const postLikeCommentAxios = (commentId: number): Promise<any> => {
+  return axiosInstance({
     method: "post",
     url: `/like/comment`,
     headers: {

@@ -1,18 +1,17 @@
 import axiosInstance from "../axiosInstance";
 
-const postBookmarkPostAxios = (postId: number): Promise<any> => {
-  const postData = {
-    postId,
-  };
+const postChatRoomAxios = (name: string): Promise<any> => {
   return axiosInstance({
     method: "post",
-    url: `/bookmark/save`,
+    url: `/chat/room`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    data: postData,
+    params: {
+      name: name,
+    },
   });
 };
 
-export default postBookmarkPostAxios;
+export default postChatRoomAxios;

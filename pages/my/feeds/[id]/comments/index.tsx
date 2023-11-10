@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import postLikeCommentAxios from "@/services/postInfo/postLikeComment";
 import getCommentAllAxios from "@/services/postInfo/getCommentAll";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
+import deleteCommentAxios from "@/services/postInfo/deleteComment";
 
 interface PostItemData {
   commentsCounts: number;
@@ -47,14 +48,11 @@ const Comments: React.FC = () => {
   // const comments = useSelector((state: RootState) => state.comments.comments);
   const [post, setPost] = useState<PostItemData | null>(null);
   const [comment, setComment] = useState("");
+  const [commentId, setCommentId] = useState("");
   const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
   const [isLikeComment, setIsLikeComment] = useState<boolean>(false);
-  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
-    null
-  );
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const dispatch = useDispatch();
   const router = useRouter();
   const { id } = router.query;
   const pageTitle = "댓글";
@@ -140,14 +138,6 @@ const Comments: React.FC = () => {
     setComment(e.target.value);
   };
 
-  const handleCommentLongPress = useLongPress(() => {
-    setIsEditModalOpen(true);
-  }, 1000);
-
-  const handleEditCommentClick = (commentId: number) => {
-    setSelectedCommentId(commentId);
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Enter") {
       if (comment.trim() !== "") {
@@ -159,21 +149,41 @@ const Comments: React.FC = () => {
     }
   };
 
-  const handleDeleteComment = async () => {
-    if (selectedCommentId) {
-      dispatch(deleteComment(selectedCommentId));
-    }
+  // 모달 열기
+  const handleShowModal = (comment: any) => {
+    setCommentId(comment.commentId);
+    setIsEditModalOpen(true);
+  };
+
+  // 모달 닫기
+  const handleCloseModal = () => {
     setIsEditModalOpen(false);
   };
 
-  const handleCancelDelete = () => {
+  // 댓글 삭제
+  const handleCommentDelete = () => {
+    handleDeleteComment(commentId);
+  };
+
+  // 댓글 삭제 요청
+  const handleDeleteComment = (id: number) => {
+    deleteCommentAxios(id)
+      .then((response) => {
+        console.log("delete success:", response);
+        const updatedComments = commentAll.filter(
+          (comment) => comment.commentId !== id
+        );
+        setCommentAll(updatedComments);
+      })
+      .catch((err) => {
+        handleError(err, "error delete");
+      });
     setIsEditModalOpen(false);
   };
 
   return (
     <Container>
       <PageHeader title={pageTitle} />
-
       <CommentsContainer>
         <UserProfile>
           <Image
@@ -197,15 +207,10 @@ const Comments: React.FC = () => {
           </SmileIcon>
         </CommentsForm>
       </CommentsContainer>
-
       {post && <CommentItem post={post} isReply={false} />}
       {commentAll ? (
         commentAll.map((comment, index) => (
-          <div
-            key={index}
-            // onMouseDown={handleCommentLongPress.onMouseDown}
-            onClick={() => handleEditCommentClick(comment.commentId)}
-          >
+          <div key={index} onClick={() => handleShowModal(comment)}>
             <CommentItem
               post={post}
               comment={comment}
@@ -218,8 +223,8 @@ const Comments: React.FC = () => {
       ) : (
         <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
       )}
-      {isEditModalOpen && selectedCommentId !== null && (
-        <Modal onDelete={handleDeleteComment} onCancel={handleCancelDelete} />
+      {isEditModalOpen && (
+        <Modal onDelete={handleCommentDelete} onCancel={handleCloseModal} />
       )}
       <Footer />
     </Container>

@@ -56,29 +56,29 @@ export const MyPageHeader: React.FC<MyHeaderProps> = ({
 };
 
 interface UserInfo {
-  memberId: number;
+  email: string;
+  member_id: number;
   nickname: string;
+  job: string;
+  image: string;
 }
 
-interface MyDirectHeaderProps {
-  userInfo: UserInfo;
-  onCreateChatRoom: () => void;
+interface DirectHeaderProps {
+  userInfo: UserInfo | null;
 }
 
-export const DirectHeader: React.FC<MyDirectHeaderProps> = ({
-  userInfo,
-  onCreateChatRoom,
-}) => {
+export const DirectHeader: React.FC<DirectHeaderProps> = ({ userInfo }) => {
+  if (!userInfo) {
+    return null;
+  }
   return (
     <>
       <DmHeader>
         <BackArrow />
         <h2>{userInfo.nickname}</h2>
-        <div onClick={onCreateChatRoom}>
-          <Link href="/direct/new">
-            <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
-          </Link>
-        </div>
+        <Link href="/direct/new">
+          <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
+        </Link>
       </DmHeader>
     </>
   );
