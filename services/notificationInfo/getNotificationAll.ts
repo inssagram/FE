@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const getNotificationAllAxios = async (): Promise<any> => {
-  return await axiosInstance({
+const getNotificationAllAxios = (): Promise<any> => {
+  return axiosInstance({
     method: "get",
     url: `/notification/all`,
     headers: {

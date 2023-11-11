@@ -1,10 +1,10 @@
 import axiosInstance from "../axiosInstance";
 
-const deleteBookmarkPostAxios = async (postId: number): Promise<any> => {
+const deleteBookmarkPostAxios = (postId: number): Promise<any> => {
   const postData = {
     postId,
   };
-  return await axiosInstance({
+  return axiosInstance({
     method: "delete",
     url: `/bookmark/delete`,
     headers: {

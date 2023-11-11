@@ -1,10 +1,10 @@
 import axiosInstance from "../axiosInstance";
 
-const postMemberFollowAxios = async (followId: number): Promise<any> => {
+const postMemberFollowAxios = (followId: number): Promise<any> => {
   const followData = {
     followId,
   };
-  return await axiosInstance({
+  return axiosInstance({
     method: "post",
     url: `/member/follow`,
     headers: {

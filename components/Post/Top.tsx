@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,15 +11,14 @@ import {
   AccountInfoModal,
   EditModal,
 } from "../atoms/Modal";
-import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 import { RootState } from "@/src/redux/Posts/store";
+import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 
 interface UserInfo {
   email: string;
   member_id: number;
   nickname: string;
   job: string;
-  profilePic: string;
 }
 
 interface PostData {

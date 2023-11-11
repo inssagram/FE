@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const getSearchResultAxios = async (keyword: string): Promise<any> => {
-  return await axiosInstance({
+const getSearchResultAxios = (keyword: string): Promise<any> => {
+  return axiosInstance({
     method: "get",
     url: `/search/${keyword}`,
     headers: {

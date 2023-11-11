@@ -44,22 +44,17 @@ export const FollowButton: React.FC = () => {
 
 interface HeartButtonProps {
   isLiked: boolean;
-  postId: number;
-  handleLikeClick: (postId: number) => void;
+  handleLikeClick: () => void;
 }
 
 export const HeartButton: React.FC<HeartButtonProps> = ({
   isLiked,
   handleLikeClick,
-  postId,
 }) => {
   return (
-    <FontAwesomeIcon
-      onClick={() => handleLikeClick(postId)}
-      icon={isLiked ? fasHeart : farHeart}
-      fontSize={24}
-      style={{ color: isLiked ? "red" : "inherit" }}
-    />
+    <HeartBtn onClick={handleLikeClick}>
+      <FontAwesomeIcon icon={isLiked ? fasHeart : farHeart} fontSize={24} />
+    </HeartBtn>
   );
 };
 
@@ -82,4 +77,9 @@ const FollowBtn = styled.button`
   border-radius: 10px;
   color: #ffffff;
   background-color: #0095f6;
+`;
+
+const HeartBtn = styled.button`
+  border: none;
+  background-color: transparent;
 `;
