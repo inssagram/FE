@@ -6,8 +6,6 @@ import { BackArrow } from "@/components/atoms/Icon";
 import { reduceJob } from "../emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { auth } from "@/components/firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Job = () => {
   const BASE_URL = process.env.BASE_URL
@@ -28,7 +26,6 @@ const Job = () => {
     }
   }
 
-  console.log(register)
   interface JobData {
     job: string;
   }
@@ -74,7 +71,6 @@ const Job = () => {
         nickname: register.nickname,
         job: register.job
       })
-      await createUserWithEmailAndPassword(auth, register.email, register.password)
         alert("계정이 생성되었습니다.");
         router.push("/signin");
       } catch (error) {
