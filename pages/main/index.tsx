@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { handleError } from "@/utils/errorHandler";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
@@ -21,7 +22,6 @@ interface PostData {
 
 const Main: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
-  console.log("UserInfo:", userInfo);
   const [posts, setPosts] = useState<PostData[]>([]);
 
   const router = useRouter();
@@ -29,10 +29,10 @@ const Main: React.FC = () => {
 
   const fetchPostData = async () => {
     try {
-      const response = await getPostAllAxios();
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+      const res = await getPostAllAxios();
+      setPosts(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
     }
   };
 
@@ -40,21 +40,13 @@ const Main: React.FC = () => {
     fetchPostData();
   }, []);
 
-  const handleCommentClick = () => {
-    router.push(`/my/feeds/${id}/comments`);
-  };
-
   return (
     <Layout>
       <PostArea>
         {posts.map((post, index) => (
           <Post key={index}>
             <PostTop post={post} />
-            <PostContents
-              post={post}
-              userInfo={userInfo}
-              handleCommentClick={handleCommentClick}
-            />
+            <PostContents post={post} userInfo={userInfo} />
           </Post>
         ))}
       </PostArea>

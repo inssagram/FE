@@ -1,7 +1,7 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const deleteSearchHistoryAxios = async (keyword: string): Promise<any> => {
-  return await customAxios({
+  return await axiosInstance({
     method: "delete",
     url: `/search/${keyword}`,
     headers: {

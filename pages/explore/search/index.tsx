@@ -1,75 +1,91 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { handleError } from "@/utils/errorHandler";
 import { SearchHistoryHeader } from "@/components/atoms/Header";
 import { SearchItem } from "@/components/atoms/Item";
 import SearchBar from "@/components/input/SearchBar";
 import Footer from "@/components/Footer";
+import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import getSearchHistoryAxios from "@/services/searchInfo/getSearchHistory";
+import postSearchTermAxios from "@/services/searchInfo/postSearchTerm";
 import deleteSearchHistoryAxios from "@/services/searchInfo/deleteSearchHistory";
-import postSearchValueAxios from "@/services/searchInfo/postSearchValue";
-import { RootState } from "@/src/redux/Posts/store";
 
-interface SearchHistoryData {
+interface SearchItemData {
+  memberId: number;
+  email: string;
   searched: string;
+  nickName: string;
+  friendStatus: boolean;
+  job: string;
+  image: string;
 }
 
 const Search: React.FC = () => {
-  const userInfo = useSelector((state: RootState) => state.user.member);
-  const [searchHistory, setSearchHistory] = useState<SearchHistoryData[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(searchTerm);
-  const [searchResults, setSearchResults] = useState<SearchHistoryData[]>([]);
-
-  useEffect(() => {
-    if (userInfo && userInfo.member_id) {
-      fetchSearchHistoryData(userInfo.member_id);
-    }
-  }, [userInfo]);
-
-  const fetchSearchHistoryData = async (memberId: number) => {
-    try {
-      const response = await getSearchHistoryAxios(memberId);
-      setSearchHistory(response);
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
-  };
+  const [newSearchTerm, setNewSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchItemData[]>([]);
+  const [searchHistory, setSearchHistory] = useState<SearchItemData[]>([]);
 
   const handleSearch = (searchValue: string) => {
     setSearchTerm(searchValue);
-    if (userInfo && userInfo.member_id) {
-      postSearchTermData(userInfo.member_id);
-    }
+  };
 
-    if (searchHistory.length > 0) {
-      const filteredResults = searchHistory.filter((history) =>
-        history.searched.includes(searchValue)
-      );
-      setSearchResults(filteredResults);
+  // 검색 결과 조회
+  const fetchSearchResultData = async (keyword: string) => {
+    try {
+      const res = await getSearchResultAxios(keyword);
+      setSearchResults(res);
+    } catch (err) {
+      handleError(err, "Error creating post:");
     }
   };
 
+  // 검색 결과 저장
   const postSearchTermData = async (memberId: number) => {
     try {
-      await postSearchValueAxios(memberId);
-    } catch (error) {
-      console.error("Error posting search value:", error);
+      const res = await postSearchTermAxios(memberId);
+      setNewSearchTerm(res.data);
+    } catch (err) {
+      handleError(err, "Error posting search value:");
     }
   };
 
-  const handleDeleteHistory = async (index: number) => {
+  const handleSearchItemClick = (memberId: number) => {
+    postSearchTermData(memberId);
+  };
+
+  // 최근 검색 기록 조회
+  const fetchSearchHistoryData = async () => {
     try {
-      const deletedTerm = searchHistory[index].searched;
-      const response = await deleteSearchHistoryAxios(deletedTerm);
-      if (response) {
-        const newSearchHistory = searchHistory.filter((_, i) => i !== index);
-        setSearchHistory(newSearchHistory);
-      }
-    } catch (error) {
-      console.error("Error deleting search history:", error);
+      const res = await getSearchHistoryAxios();
+      setSearchHistory(res);
+    } catch (err) {
+      handleError(err, "Error loading search history:");
     }
   };
+
+  useEffect(() => {
+    fetchSearchHistoryData();
+  }, []);
+
+  // 최근 검색 기록 삭제
+  const handleSearchItemDeleteClick = async (searched: string) => {
+    try {
+      const res = await deleteSearchHistoryAxios(searched);
+      if (res) {
+        const updatedSearchHistory = await getSearchHistoryAxios();
+        setSearchHistory(updatedSearchHistory);
+      }
+    } catch (err) {
+      handleError(err, "검색 기록 삭제 중 오류 발생:");
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchSearchResultData(searchTerm);
+    }
+  }, [searchTerm]);
 
   return (
     <>
@@ -79,15 +95,19 @@ const Search: React.FC = () => {
         </PageHeader>
         {searchResults.length > 0 &&
           searchResults.map((result, index) => (
-            <SearchItem key={index} searchTerm={result.searched} />
+            <SearchItem
+              key={index}
+              result={result}
+              handleClick={() => handleSearchItemClick(result.memberId)}
+            />
           ))}
-        <SearchHistoryHeader />
+        {searchResults.length > 0 ? "" : <SearchHistoryHeader />}
         {searchHistory.length > 0 ? (
           searchHistory.map((history, index) => (
             <SearchItem
               key={index}
-              searchTerm={history.searched}
-              onClick={() => handleDeleteHistory(index)}
+              result={history}
+              handleDelete={() => handleSearchItemDeleteClick(history.searched)}
               isHistory
             />
           ))

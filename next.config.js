@@ -11,10 +11,13 @@ const nextConfig = {
       "www.animals.or.kr",
       "www.chemicalnews.co.kr",
       "search.pstatic.net",
+      "avatars.githubusercontent.com",
+      "mblogthumb-phinf.pstatic.net",
+      "images.khan.co.kr",
+      "images.vivino.com",
     ],
   },
   env: {
-    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
     BASE_URL: process.env.BASE_URL,
     FIREBASE_APIKEY: process.env.FIREBASE_APIKEY,
     FIREBASE_AUTHDOMAIN: process.env.FIREBASE_AUTHDOMAIN,
@@ -23,6 +26,8 @@ const nextConfig = {
     FIREBASE_MESSAGINGSENDERID: process.env.FIREBASE_MESSAGINGSENDERID,
     FIREBASE_APPID: process.env.FIREBASE_APPID,
     FIREBASE_MEASUREMENTID: process.env.FIREBASE_MEASUREMENTID,
+    WebSocket_URL: process.env.WebSocket_URL,
+
   },
 };
 

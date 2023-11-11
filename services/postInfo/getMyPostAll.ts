@@ -1,9 +1,9 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const getMyPostAllAxios = async (memberId: number): Promise<any> => {
-  return await customAxios({
+  return await axiosInstance({
     method: "get",
-    url: `/post?`,
+    url: `/post/member?`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",

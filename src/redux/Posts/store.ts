@@ -7,6 +7,7 @@ import { userSlice } from "./userSlice";
 import { registerSlice } from "@/pages/signup/emailState";
 import profileReducer from "./userProfileSlice";
 import { postsSlice } from "./postSlice";
+import { commentsSlice } from "./commentSlice";
 
 const persistConfig = {
   key: "root",
@@ -19,7 +20,7 @@ const reducers = combineReducers({
   register: registerSlice.reducer,
   profile: profileReducer,
   posts: postsSlice.reducer,
-  // comments: commentsReducer,
+  comments: commentsSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

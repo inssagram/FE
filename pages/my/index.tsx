@@ -11,10 +11,10 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
+import { handleError } from "@/utils/errorHandler";
 import { MyPageHeader } from "@/components/atoms/Header";
 import Footer from "@/components/Footer";
 import { RootState } from "@/src/redux/Posts/store";
-import getPostAllAxios from "@/services/postInfo/getPostAll";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
 
 interface UserInfo {
@@ -23,6 +23,7 @@ interface UserInfo {
   nickname: string;
   job: string;
   profilePic: string;
+  image: string;
 }
 
 interface PostData {
@@ -42,20 +43,19 @@ interface MyProps {
 }
 
 const My: React.FC<MyProps> = () => {
-  const [posts, setPosts] = useState<PostData[]>([]);
-  console.log([posts]);
   const userInfo = useSelector(
     (state: RootState) => state.user.member
   ) as UserInfo;
+  const [posts, setPosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchMyPostAllData = async (memberId: number) => {
     try {
-      const response = await getMyPostAllAxios(memberId);
-      setPosts(response.data);
+      const res = await getMyPostAllAxios(memberId);
+      setPosts(res.data);
       setLoading(false);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
       setLoading(true);
     }
   };
@@ -119,24 +119,17 @@ const My: React.FC<MyProps> = () => {
 
   return (
     <>
-      <MyPageHeader userInfo={userInfo} />
+      <MyPageHeader userInfo={userInfo} isNotMe={false} />
 
       <SC.Container>
         <SC.Profile>
           <Image
-            src="/images/noProfile.jpg"
+            src={userInfo.image ? userInfo.image : "/images/noProfile.jpg"}
             alt="프로필"
             width={77}
             height={77}
             style={{ borderRadius: "100%" }}
           />
-          {/* <Image
-            src={userInfo.profilePic}
-            alt="프로필"
-            width={77}
-            height={77}
-            style={{ borderRadius: "100%" }}
-          /> */}
         </SC.Profile>
 
         <SC.MyDescContainer>
@@ -165,13 +158,13 @@ const My: React.FC<MyProps> = () => {
         <SC.MyDataValue>
           <SC.DataName>팔로워</SC.DataName>
           <Link href="/my/followers">
-          <SC.DataValue>485</SC.DataValue>
+            <SC.DataValue>485</SC.DataValue>
           </Link>
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로우</SC.DataName>
           <Link href="/my/follows">
-          <SC.DataValue>557</SC.DataValue>
+            <SC.DataValue>557</SC.DataValue>
           </Link>
         </SC.MyDataValue>
       </SC.MyDataContainer>

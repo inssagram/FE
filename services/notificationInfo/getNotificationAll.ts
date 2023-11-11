@@ -1,7 +1,7 @@
-import customAxios from "../customAxios";
+import axiosInstance from "../axiosInstance";
 
 const getNotificationAllAxios = async (): Promise<any> => {
-  return await customAxios({
+  return await axiosInstance({
     method: "get",
     url: `/notification/all`,
     headers: {
