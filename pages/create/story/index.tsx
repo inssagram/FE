@@ -60,7 +60,7 @@ const Story: React.FC = () => {
     }
    }
 
-   const handleStartText = (e:React.ClickEvent) => {
+   const handleStartText = (e:React.MouseEvent) => {
     setIsTexting(true);
    }
 

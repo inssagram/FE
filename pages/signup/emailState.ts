@@ -4,7 +4,7 @@ export const registerSlice = createSlice({
   name: "registerSlice",
   initialState: {
     email: "",
-    nickName: "",
+    nickname: "",
     password: "",
     job: "",
   },
@@ -12,8 +12,8 @@ export const registerSlice = createSlice({
     reduceEmail(state, email) {
       state.email = email.payload;
     },
-    reduceNickname(state,nickName){
-      state.nickName = nickName.payload
+    reduceNickname(state,nickname){
+      state.nickname = nickname.payload
     },
     reducePassword(state, password) {
       state.password = password.payload;
