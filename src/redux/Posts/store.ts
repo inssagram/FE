@@ -18,9 +18,9 @@ const persistConfig = {
 const reducers = combineReducers({
   user: userSlice.reducer,
   register: registerSlice.reducer,
-  profile: profileReducer,
-  posts: postsSlice.reducer,
-  comments: commentsSlice.reducer,
+  // profile: profileReducer,
+  // posts: postsSlice.reducer,
+  // comments: commentsSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

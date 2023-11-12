@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { handleError } from "@/utils/errorHandler";
@@ -24,21 +24,18 @@ const Main: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
   const [posts, setPosts] = useState<PostData[]>([]);
 
-  const router = useRouter();
-  const { id } = router.query as { id: string };
-
-  const fetchPostData = async () => {
+  const fetchPostData = useCallback(async () => {
     try {
       const res = await getPostAllAxios();
       setPosts(res.data);
     } catch (err) {
       handleError(err, "Error fetching posts:");
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchPostData();
-  }, []);
+  }, [fetchPostData]);
 
   return (
     <Layout>

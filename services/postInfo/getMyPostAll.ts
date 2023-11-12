@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const getMyPostAllAxios = async (memberId: number): Promise<any> => {
-  return await axiosInstance({
+const getMyPostAllAxios = (memberId: number): Promise<any> => {
+  return axiosInstance({
     method: "get",
     url: `/post/member?`,
     headers: {

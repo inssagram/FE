@@ -1,4 +1,3 @@
-// import { useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
@@ -16,6 +15,8 @@ import { MyPageHeader } from "@/components/atoms/Header";
 import Footer from "@/components/Footer";
 import { RootState } from "@/src/redux/Posts/store";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
+import getTaggedPostAllAxios from "@/services/postInfo/getTaggedPostAll";
+import getBookmarkPostAllAxios from "@/services/postInfo/getBookmarkPostAll";
 
 interface UserInfo {
   email: string;
@@ -47,8 +48,13 @@ const My: React.FC<MyProps> = () => {
     (state: RootState) => state.user.member
   ) as UserInfo;
   const [posts, setPosts] = useState<PostData[]>([]);
+  const [bookmarkedPost, setBookmarkedPost] = useState<PostData[]>([]);
+  const [isShowBookmarked, setIsShowBookmarked] = useState(false);
+  const [taggedPost, setTaggedPost] = useState<PostData[]>([]);
+  const [isShowTagged, setIsShowTagged] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // 내가 작성한 게시글 조회
   const fetchMyPostAllData = async (memberId: number) => {
     try {
       const res = await getMyPostAllAxios(memberId);
@@ -58,6 +64,39 @@ const My: React.FC<MyProps> = () => {
       handleError(err, "Error fetching posts:");
       setLoading(true);
     }
+  };
+
+  // 내가 북마크한 게시글 조회
+  const fetchBookmarkPostAllData = async () => {
+    try {
+      const res = await getBookmarkPostAllAxios();
+      setBookmarkedPost(res.data);
+      setLoading(false);
+    } catch (err) {
+      handleError(err, "Error fetching bookmarked posts:");
+      setLoading(true);
+    }
+  };
+
+  const handleBookmarkIconClick = () => {
+    fetchBookmarkPostAllData();
+    setIsShowBookmarked(!isShowBookmarked);
+  };
+
+  const fetchTaggedPostAllData = async (memberId: number) => {
+    try {
+      const res = await getTaggedPostAllAxios(memberId);
+      setTaggedPost(res.data);
+      setLoading(false);
+    } catch (err) {
+      handleError(err, "Error fetching bookmarked posts:");
+      setLoading(true);
+    }
+  };
+
+  const handleTaggedIconClick = () => {
+    fetchTaggedPostAllData(userInfo.member_id);
+    setIsShowTagged(!isShowTagged);
   };
 
   useEffect(() => {
@@ -171,8 +210,8 @@ const My: React.FC<MyProps> = () => {
       <SC.IconContainer>
         <FontAwesomeIcon icon={faTable} />
         <FontAwesomeIcon icon={faMobileScreen} />
-        <FontAwesomeIcon icon={faBookmark} />
-        <FontAwesomeIcon icon={faUser} />
+        <FontAwesomeIcon icon={faBookmark} onClick={handleBookmarkIconClick} />
+        <FontAwesomeIcon icon={faUser} onClick={handleTaggedIconClick} />
       </SC.IconContainer>
 
       <SC.Content>
@@ -180,11 +219,49 @@ const My: React.FC<MyProps> = () => {
           <SC.Loading>
             <FontAwesomeIcon icon={faSpinner} fontSize={"25px"} />
           </SC.Loading>
+        ) : isShowBookmarked ? (
+          bookmarkedPost.length === 0 ? (
+            <SC.Text>저장된 게시물이 없습니다</SC.Text>
+          ) : (
+            bookmarkedPost.map((post) => (
+              <Link
+                key={post.postId}
+                href={`/my/feeds/${post.postId}`}
+                passHref
+              >
+                <Image
+                  src={post.image[0]}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              </Link>
+            ))
+          )
+        ) : isShowTagged ? (
+          taggedPost.length === 0 ? (
+            <SC.Text>태그된 게시물이 없습니다</SC.Text>
+          ) : (
+            taggedPost.map((post) => (
+              <Link
+                key={post.postId}
+                href={`/my/feeds/${post.postId}`}
+                passHref
+              >
+                <Image
+                  src={post.image[0]}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              </Link>
+            ))
+          )
         ) : (
           posts.map((post) => (
             <Link key={post.postId} href={`/my/feeds/${post.postId}`} passHref>
               <Image
-                src="/images/noImage.svg"
+                src={post.image[0]}
                 alt="이미지"
                 width={135}
                 height={135}

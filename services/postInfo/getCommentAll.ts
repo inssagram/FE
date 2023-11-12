@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const getCommentAllAxios = async (postId: number): Promise<any> => {
-  return await axiosInstance({
+const getCommentAllAxios = (postId: number): Promise<any> => {
+  return axiosInstance({
     method: "get",
     url: `/comment/search`,
     headers: {

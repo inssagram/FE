@@ -10,6 +10,40 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
+const Footer: React.FC = () => {
+  return (
+    <Container>
+      <IconPannels>
+        <Icon>
+          <Link href="/main">
+            <FontAwesomeIcon icon={faHouse} fontSize={"24px"} />
+          </Link>
+        </Icon>
+        <Icon>
+          <Link href="/explore">
+            <FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"24px"} />
+          </Link>
+        </Icon>
+        <Icon>
+          <Link href="/main">
+            <FontAwesomeIcon icon={faFilm} fontSize={"24px"} />
+          </Link>
+        </Icon>
+        <Icon>
+          <Link href="/direct">
+            <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+          </Link>
+        </Icon>
+        <Icon>
+          <Link href="/my">
+            <FontAwesomeIcon icon={faUser} fontSize={"24px"} />
+          </Link>
+        </Icon>
+      </IconPannels>
+    </Container>
+  );
+};
+
 const Container = styled.div`
   width: 100%;
   height: 49px;
@@ -29,39 +63,5 @@ const IconPannels = styled.div`
 const Icon = styled.div`
   padding: 12px;
 `;
-
-const Footer: React.FC = () => {
-  return (
-    <Container>
-      <IconPannels>
-        <Icon>
-          <Link href="/">
-            <FontAwesomeIcon icon={faHouse} fontSize={"24px"} />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link href="/explore">
-            <FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"24px"} />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link href="/">
-            <FontAwesomeIcon icon={faFilm} fontSize={"24px"} />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link href="/direct">
-            <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
-          </Link>
-        </Icon>
-        <Icon>
-          <Link href="/my">
-            <FontAwesomeIcon icon={faUser} fontSize={"24px"} />
-          </Link>
-        </Icon>
-      </IconPannels>
-    </Container>
-  );
-};
 
 export default Footer;

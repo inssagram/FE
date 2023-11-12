@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/redux/Posts/store";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
@@ -105,6 +107,7 @@ interface PostItemData {
   contents: string;
   createdAt: number;
   hashTags: string;
+  memberImage: string;
   image: string;
   likeCount: number;
   memberId: number;
@@ -115,10 +118,11 @@ interface PostItemData {
 
 interface CommentItemData {
   commentId: number;
-  postId: number;
   memberId: number;
+  postId: number;
   nickname: string;
   content: string;
+  memberImage: string;
   likeCount: number;
   replyFlag: boolean;
   createdAt: number;
@@ -129,18 +133,28 @@ interface CommentItemData {
 interface CommentDataProps {
   post: PostItemData;
   comment: CommentItemData;
-  isLikeComment: boolean;
+  commentLikes: [];
   handleLikeCommentClick: (commentId: number) => void;
+  handleShowModal: (comment: any) => void;
   isReply?: boolean;
+  index: any;
 }
 
 export const CommentItem: React.FC<CommentDataProps> = ({
   post,
   comment,
-  isLikeComment,
+  commentLikes,
   handleLikeCommentClick,
+  handleShowModal,
   isReply,
+  index,
 }) => {
+  const userInfo = useSelector((state: RootState) => state.user.member);
+  console.log(userInfo);
+
+  const isCurrentUserCommentAuthor =
+    userInfo && comment && userInfo.member_id === comment.memberId;
+
   return (
     <>
       {!isReply ? (
@@ -148,7 +162,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
           <Profile>
             <Image
               src={
-                post.image ? "/images/noProfile.jpg" : "/images/noProfile.jpg"
+                post.memberImage ? post.memberImage : "/images/noProfile.jpg"
               }
               alt="프로필"
               width={42}
@@ -169,8 +183,8 @@ export const CommentItem: React.FC<CommentDataProps> = ({
           <Profile>
             <Image
               src={
-                comment.image
-                  ? "/images/noProfile.jpg"
+                comment.memberImage
+                  ? comment.memberImage
                   : "/images/noProfile.jpg"
               }
               alt="프로필"
@@ -187,16 +201,23 @@ export const CommentItem: React.FC<CommentDataProps> = ({
               </Desc>
               <Desc>
                 <Date>16주</Date>
-                <Likes>좋아요 {comment.likeCount}개</Likes>
+                <Link href={`/post/comment/liked_by/${comment.commentId}`}>
+                  <Likes>좋아요 {comment.likeCount}개</Likes>
+                </Link>
                 <MoreComment>답글달기</MoreComment>
+                {isCurrentUserCommentAuthor && (
+                  <DeleteComment onClick={() => handleShowModal(comment)}>
+                    삭제하기
+                  </DeleteComment>
+                )}
               </Desc>
             </Info>
             <HeartButton>
               <FontAwesomeIcon
                 onClick={() => handleLikeCommentClick(comment.commentId)}
-                icon={isLikeComment ? fasHeart : farHeart}
+                icon={commentLikes[index] ? fasHeart : farHeart}
+                style={{ color: commentLikes[index] ? "red" : "inherit" }}
                 fontSize={"12px"}
-                style={{ color: isLikeComment ? "red" : "inherit" }}
               />
             </HeartButton>
           </Reply>
@@ -309,10 +330,10 @@ const Content = styled.p`
   max-width: 370px;
 `;
 
-const Desc = styled.p`
+const Desc = styled.div`
   display: flex;
   flex-direction: row;
-  max-width: 200px;
+  max-width: 265px;
 `;
 
 const Date = styled.p`
@@ -345,8 +366,16 @@ const Reply = styled.div`
   width: 316px;
 `;
 
-const MoreComment = styled.p`
-  width: 80px;
+const MoreComment = styled.button`
+  width: 60px;
+  font-size: 12px;
+  color: #737373;
+  border: none;
+  background-color: transparent;
+`;
+
+const DeleteComment = styled.button`
+  width: 60px;
   font-size: 12px;
   color: #737373;
   border: none;

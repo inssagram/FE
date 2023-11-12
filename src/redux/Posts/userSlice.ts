@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Member {
-  member_id: number;
   email: string;
+  member_id: number;
   nickname: string;
   job: string;
-  profilePic: string | null;
+  image: string;
 }
 
 interface UserState {

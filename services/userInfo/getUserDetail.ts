@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 
-const getUserDetailAxios = async (nickname: string): Promise<any> => {
-  return await axiosInstance({
+const getUserDetailAxios = (id: number): Promise<any> => {
+  return axiosInstance({
     method: "get",
-    url: `/member/detail/${nickname}`,
+    url: `/member/detail/${id}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
