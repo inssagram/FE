@@ -6,8 +6,7 @@ import * as SC from "@/components/styled/main_boardwirte_story";
 import Image from "next/image";
 import axios from "axios";
 import {ref, getDownloadURL, uploadBytes} from 'firebase/storage'
-import { storage } from '@/components/firebase/firebase'
-
+import { storage } from "@/components/firebase/firebase";
 
 
 const Story: React.FC = () => {
@@ -32,7 +31,7 @@ const Story: React.FC = () => {
   const handlePreviewImage = (e:React.ChangeEvent<HTMLInputElement>) => {
       if(e.target.files && e.target.files.length > 0){
         const image = e.target.files[0]
-        const storageRef = ref(storage, `fires/${image.name}`)
+        const storageRef = ref(storage, `files/${image.name}`)
         const uploadTask = uploadBytes(storageRef, image)
 
         uploadTask.then((snapshot) => {
@@ -60,7 +59,7 @@ const Story: React.FC = () => {
     }
    }
 
-   const handleStartText = (e:React.MouseEvent) => {
+   const handleStartText = () => {
     setIsTexting(true);
    }
 
@@ -120,14 +119,15 @@ const Story: React.FC = () => {
           {isTexting 
           ? <span onClick={handleEndText} style={{ color: "white", fontSize: "2rem" }}>완료</span> 
           : <FontAwesomeIcon 
-              onClick={(e) => handleStartText(e)} 
+              onClick={(e) => handleStartText()} 
               icon={faFont} 
               style={{ color: "white", fontSize: "2rem" }}
             />
           }
         </SC.IconPannels>
       </SC.Header>
-      <SC.body isTexting={isTexting}>
+      <SC.body>
+        <SC.Filter isTexting={isTexting}></SC.Filter>
         {previewImage 
           ? (<Image src={previewImage} alt={previewImage} fill/>) 
           : <SC.Empty></SC.Empty>

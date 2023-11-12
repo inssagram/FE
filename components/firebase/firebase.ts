@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { getAuth, signInWithCustomToken } from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-b-qg4zxIxvX-pOGIbgubojBcLjNqSzQ",
@@ -13,6 +13,6 @@ const firebaseConfig = {
   measurementId: "G-BV7JHREQKR"
 };
 
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const storage = getStorage(app)
+export const storage = getStorage(app);

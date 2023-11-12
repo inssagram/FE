@@ -15,6 +15,7 @@ const nextConfig = {
       "mblogthumb-phinf.pstatic.net",
       "images.khan.co.kr",
       "images.vivino.com",
+      "firebasestorage.googleapis.com",
     ],
   },
   env: {
@@ -27,7 +28,7 @@ const nextConfig = {
     FIREBASE_APPID: process.env.FIREBASE_APPID,
     FIREBASE_MEASUREMENTID: process.env.FIREBASE_MEASUREMENTID,
     WebSocket_URL: process.env.WebSocket_URL,
-
+    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
   },
 };
 
