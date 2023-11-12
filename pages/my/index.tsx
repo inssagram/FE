@@ -83,9 +83,9 @@ const My: React.FC<MyProps> = () => {
     setIsShowBookmarked(!isShowBookmarked);
   };
 
-  const fetchTaggedPostAllData = async () => {
+  const fetchTaggedPostAllData = async (memberId: number) => {
     try {
-      const res = await getTaggedPostAllAxios();
+      const res = await getTaggedPostAllAxios(memberId);
       setTaggedPost(res.data);
       setLoading(false);
     } catch (err) {
@@ -95,7 +95,7 @@ const My: React.FC<MyProps> = () => {
   };
 
   const handleTaggedIconClick = () => {
-    fetchTaggedPostAllData();
+    fetchTaggedPostAllData(userInfo.member_id);
     setIsShowTagged(!isShowTagged);
   };
 

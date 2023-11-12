@@ -40,9 +40,9 @@ const Notifications: React.FC = () => {
   };
 
   // 알림 삭제
-  const handleDeleteNotificationClick = async () => {
+  const handleDeleteNotificationClick = async (id: number) => {
     try {
-      const res = await deleteNotificationAxios();
+      const res = await deleteNotificationAxios(id);
     } catch (err) {
       handleError(err, "Error deleting notifications:");
     }

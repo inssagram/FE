@@ -1,9 +1,8 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100%;
   height: 915px;
-  background-color: aliceblue;
 `;
 
 export const Notification = styled.div`
@@ -45,8 +44,6 @@ export const Id = styled.input`
   color: black;
 `;
 
-
-
 export const Password = styled.input`
   width: 205px;
   height: 40px;
@@ -56,8 +53,8 @@ export const Password = styled.input`
   padding-left: 5px;
   font-family: Arial, Helvetica, sans-serif;
   color: black;
-  &::placeholder{
-    font-family: JejuGothic
+  &::placeholder {
+    font-family: JejuGothic;
   }
 `;
 

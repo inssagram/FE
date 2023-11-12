@@ -26,6 +26,7 @@ interface PostData {
   memberId: number;
   nickName: string;
   image: string;
+  memberImage: string;
   contents: string;
   likeCount: number;
   commentsCounts: number;
@@ -48,19 +49,15 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const isCurrentUserPost = userInfo.member_id === post.memberId;
   const isCurrentUser = userInfo.nickname === post.nickName;
 
-  const handleFollowClick = () => {
-    const followId = post.memberId;
-    postMemberFollowAxios(followId)
-      .then((response) => {
-        console.log("팔로우 요청이 성공적으로 전송되었습니다.", response);
-        setIsFollowing(!isFollowing);
-      })
-      .catch((error) => {
-        console.error(
-          "팔로우를 서버로 전송하는 중 오류가 발생했습니다.",
-          error
-        );
-      });
+  const handleFollowClick = async () => {
+    try {
+      const followId = post.memberId;
+      const response = await postMemberFollowAxios(followId);
+      console.log("success", response);
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   const handleEtcClick = () => {
@@ -93,23 +90,15 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   return (
     <Top>
       <Account>
-        <Link href={isCurrentUser ? "/my" : `/user/${post.nickName}`}>
+        <Link href={isCurrentUser ? "/my" : `/user/${post.memberId}`}>
           <ProfileImage
-            src="/images/noProfile.jpg"
+            src={post.memberImage ? post.memberImage : "/images/noProfile.jpg"}
             alt="프로필"
             width={32}
             height={32}
             style={{ borderRadius: "100%" }}
           />
         </Link>
-
-        {/* <ProfileImage
-          src={userInfo.profilePic}
-          alt="프로필"
-          width={32}
-          height={32}
-          style={{ borderRadius: "100%" }}
-        /> */}
         <Id>{post.nickName}</Id>
         {!isCurrentUserPost && (
           <FollowBtn
