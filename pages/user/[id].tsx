@@ -1,8 +1,9 @@
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useSelector } from "react-redux";
 import * as SC from "@/components/styled/my";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,33 +12,56 @@ import {
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
+import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { MyPageHeader } from "@/components/atoms/Header";
 import Footer from "@/components/Footer";
 import getUserDetailAxios from "@/services/userInfo/getUserDetail";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
 
-export interface Post {
-  id: number;
-  userId: string;
-  content: string;
-  imageUrl: string;
+interface MemberData {
+  email: string;
+  nickname: string;
+  companyName: string;
+  profilePic: string;
+  followers: [followerId: number, followerName: string];
+  following: string[];
+  posts: number;
+}
+
+interface PostData {
+  memberId: number;
+  nickName: string;
+  followed: boolean;
+  postId: number;
+  image: string[];
+  contents: string;
+  postLike: boolean;
+  bookmarked: boolean;
+  likeCount: number;
+  createdAt: string;
+  commentsCounts: number;
+  location: string;
+  taggedMemberIds: string;
 }
 
 interface MyProps {
+  memberInfo: MemberData;
+  posts: PostData;
   selectedUserName?: string;
 }
 
 const User: React.FC<MyProps> = () => {
-  const [userInfo, setUserInfo] = useState<any>();
+  const userInfo = useSelector((state: RootState) => state.user.member);
   console.log(userInfo);
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [memberInfo, setMemberInfo] = useState<MemberData>();
+  console.log(memberInfo);
+  const [posts, setPosts] = useState<PostData[]>([]);
   console.log(posts);
-  const [isClient, setIsClient] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const sentinelRef = useRef(null);
-  const feedViewConRef = useRef(null);
+  // const [isClient, setIsClient] = useState(false);
+  // const sentinelRef = useRef(null);
+  // const feedViewConRef = useRef(null);
 
   const router = useRouter();
   const { id } = router.query;
@@ -45,23 +69,23 @@ const User: React.FC<MyProps> = () => {
   // const userNameFromQuery = router.query.userName as string;
   // const userIdFromPath = router.query.id as string;
 
-  // 회원 상세 정보 조회
+  // 특정 유저 상세 정보 조회
   const fetchUserDetailData = async (id: number) => {
     try {
       const res = await getUserDetailAxios(id);
-      setUserInfo(res);
+      setMemberInfo(res.data);
     } catch (err) {
       handleError(err, "Error fetcing member detail:");
     }
   };
 
   useEffect(() => {
-    if (userInfo && userInfo.memberId) {
-      fetchUserDetailData(userInfo.memberId);
+    if (id) {
+      fetchUserDetailData(id);
     }
-  }, [userInfo]);
+  }, [id]);
 
-  // 내가 작성한 게시글 조회
+  // 특정 유저가 작성한 게시글 조회
   const fetchMyPostAllData = async (memberId: number) => {
     try {
       const res = await getMyPostAllAxios(memberId);
@@ -74,10 +98,23 @@ const User: React.FC<MyProps> = () => {
   };
 
   useEffect(() => {
-    if (userInfo && userInfo.nickname) {
-      fetchMyPostAllData(userInfo.memberId);
+    if (id) {
+      fetchMyPostAllData(id);
     }
-  }, [userInfo]);
+  }, [id]);
+
+  // 팔로우 상태
+  const getFollowStatus = () => {
+    if (memberInfo && userInfo) {
+      const isFollowing = memberInfo.followers.some(
+        (follower) => follower.followerName === userInfo.nickname
+      );
+
+      return isFollowing ? "팔로잉" : "팔로우";
+    }
+
+    return "";
+  };
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -135,36 +172,46 @@ const User: React.FC<MyProps> = () => {
 
   return (
     <>
-      <MyPageHeader userInfo={userInfo} isNotMe={true} />
+      {userInfo && memberInfo && (
+        <MyPageHeader
+          userInfo={userInfo}
+          memberInfo={memberInfo}
+          isNotMe={true}
+        />
+      )}
 
-      <SC.Container>
-        <SC.Profile>
-          <Image
-            src="/images/noProfile.jpg"
-            alt="프로필"
-            width={77}
-            height={77}
-            style={{ borderRadius: "100%" }}
-          />
-        </SC.Profile>
+      {memberInfo && (
+        <SC.Container>
+          <SC.Profile>
+            <Image
+              src={
+                memberInfo.profilePic
+                  ? memberInfo.profilePic
+                  : "/images/noProfile.jpg"
+              }
+              alt="프로필"
+              width={77}
+              height={77}
+              style={{ borderRadius: "100%" }}
+            />
+          </SC.Profile>
 
-        <SC.MyDescContainer>
-          <SC.Intro>
-            <SC.Id>닉네임</SC.Id>
-            <SC.Company>직업</SC.Company>
-          </SC.Intro>
-          <SC.EditArea>
-            <SC.Edit>
-              <Link href="my/settings/profile" passHref>
-                <SC.Desc>팔로잉</SC.Desc>
-              </Link>
-            </SC.Edit>
-            <SC.Edit>
-              <SC.Desc>메세지 보내기</SC.Desc>
-            </SC.Edit>
-          </SC.EditArea>
-        </SC.MyDescContainer>
-      </SC.Container>
+          <SC.MyDescContainer>
+            <SC.Intro>
+              <SC.Id>{memberInfo.nickname}</SC.Id>
+              <SC.Company>{memberInfo.companyName}</SC.Company>
+            </SC.Intro>
+            <SC.DetailArea>
+              <SC.Follow>
+                <SC.Desc>{getFollowStatus()}</SC.Desc>
+              </SC.Follow>
+              <SC.Detail href="/direct/new">
+                <SC.Desc>메세지 보내기</SC.Desc>
+              </SC.Detail>
+            </SC.DetailArea>
+          </SC.MyDescContainer>
+        </SC.Container>
+      )}
 
       <SC.MyDataContainer>
         <SC.MyDataValue>
@@ -210,12 +257,15 @@ const User: React.FC<MyProps> = () => {
         ) : (
           posts.map((post) => (
             <Link key={post.postId} href={`/my/feeds/${post.postId}`} passHref>
-              <Image
-                src="/images/noImage.svg"
-                alt="이미지"
-                width={135}
-                height={135}
-              />
+              {/* {post.image.map((imageUrl, index) => (
+                <Image
+                  key={index}
+                  src={imageUrl}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              ))} */}
             </Link>
           ))
         )}

@@ -122,9 +122,11 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
             />
           </Right>
         </ButtonArea>
-        {post.likeCount > 0 && (
-          <LikesArea>{post.likeCount}명이 좋아합니다</LikesArea>
-        )}
+        <Link href={`/post/liked_by/${post.postId}`}>
+          <LikesArea>
+            {post.likeCount > 0 && post.likeCount} 명이 좋아합니다
+          </LikesArea>
+        </Link>
         <CommentsArea>
           <Details>
             <Name>{post.nickname}</Name>

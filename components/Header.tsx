@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [userInfo?.member_id]);
 
   // const handleNotification = () => {
   //   setNotificationCount(notificationCount + 1);

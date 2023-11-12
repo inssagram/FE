@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -49,6 +50,33 @@ export const EditArea = styled.div`
 `;
 
 export const Edit = styled.button`
+  width: 130px;
+  height: 35px;
+  border-style: none;
+  border-radius: 10%;
+  background-color: #efefef;
+`;
+
+export const Follow = styled.button`
+  width: 130px;
+  height: 35px;
+  border-style: none;
+  border-radius: 10%;
+  background-color: #efefef;
+`;
+
+export const DetailArea = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+export const Detail = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 130px;
   height: 35px;
   border-style: none;
