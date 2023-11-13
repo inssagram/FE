@@ -27,6 +27,8 @@
     "@types/redux-logger": "^3.0.11",
     "@types/uuid": "^9.0.7",
     "axios": "^1.5.1",
+    "chokidar": "^3.5.3",
+    "debug": "^4.3.4",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "event-source-polyfill": "^1.0.31",
@@ -40,6 +42,7 @@
     "react-helmet": "^6.1.0",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.16.0",
+    "redux": "4",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
@@ -49,7 +52,7 @@
     "styled-components": "^6.0.8",
     "typescript": "5.2.2",
     "uuid": "^9.0.1",
-    "vercel": "^32.4.1"
+    "vercel": "^32.5.3"
   },
   "devDependencies": {
     "@types/event-source-polyfill": "^1.0.3",

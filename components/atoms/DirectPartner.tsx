@@ -3,9 +3,9 @@ import Link from "next/link";
 import styled from "styled-components";
 
 interface Item {
-  userId: string;
-  name: string;
-  profileUrl: string;
+  memberId: string;
+  nickname: string;
+  profileImg: string;
 }
 
 const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
@@ -14,22 +14,22 @@ const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
   return (
     <>
       <Partner>
-        {selectedItem && (
-          <Picture>
-            <Img>
-              <Image
-                src={selectedItem.profileUrl}
-                alt="프로필"
-                width={56}
-                height={56}
-              />
-            </Img>
-          </Picture>
-        )}
-        <Name>{selectedItem?.name}</Name>
-        <Id>{selectedItem?.userId} Inssagram</Id>
+        {/* {selectedItem && ( */}
+        <Picture>
+          <Img>
+            <Image
+              src="/images/noProfile.jpg"
+              alt="프로필"
+              width={56}
+              height={56}
+            />
+          </Img>
+        </Picture>
+        {/* )} */}
+        <Name>{selectedItem?.nickname}</Name>
+        <Id>{selectedItem?.nickname} Inssagram</Id>
         <Profile>
-          <Link href="/my">프로필 보기</Link>
+          <Link href="/user/${memberId}">프로필 보기</Link>
         </Profile>
       </Partner>
     </>

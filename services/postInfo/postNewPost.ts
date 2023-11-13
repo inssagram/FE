@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance";
 
-const postNewPostAxios = async (
+const postNewPostAxios = (
   memberId: number,
   image: string,
   contents: string,
@@ -15,7 +15,7 @@ const postNewPostAxios = async (
     hashTags,
   };
 
-  return await axiosInstance({
+  return axiosInstance({
     method: "post",
     url: `/post/create`,
     headers: {

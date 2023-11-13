@@ -22,7 +22,6 @@ interface ExplorePostData {
 
 const Post: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
-  console.log("UserInfo:", userInfo);
   const [post, setPost] = useState<ExplorePostData | null>(null);
 
   const router = useRouter();

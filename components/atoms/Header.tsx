@@ -32,53 +32,63 @@ export const SearchHistoryHeader: React.FC = () => {
 };
 
 interface MyHeaderProps {
-  userInfo: any;
+  userInfo: { nickname: string };
+  memberInfo: { nickname: string };
   isNotMe: boolean;
 }
 
 export const MyPageHeader: React.FC<MyHeaderProps> = ({
   userInfo,
+  memberInfo,
   isNotMe,
 }) => {
   return (
     <>
-      <MyHeader>
-        <Link href="/my/settings">
-          <FontAwesomeIcon icon={faGear} fontSize={"24"} />
-        </Link>
-        <h2>{isNotMe ? "" : userInfo.nickname}</h2>
-        <Link href="my/recommend" passHref>
-          <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
-        </Link>
-      </MyHeader>
+      {isNotMe ? (
+        <MyHeader>
+          <BackChevron />
+          <h2>{memberInfo.nickname}</h2>
+          <span></span>
+        </MyHeader>
+      ) : (
+        <MyHeader>
+          <Link href="/my/settings">
+            <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+          </Link>
+          <h2>{userInfo.nickname}</h2>
+          <Link href="my/recommend" passHref>
+            <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
+          </Link>
+        </MyHeader>
+      )}
     </>
   );
 };
 
 interface UserInfo {
-  memberId: number;
+  email: string;
+  member_id: number;
   nickname: string;
+  job: string;
+  image: string;
 }
 
-interface MyDirectHeaderProps {
-  userInfo: UserInfo;
-  onCreateChatRoom: () => void;
+interface DirectHeaderProps {
+  userInfo: UserInfo | null;
 }
 
-export const DirectHeader: React.FC<MyDirectHeaderProps> = ({
-  userInfo,
-  onCreateChatRoom,
-}) => {
+export const DirectHeader: React.FC<DirectHeaderProps> = ({ userInfo }) => {
+  if (!userInfo) {
+    return null;
+  }
   return (
     <>
       <DmHeader>
         <BackArrow />
         <h2>{userInfo.nickname}</h2>
-        <div onClick={onCreateChatRoom}>
-          <Link href="/direct/new">
-            <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
-          </Link>
-        </div>
+        <Link href="/direct/new">
+          <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
+        </Link>
       </DmHeader>
     </>
   );

@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
-const getSearchHistoryAxios = async (): Promise<any> => {
-  return await axiosInstance({
+const getSearchHistoryAxios = (): Promise<any> => {
+  return axiosInstance({
     method: "get",
     url: `/search`,
     headers: {

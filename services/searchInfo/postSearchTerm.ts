@@ -1,11 +1,11 @@
 import axiosInstance from "../axiosInstance";
 
-const postSearchTermAxios = async (memberId: number): Promise<any> => {
+const postSearchTermAxios = (memberId: number): Promise<any> => {
   const SearchData = {
     memberId,
   };
 
-  return await axiosInstance({
+  return axiosInstance({
     method: "post",
     url: `/search/save`,
     headers: {

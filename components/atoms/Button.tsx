@@ -38,28 +38,31 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
   );
 };
 
-export const FollowButton: React.FC = () => {
-  return <FollowBtn>팔로우</FollowBtn>;
+interface FollowButtonProps {
+  onClick?: () => void;
+}
+
+export const FollowButton: React.FC<FollowButtonProps> = ({ onClick }) => {
+  return <FollowBtn onClick={onClick}> 팔로우</FollowBtn>;
 };
 
 interface HeartButtonProps {
   isLiked: boolean;
-  postId: number;
-  handleLikeClick: (postId: number) => void;
+  handleLikeClick: () => void;
 }
 
 export const HeartButton: React.FC<HeartButtonProps> = ({
   isLiked,
   handleLikeClick,
-  postId,
 }) => {
   return (
-    <FontAwesomeIcon
-      onClick={() => handleLikeClick(postId)}
-      icon={isLiked ? fasHeart : farHeart}
-      fontSize={24}
-      style={{ color: isLiked ? "red" : "inherit" }}
-    />
+    <HeartBtn onClick={handleLikeClick}>
+      <FontAwesomeIcon
+        icon={isLiked ? fasHeart : farHeart}
+        style={{ color: isLiked ? "red" : "inherit" }}
+        fontSize={"24px"}
+      />
+    </HeartBtn>
   );
 };
 
@@ -77,9 +80,15 @@ const CloseBtn = styled.button`
 `;
 
 const FollowBtn = styled.button`
+  width: 82px;
   padding: 7px 16px;
   border: none;
   border-radius: 10px;
   color: #ffffff;
   background-color: #0095f6;
+`;
+
+const HeartBtn = styled.button`
+  border: none;
+  background-color: transparent;
 `;
