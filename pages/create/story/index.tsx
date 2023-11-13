@@ -1,23 +1,27 @@
-import React , {ButtonHTMLAttributes, useState} from "react";
+import React , {ButtonHTMLAttributes, useState, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import * as SC from "@/components/styled/main_boardwirte_story";
 import Image from "next/image";
-import axios from "axios";
 import {ref, getDownloadURL, uploadBytes} from 'firebase/storage'
 import { storage } from "@/components/firebase/firebase";
-
+import html2canvas from "html2canvas";
+import axios from "axios";
+import { image } from "html2canvas/dist/types/css/types/image";
+import { v4 as uuidv4} from "uuid"
+import { useSelector } from "react-redux";
 
 const Story: React.FC = () => {
   const token = sessionStorage.getItem('token')
   const BASE_URL = process.env.BASE_URL
   const [previewImage, setPreviewImage] = useState<string>('')
-  const [file, setFile] = useState<File | null>(null)
   const [isTexting, setIsTexting] = useState<boolean>(false)
   const [textValue, setTextValue] = useState<string>("")
   const [textBoxes, setTextBoxes] = useState<string[]>([])
-  
+  const divRef = useRef<HTMLDivElement>(null);
+  const user = useSelector((state: any) => state.user)
+
   type Position = {
     x: string;
     y: string
@@ -31,31 +35,44 @@ const Story: React.FC = () => {
   const handlePreviewImage = (e:React.ChangeEvent<HTMLInputElement>) => {
       if(e.target.files && e.target.files.length > 0){
         const image = e.target.files[0]
-        const storageRef = ref(storage, `files/${image.name}`)
-        const uploadTask = uploadBytes(storageRef, image)
-
-        uploadTask.then((snapshot) => {
-          e.target.value = "";
-          getDownloadURL(snapshot.ref).then((downloadURL) => {
-            console.log("File is", downloadURL);
-            setPreviewImage(downloadURL)
-          })
-        })
+        const imageURL = URL.createObjectURL(image)
+        setPreviewImage(imageURL)
       }else{
         setPreviewImage((prev) => prev)
       }
   }
 
-  const handleUploadImage = (e:SubmitEvent) => {
+  const uploadImageToServer = async (imageBlob: string, uuid: string, nickname: string) => {
+    return await axios.post(`${BASE_URL}/story/create`,{
+        image: imageBlob,
+        accessKey: uuid,
+        location: nickname,
+      },{
+        headers: {
+          Authorization: `${token}`,
+      }})
+  };
+
+
+  const handleUploadImage = async (e:SubmitEvent) => {
     e.preventDefault()
-    if(file){
-        axios.post(`${BASE_URL}/story/create`,{
-          "image": previewImage
-        },{
-          headers: {
-            Authorization: `${token}`
-          }
-        }).then((res) => console.log(res)).catch((error) => console.log(error))
+    if (!divRef.current) return;
+    try {
+      const div = divRef.current;
+      const canvas = await html2canvas(div, { scale: 2 });
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob((b) => resolve(b));
+      });
+      if (blob) {
+        const uuid = uuidv4()
+        const storageRef = ref(storage, `${user.member.nickname}/${uuid}`);
+        const uploadTask = uploadBytes(storageRef, blob);
+        const snapshot = await uploadTask;
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        console.log("File is", downloadURL);
+        await uploadImageToServer(downloadURL, uuid, user.member.nickname)
+    }}catch (error) {
+      console.error("ERROR", error);
     }
    }
 
@@ -102,6 +119,8 @@ const Story: React.FC = () => {
 
    
 
+
+
   return (
     <>
     <form>
@@ -126,7 +145,7 @@ const Story: React.FC = () => {
           }
         </SC.IconPannels>
       </SC.Header>
-      <SC.body>
+      <SC.body ref={divRef}>
         <SC.Filter isTexting={isTexting}></SC.Filter>
         {previewImage 
           ? (<Image src={previewImage} alt={previewImage} fill/>) 
