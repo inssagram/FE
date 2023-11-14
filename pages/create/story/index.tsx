@@ -8,7 +8,6 @@ import {ref, getDownloadURL, uploadBytes} from 'firebase/storage'
 import { storage } from "@/components/firebase/firebase";
 import html2canvas from "html2canvas";
 import axios from "axios";
-import { image } from "html2canvas/dist/types/css/types/image";
 import { v4 as uuidv4} from "uuid"
 import { useSelector } from "react-redux";
 
@@ -33,7 +32,7 @@ const Story: React.FC = () => {
 
 
   const handlePreviewImage = (e:React.ChangeEvent<HTMLInputElement>) => {
-      if(e.target.files && e.target.files.length > 0){
+      if(e.target.files !== null){
         const image = e.target.files[0]
         const imageURL = URL.createObjectURL(image)
         setPreviewImage(imageURL)
@@ -65,7 +64,7 @@ const Story: React.FC = () => {
       });
       if (blob) {
         const uuid = uuidv4()
-        const storageRef = ref(storage, `${user.member.nickname}/${uuid}`);
+        const storageRef = ref(storage, `story/${user.member.nickname}/${uuid}`);
         const uploadTask = uploadBytes(storageRef, blob);
         const snapshot = await uploadTask;
         const downloadURL = await getDownloadURL(snapshot.ref);

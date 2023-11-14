@@ -66,8 +66,8 @@ const Job = () => {
   };
 
   const submitButtonHandler = async () => {
-    dispatch(reduceJob(inputValue))
     try{
+      await dispatch(reduceJob(inputValue))
       await createUserWithEmailAndPassword(auth, register.email, register.password)
       await axios.post(`${BASE_URL}/signup`, {
         email: register.email,

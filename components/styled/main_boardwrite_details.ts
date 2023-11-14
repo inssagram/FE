@@ -66,6 +66,9 @@ export const MyProfile = styled.div`
 
 export const TextCont = styled.div`
   position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   width: 80%;
   height: 51px;
   bottom: 35%;

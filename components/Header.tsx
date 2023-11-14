@@ -10,6 +10,7 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
 import { RootState } from "@/src/redux/Posts/store";
 
+
 interface HeaderProps {
   setSelectedImage: (src: string) => void;
 }
@@ -68,27 +69,8 @@ const Header: React.FC<HeaderProps> = (props) => {
   // };
 
   const createBoards = () => {
-    fileInputRef.current?.click();
-  };
-  const [selectedImage, setSelectedImage] = useState<string>("");
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 파일 선택하더라도 아래 이미지 주소만 사용하려고 테스트 중임다
-    const fixedImageSrc =
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg";
-    setSelectedImage(fixedImageSrc);
-
-    localStorage.setItem("selectedImage", fixedImageSrc);
-    try {
-      const response = await axios.post("http://localhost:4000/posts", {
-        image: fixedImageSrc,
-      });
-      if (response.status === 201) {
-        alert("Image uploaded!");
-        router.push("/create");
-      }
-    } catch (error) {
-      alert("Failed to upload the image");
-    }
+    router.push('create/details')
+    
   };
 
   return (
@@ -100,13 +82,6 @@ const Header: React.FC<HeaderProps> = (props) => {
         <PlusBtn id="createBoards" onClick={createBoards}>
           <FontAwesomeIcon icon={faSquarePlus} fontSize={"24px"} />
         </PlusBtn>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          accept="image/*"
-        />
         {unreadCount > 0 && <NotiAlarm />}
         {showBubble && unreadCount > 0 ? (
           <HeartBtn>
@@ -166,6 +141,7 @@ const PlusBtn = styled.button`
   border-style: none;
   background-color: transparent;
   padding: 12px;
+  color: black;
 `;
 
 const HeartBtn = styled.button`
