@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { getAuth, signInWithCustomToken } from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-b-qg4zxIxvX-pOGIbgubojBcLjNqSzQ",
@@ -13,6 +13,11 @@ const firebaseConfig = {
   measurementId: "G-BV7JHREQKR"
 };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const storage = getStorage(app)
+
+console.log("FB_APIKEY:", process.env.FB_APIKEY);
+console.log("FB_AUTHDOMAIN:", process.env.FB_AUTHDOMAIN);
+
+const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+export const auth = getAuth(firebaseApp);
+export const storage = getStorage(firebaseApp);

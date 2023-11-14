@@ -19,12 +19,21 @@ interface textProps {
   isTexting: boolean;
  }
 
-export const body = styled.div<textProps>`
+export const body = styled.div`
   position: relative;
   width: 100%;
   height: 915px;
-  background-color: ${(props) => props.isTexting ? "transparent" : "rgba(0,0,0,0.5)"};
 `;
+
+export const Filter = styled.div<textProps>`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: black;
+  opacity: 0.5;
+  display: ${(props) => props.isTexting ? "inline-block" : "none"};
+`
 
 export const TextArea = styled.textarea<textProps>`
   position: absolute;
@@ -40,6 +49,7 @@ export const TextArea = styled.textarea<textProps>`
     border: none;
     outline: none;
   }
+  z-index: 2;
 `
 
 export const TextBox = styled.span`
