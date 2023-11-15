@@ -6,8 +6,6 @@ import { BackArrow } from "@/components/atoms/Icon";
 import { reduceJob } from "../emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { auth } from "@/components/firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 
 const Job = () => {
@@ -68,7 +66,6 @@ const Job = () => {
   const submitButtonHandler = async () => {
     try{
       await dispatch(reduceJob(inputValue))
-      await createUserWithEmailAndPassword(auth, register.email, register.password)
       await axios.post(`${BASE_URL}/signup`, {
         email: register.email,
         password: register.password,
