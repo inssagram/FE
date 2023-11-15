@@ -20,6 +20,7 @@ const nextConfig = {
   },
   env: {
     BASE_URL: process.env.BASE_URL,
+    JOBLIST_API_KEY: process.env.JOBLIST_API_KEY,
     FB_APIKEY: process.env.FB_APIKEY,
     FB_AUTHDOMAIN: process.env.FB_AUTHDOMAIN,
     FB_PROJECTID: process.env.FB_PROJECTID,

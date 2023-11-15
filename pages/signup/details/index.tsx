@@ -71,7 +71,9 @@ const Details: React.FC = () => {
         setNicknameSet(true);
       })
       .catch((error) => {
-        alert(error.response.data.message)
+        setNicknameProcessState(
+          error.response.data.message
+        );
         console.log(error)
         setWrongWayNickname(true);
         setNicknameSet(false); 
