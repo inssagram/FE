@@ -1,16 +1,21 @@
 import axiosInstance from "../axiosInstance";
 
-const postChatRoomAxios = (name: string): Promise<any> => {
+const postChatRoomAxios = (
+  firstParticipantId: number,
+  secondParticipantId: number
+): Promise<any> => {
+  const createChatData = {
+    firstParticipantId,
+    secondParticipantId,
+  };
   return axiosInstance({
     method: "post",
-    url: `/chat/room`,
+    url: `/chat/room/create`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
     },
-    params: {
-      name: name,
-    },
+    data: createChatData,
   });
 };
 

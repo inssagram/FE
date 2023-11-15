@@ -59,7 +59,7 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
 }) => {
   const { postId } = post;
 
-  const handleAccountInfoDelete = () => {
+  const handlePostDelete = () => {
     const token = sessionStorage.getItem("token");
     axios
       .delete(`http://3.36.239.69:8080/post/delete/${postId}`, {
@@ -78,7 +78,7 @@ export const MyEllipsisModal: React.FC<MyEllipsisModalProps> = ({
   return (
     <ModalBackdrop>
       <ModalContent>
-        <DeletePost onClick={handleAccountInfoDelete}>삭제하기</DeletePost>
+        <DeletePost onClick={handlePostDelete}>삭제하기</DeletePost>
         <EditPost onClick={handleEditClick}>수정하기</EditPost>
         <MyCopyLink>
           <CopyLinkButton linkToCopy={`localhost:3000/post/${post.postId}`} />

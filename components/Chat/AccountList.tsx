@@ -8,8 +8,8 @@ import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 
 interface SearchData {
   memberId: number;
-  nickname: string;
-  profileImg: string;
+  nickName: string;
+  image: string;
 }
 
 interface SearchDataProps {
@@ -27,7 +27,7 @@ const AccountList: React.FC<SearchDataProps> = ({
   const fetchSearchResultList = async (keyword: string) => {
     try {
       const res = await getSearchResultAxios(keyword);
-      setSearchResults(res.data);
+      setSearchResults(res);
     } catch (err) {
       handleError(err, "Error searching result:");
     }
@@ -50,15 +50,15 @@ const AccountList: React.FC<SearchDataProps> = ({
           <ResultContainer key={index}>
             <Profile>
               <Image
-                src="/images/noProfile.jpg"
+                src={result.image ? result.image : "/images/noProfile.jpg"}
                 alt="프로필"
                 width={44}
                 height={44}
               />
             </Profile>
             <Account>
-              <Name>{result.nickname}</Name>
-              <Id>{result.memberId}</Id>
+              <Name>{result.nickName}</Name>
+              {/* <Id>{result.memberId}</Id> */}
             </Account>
             <SelectBtn onClick={() => handleSelectAccount(result)}>
               <Icon icon={faCircleCheck} fontSize={"24px"} />

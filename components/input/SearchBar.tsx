@@ -8,52 +8,6 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-const SearchBarContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const SearchArea = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  border: 1px solid #c0c0c0;
-  border-radius: 7px;
-  background-color: #fff;
-  // background-color: #404040;
-`;
-
-const Input = styled.input`
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 0 8px;
-  color: #222;
-  background-color: #fff;
-  // color: #fff;
-  // background-color: #404040;
-`;
-
-const SearchIcon = styled.div`
-  color: #888;
-  margin-right: 8px;
-`;
-
-const Xmark = styled.div`
-  color: #888;
-  cursor: pointer;
-`;
-
-const CancleButton = styled.div`
-  width: 28px;
-  color: #888;
-  margin-left: 8px;
-  cursor: pointer;
-`;
-
 const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
   onSearch,
 }) => {
@@ -109,5 +63,51 @@ const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
     </SearchBarContainer>
   );
 };
+
+const SearchBarContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const SearchArea = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border: 1px solid #c0c0c0;
+  border-radius: 7px;
+  background-color: #fff;
+  // background-color: #404040;
+`;
+
+const Input = styled.input`
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 8px;
+  color: #222;
+  background-color: #fff;
+  // color: #fff;
+  // background-color: #404040;
+`;
+
+const SearchIcon = styled.div`
+  color: #888;
+  margin-right: 8px;
+`;
+
+const Xmark = styled.div`
+  color: #888;
+  cursor: pointer;
+`;
+
+const CancleButton = styled.div`
+  width: 28px;
+  color: #888;
+  margin-left: 8px;
+  cursor: pointer;
+`;
 
 export default SearchBar;

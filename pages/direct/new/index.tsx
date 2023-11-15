@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
@@ -49,15 +50,28 @@ const New: React.FC<SearchData> = () => {
     setSearchTerm(searchValue);
   };
 
-  const handleAccountSelect = (result: SearchData) => {
-    setSelectedAccount(result.nickname);
+  const handleAccountSelect = (selectedAccount: SearchData) => {
+    setSelectedAccount(selectedAccount);
+  };
+
+  const handleNextClick = () => {
+    if (selectedAccount) {
+      const { memberId } = selectedAccount;
+      handleChatRoomClick(memberId, memberId);
+    }
   };
 
   // 채팅방 생성 및 입장 선택된 유저 id 담아서 요청?
-  const handleChatRoomClick = async (name: string) => {
+  const handleChatRoomClick = async (
+    firstParticipantId: number,
+    secondParticipantId: number
+  ) => {
     if (selectedAccount) {
       try {
-        const res = await postChatRoomAxios(name);
+        const res = await postChatRoomAxios(
+          firstParticipantId,
+          secondParticipantId
+        );
         const createdRoomId = res.roomId;
 
         // 채팅방 입장
@@ -77,22 +91,16 @@ const New: React.FC<SearchData> = () => {
     }
   }, [roomId, userToken]);
 
-  const handleNextClick = () => {
-    if (selectedAccount) {
-      handleChatRoomClick("채팅방");
-    }
-  };
-
   return (
     <>
       <NewHeader>
         <BackArrow />
         <HeaderTitle>새로운 메시지</HeaderTitle>
-        {/* {selectedItem && (
-          <Link href={`/direct/in/${selectedItem.id}`}> */}
-        <Next onClick={handleNextClick}>다음</Next>
-        {/* </Link>
-        )} */}
+        {selectedAccount && (
+          <Link href={`/direct/in/${selectedAccount.id}`}>
+            <Next onClick={handleNextClick}>다음</Next>
+          </Link>
+        )}
       </NewHeader>
       <div>
         <SearchInput
