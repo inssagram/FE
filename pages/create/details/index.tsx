@@ -57,15 +57,20 @@ const Details: React.FC = () => {
       "image": [imageBlob],
       "contents": contents,
     }
-    return axiosInstance({
-      method: "post",
-      url: "/post/create",
-      headers: {
-        "Content-Type": "application/json",
-        charset: "utf-8",
-      },
-      data: postData,
-    });
+    try{
+      const res = await axiosInstance({
+        method: "post",
+        url: "/post/create",
+        headers: {
+          "Content-Type": "application/json",
+          charset: "utf-8",
+        },
+        data: postData,
+      });
+      return res.data.postId
+    }catch(error){
+      console.error(error)
+    }
   };
 
   const handleCreateBoard = async () => {
@@ -77,7 +82,8 @@ const Details: React.FC = () => {
         const blobImage = await uploadTask;
         const downloadURL = await getDownloadURL(blobImage.ref);
         await uploadImageToServer(downloadURL, contents)
-        console.log('downloadURL:',downloadURL, 'uuid:',uuid,)
+        const postId = await uploadImageToServer(downloadURL, contents)
+        router.push(`/my/feeds/${postId}`)
      }
     }catch (error) {
       console.error(error);
