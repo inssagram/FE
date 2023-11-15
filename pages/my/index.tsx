@@ -53,6 +53,11 @@ const My: React.FC<MyProps> = () => {
   const [taggedPost, setTaggedPost] = useState<PostData[]>([]);
   const [isShowTagged, setIsShowTagged] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedIcon, setSelectedIcon] = useState<string>("table");
+
+  const handleIconClick = (icon: string) => {
+    setSelectedIcon(icon);
+  };
 
   // 내가 작성한 게시글 조회
   const fetchMyPostAllData = async (memberId: number) => {
@@ -79,6 +84,7 @@ const My: React.FC<MyProps> = () => {
   };
 
   const handleBookmarkIconClick = () => {
+    handleIconClick("bookmark");
     fetchBookmarkPostAllData();
     setIsShowBookmarked(!isShowBookmarked);
   };
@@ -95,13 +101,24 @@ const My: React.FC<MyProps> = () => {
   };
 
   const handleTaggedIconClick = () => {
+    handleIconClick("tagged");
     fetchTaggedPostAllData(userInfo.member_id);
     setIsShowTagged(!isShowTagged);
   };
 
+  // const handleTaggedIconClick = async () => {
+  //   try {
+  //     await fetchTaggedPostAllData(userInfo.member_id);
+  //     setIsShowTagged(!isShowTagged);
+  //   } catch (err) {
+  //     handleError(err, "Error fetching tagged posts:");
+  //   }
+  // };
+
   useEffect(() => {
     if (userInfo && userInfo.member_id) {
       fetchMyPostAllData(userInfo.member_id);
+      handleIconClick("table");
     }
   }, [userInfo]);
 
@@ -174,6 +191,13 @@ const My: React.FC<MyProps> = () => {
         <SC.MyDescContainer>
           <SC.Intro>
             <SC.Id>{userInfo.nickname}</SC.Id>
+            {userInfo.job ? (
+              <SC.Company>{userInfo.job}123</SC.Company>
+            ) : (
+              <Link href="/my/settings/profile" passHref>
+                <SC.Company>직업을 입력해보세요</SC.Company>
+              </Link>
+            )}
             <SC.Company>{userInfo.job}</SC.Company>
           </SC.Intro>
           <SC.EditArea>
@@ -208,8 +232,14 @@ const My: React.FC<MyProps> = () => {
         </SC.MyDataValue>
       </SC.MyDataContainer>
       <SC.IconContainer>
-        <FontAwesomeIcon icon={faTable} />
-        <FontAwesomeIcon icon={faMobileScreen} />
+        <FontAwesomeIcon
+          icon={faTable}
+          onClick={() => handleIconClick("table")}
+        />
+        <FontAwesomeIcon
+          icon={faMobileScreen}
+          onClick={() => handleIconClick("mobile")}
+        />
         <FontAwesomeIcon icon={faBookmark} onClick={handleBookmarkIconClick} />
         <FontAwesomeIcon icon={faUser} onClick={handleTaggedIconClick} />
       </SC.IconContainer>
@@ -219,44 +249,48 @@ const My: React.FC<MyProps> = () => {
           <SC.Loading>
             <FontAwesomeIcon icon={faSpinner} fontSize={"25px"} />
           </SC.Loading>
-        ) : isShowBookmarked ? (
-          bookmarkedPost.length === 0 ? (
-            <SC.Text>저장된 게시물이 없습니다</SC.Text>
-          ) : (
-            bookmarkedPost.map((post) => (
-              <Link
-                key={post.postId}
-                href={`/my/feeds/${post.postId}`}
-                passHref
-              >
-                <Image
-                  src={post.image[0]}
-                  alt="이미지"
-                  width={135}
-                  height={135}
-                />
-              </Link>
-            ))
-          )
-        ) : isShowTagged ? (
-          taggedPost.length === 0 ? (
-            <SC.Text>태그된 게시물이 없습니다</SC.Text>
-          ) : (
-            taggedPost.map((post) => (
-              <Link
-                key={post.postId}
-                href={`/my/feeds/${post.postId}`}
-                passHref
-              >
-                <Image
-                  src={post.image[0]}
-                  alt="이미지"
-                  width={135}
-                  height={135}
-                />
-              </Link>
-            ))
-          )
+        ) : selectedIcon === "bookmark" ? (
+          isShowBookmarked ? (
+            bookmarkedPost.length === 0 ? (
+              <SC.Text>저장된 게시물이 없습니다</SC.Text>
+            ) : (
+              bookmarkedPost.map((post) => (
+                <Link
+                  key={post.postId}
+                  href={`/my/feeds/${post.postId}`}
+                  passHref
+                >
+                  <Image
+                    src={post.image[0]}
+                    alt="이미지"
+                    width={135}
+                    height={135}
+                  />
+                </Link>
+              ))
+            )
+          ) : null
+        ) : selectedIcon === "tagged" ? (
+          isShowTagged ? (
+            taggedPost.length === 0 ? (
+              <SC.Text>태그된 게시물이 없습니다</SC.Text>
+            ) : (
+              taggedPost.map((post) => (
+                <Link
+                  key={post.postId}
+                  href={`/my/feeds/${post.postId}`}
+                  passHref
+                >
+                  <Image
+                    src={post.image[0]}
+                    alt="이미지"
+                    width={135}
+                    height={135}
+                  />
+                </Link>
+              ))
+            )
+          ) : null
         ) : (
           posts.map((post) => (
             <Link key={post.postId} href={`/my/feeds/${post.postId}`} passHref>

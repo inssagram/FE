@@ -10,12 +10,10 @@ import getLikePostMemberListAxios from "@/services/postInfo/getLikePostMemberLis
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 
 interface LikeMemberData {
-  member_id: number;
-  email: string;
-  nickname: string;
-  job: string;
-  image: string;
-  friendStatus: boolean;
+  memberId: number;
+  memberNickname: string;
+  memberProfile: string;
+  followedState: boolean;
 }
 
 const LikedPost: React.FC<LikeMemberData> = () => {
@@ -37,12 +35,11 @@ const LikedPost: React.FC<LikeMemberData> = () => {
     }
   };
 
-  const handleFollowClick = async () => {
+  const handleFollowClick = async (followId: number) => {
     try {
-      const followId = post.memberId;
       const response = await postMemberFollowAxios(followId);
       console.log("success", response);
-      setIsFollowing(!isFollowing);
+      setIsFollowing((prevIsFollowing) => !prevIsFollowing);
     } catch (error) {
       console.error("error", error);
     }
@@ -57,26 +54,26 @@ const LikedPost: React.FC<LikeMemberData> = () => {
   return (
     <>
       <PageHeader title={PageTitle} />
-      {/* <CloseButton /> */}
 
-      {postMembers.map((post) => (
-        <ItemContainer key={post.member_id}>
-          <ClickTo href="/" passHref>
+      {postMembers.map((member) => (
+        <ItemContainer key={member.memberId}>
+          <ClickTo href={`/user/${member.memberId}`} passHref>
             <AccountImg
-              src={post.image || "/images/noProfile.jpg"}
+              src={member.memberProfile || "/images/noProfile.jpg"}
               alt="프로필 이미지"
               width={44}
               height={44}
             />
             <ContentArea>
               <AccountInfo>
-                <Id>{post.nickname}</Id>
-                <Status>{post.job && <Job>{post.job}</Job>}</Status>
+                <Id>{member.memberNickname}</Id>
               </AccountInfo>
-              <FollowButton onClick={handleFollowClick} />
-              {/* <Follow>{post.friendStatus ? "팔로잉" : "팔로잉"}</Follow> */}
             </ContentArea>
           </ClickTo>
+          <FollowButton
+            onClick={() => handleFollowClick(member.memberId)}
+            isFollowing={isFollowing}
+          />
         </ItemContainer>
       ))}
     </>
@@ -85,9 +82,11 @@ const LikedPost: React.FC<LikeMemberData> = () => {
 
 const ItemContainer = styled.div`
   width: 100%;
+  height: 60px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin: 8px 0;
+  align-items: center;
 `;
 
 const ClickTo = styled(Link)`
@@ -120,10 +119,11 @@ const AccountImg = styled(Image)`
 `;
 
 const ContentArea = styled.div`
-  width: 324px;
+  width: 242px;
+  height: 60px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
   font-size: 14px;
 `;
 

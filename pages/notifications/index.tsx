@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import * as SC from "@/components/styled/notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
@@ -43,6 +43,7 @@ const Notifications: React.FC = () => {
   const handleDeleteNotificationClick = async (id: number) => {
     try {
       const res = await deleteNotificationAxios(id);
+      fetchNotificationAllData();
     } catch (err) {
       handleError(err, "Error deleting notifications:");
     }
@@ -80,20 +81,16 @@ const Notifications: React.FC = () => {
     <>
       <PageHeader title={pageTitle} />
       <SC.Notifications>
-        <SC.Date>오늘</SC.Date>
-        {/* {notifications.map((notification, index) => (
+        {/* <SC.Date>오늘</SC.Date> */}
+        {notifications.map((notification, index) => (
           <SC.ContentArea
             key={index}
-            onMouseDown={() => handleSwipeStart(index)}
+            onMouseDown={(e) => handleSwipeStart(e)}
+            onMouseMove={(e) => handleSwipeMove(e)}
             onMouseUp={handleSwipeEnd}
-            onMouseLeave={handleSwipeEnd}
-            onTouchStart={() => handleSwipeStart(index)}
+            onTouchStart={(e) => handleSwipeStart(e)}
+            onTouchMove={(e) => handleSwipeMove(e)}
             onTouchEnd={handleSwipeEnd}
-            style={{
-              width: "300px",
-              height: "300px",
-              backgroundColor: swipeStarted ? "green" : "red",
-            }}
           >
             <SC.Account>
               {notification.sender_image ? (
@@ -117,6 +114,7 @@ const Notifications: React.FC = () => {
             <SC.Content>
               {notification.message} {notification.created_at}
             </SC.Content>
+            {/* <SC.Follow>팔로우</SC.Follow> */}
             <SC.Board
             // style={{ borderRadius: "100%", border: "1px solid #ccc" }}
             >
@@ -132,14 +130,21 @@ const Notifications: React.FC = () => {
                 style={{ borderRadius: "100%" }}
               />
             </SC.Board>
-            {deleteIconVisible === index && (
-              <SC.DeleteIcon onClick={handleDeleteNotificationClick}>
-                <FontAwesomeIcon icon={faTrash} style={{ color: "#0095f6" }} />
+
+            {deleteIconVisible && (
+              <SC.DeleteIcon
+                onClick={() => handleDeleteNotificationClick(notification.id)}
+              >
+                <FontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  fontSize={"20px"}
+                  style={{ color: "#0095f6" }}
+                />
               </SC.DeleteIcon>
             )}
           </SC.ContentArea>
-        ))} */}
-        <ContentArea
+        ))}
+        {/* <ContentArea
           onMouseDown={(e) => handleSwipeStart(e)}
           onMouseMove={(e) => handleSwipeMove(e)}
           onMouseUp={handleSwipeEnd}
@@ -163,13 +168,13 @@ const Notifications: React.FC = () => {
           {deleteIconVisible && (
             <SC.DeleteIcon onClick={handleDeleteNotificationClick}>
               <FontAwesomeIcon
-                icon={faTrash}
+                icon={faEllipsis}
                 fontSize={"24px"}
                 style={{ color: "#0095f6" }}
               />
             </SC.DeleteIcon>
           )}
-        </ContentArea>
+        </ContentArea> */}
       </SC.Notifications>
     </>
   );

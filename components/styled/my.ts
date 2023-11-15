@@ -23,6 +23,7 @@ export const MyDescContainer = styled.div`
 export const Intro = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 export const Id = styled.h2`

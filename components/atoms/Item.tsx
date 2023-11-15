@@ -47,7 +47,10 @@ export const SearchItem: React.FC<SearchItemProps> = ({
     <>
       {isHistory ? (
         <ItemContainer>
-          <ClickTo href="/" onClick={handleSearchItemClick}>
+          <ClickTo
+            href={`/user/${result.memberId}`}
+            onClick={handleSearchItemClick}
+          >
             <AccountImg
               src={result.image ? result?.image : "/images/noProfile.jpg"}
               alt="프로필 이미지"
@@ -58,8 +61,8 @@ export const SearchItem: React.FC<SearchItemProps> = ({
               <AccountInfo>
                 <Id>{result.searched}</Id>
                 <Status>
-                  {/* <Job>{result.job}</Job> */}
-                  {/* <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow> */}
+                  <Job>{result.job}</Job>
+                  <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
                 </Status>
               </AccountInfo>
               <CloseButton onClick={handleSearchItemDeleteClick} />
@@ -68,7 +71,10 @@ export const SearchItem: React.FC<SearchItemProps> = ({
         </ItemContainer>
       ) : (
         <ItemContainer>
-          <ClickTo href="/" onClick={handleSearchItemClick}>
+          <ClickTo
+            href={`/user/${result.memberId}`}
+            onClick={handleSearchItemClick}
+          >
             {result.nickName.includes("#") ? (
               <HashtagImg>
                 <Image
@@ -150,7 +156,6 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   index,
 }) => {
   const userInfo = useSelector((state: RootState) => state.user.member);
-  console.log(userInfo);
 
   const isCurrentUserCommentAuthor =
     userInfo && comment && userInfo.member_id === comment.memberId;

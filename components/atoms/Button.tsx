@@ -40,10 +40,24 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
 
 interface FollowButtonProps {
   onClick?: () => void;
+  isFollowing: boolean;
 }
 
-export const FollowButton: React.FC<FollowButtonProps> = ({ onClick }) => {
-  return <FollowBtn onClick={onClick}> 팔로우</FollowBtn>;
+export const FollowButton: React.FC<FollowButtonProps> = ({
+  onClick,
+  isFollowing,
+}) => {
+  return (
+    <FollowBtn
+      onClick={onClick}
+      style={{
+        background: isFollowing ? "#efefef" : "#0095f6",
+        color: isFollowing ? "#222222" : "#ffffff",
+      }}
+    >
+      {isFollowing ? "팔로잉" : "팔로우"}
+    </FollowBtn>
+  );
 };
 
 interface HeartButtonProps {
@@ -81,6 +95,7 @@ const CloseBtn = styled.button`
 
 const FollowBtn = styled.button`
   width: 82px;
+  height: 32px;
   padding: 7px 16px;
   border: none;
   border-radius: 10px;
