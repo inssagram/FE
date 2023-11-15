@@ -81,7 +81,7 @@ const Signup: React.FC = () => {
             <SC.EmailShortcut>@gmail.com</SC.EmailShortcut>
             <SC.EmailShortcut>@naver.com</SC.EmailShortcut>
             <SC.EmailShortcut>@nate.com</SC.EmailShortcut>
-            <SC.EmailShortcut>@daum.com</SC.EmailShortcut>
+            <SC.EmailShortcut>@daum.net</SC.EmailShortcut>
             <SC.EmailShortcut>@info.com</SC.EmailShortcut>
           </SC.EmailList>
           <SC.SubmitButton disabled={buttonDisabled} onClick={submitHandler}>다음</SC.SubmitButton>
