@@ -14,9 +14,6 @@ const firebaseConfig = {
 };
 
 
-console.log("FB_APIKEY:", process.env.FB_APIKEY);
-console.log("FB_AUTHDOMAIN:", process.env.FB_AUTHDOMAIN);
-
 const firebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 export const auth = getAuth(firebaseApp);
