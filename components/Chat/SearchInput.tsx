@@ -1,40 +1,41 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 
-const SearchInput: React.FC<{
-  onSearch: (searchValue: string) => void;
-  selectedAccount: string | null;
-}> = ({ onSearch, selectedAccount }) => {
-  const [searchValue, setSearchValue] = useState("");
-  const [selectedItem, setSelectedItem] = useState<string[]>([]);
+interface AccountData {
+  memberId: number;
+  nickName: string;
+  job: string;
+  friendStatus: boolean;
+  image: string;
+}
 
-  useEffect(() => {
-    if (selectedAccount) {
-      setSelectedItem((prevSelectedItem) => [
-        ...prevSelectedItem,
-        selectedAccount,
-      ]);
-      setSearchValue("");
-      onSearch("");
-    }
-  }, [selectedAccount, onSearch]);
+interface SearchInputProps {
+  onSearch: (searchValue: string) => void;
+  selectedAccount: AccountData[];
+}
+
+const SearchInput: React.FC<SearchInputProps> = ({
+  onSearch,
+  selectedAccount,
+}) => {
+  const [searchValue, setSearchValue] = useState("");
+  console.log(searchValue);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-    onSearch(event.target.value);
+    const value = event.target.value;
+    setSearchValue(value);
+    onSearch(value);
   };
 
   return (
     <>
       <SearchBarContainer>
         <Title>받는 사람:</Title>
-        {selectedItem.length > 0 && (
+        {selectedAccount && selectedAccount.length > 0 && (
           <SelectedAccount>
-            {selectedItem.map((item, index) => (
-              <Tag key={index}>
-                <Name>{item}</Name>
-              </Tag>
-            ))}
+            <Tag>
+              <Name>{selectedAccount[0].nickName}</Name>
+            </Tag>
           </SelectedAccount>
         )}
         <Input

@@ -3,44 +3,26 @@ import Image from "next/image";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { handleError } from "@/utils/errorHandler";
-import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 
-interface SearchData {
+interface AccountData {
   memberId: number;
   nickName: string;
+  job: string;
+  friendStatus: boolean;
   image: string;
 }
 
-interface SearchDataProps {
-  searchTerm: string;
-  onAccountSelect: (selectedAccount: SearchData) => void;
+interface AccountListProps {
+  searchResults: AccountData[];
+  onSelectAccount: (selectedAccount: AccountData) => void;
 }
 
-const AccountList: React.FC<SearchDataProps> = ({
-  searchTerm,
-  onAccountSelect,
+const AccountList: React.FC<AccountListProps> = ({
+  searchResults,
+  onSelectAccount,
 }) => {
-  const [searchResults, setSearchResults] = useState<SearchData[]>([]);
-
-  // 검색 결과 조회
-  const fetchSearchResultList = async (keyword: string) => {
-    try {
-      const res = await getSearchResultAxios(keyword);
-      setSearchResults(res);
-    } catch (err) {
-      handleError(err, "Error searching result:");
-    }
-  };
-
-  useEffect(() => {
-    if (searchTerm) {
-      fetchSearchResultList(searchTerm);
-    }
-  }, [searchTerm]);
-
-  const handleSelectAccount = (selectedAccount: SearchData) => {
-    onAccountSelect(selectedAccount);
+  const handleSelectAccount = (selectedAccount: AccountData) => {
+    onSelectAccount(selectedAccount);
   };
 
   return (
@@ -58,7 +40,7 @@ const AccountList: React.FC<SearchDataProps> = ({
             </Profile>
             <Account>
               <Name>{result.nickName}</Name>
-              {/* <Id>{result.memberId}</Id> */}
+              <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
             </Account>
             <SelectBtn onClick={() => handleSelectAccount(result)}>
               <Icon icon={faCircleCheck} fontSize={"24px"} />
@@ -98,13 +80,14 @@ const Account = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 3px;
   min-width: 288px;
   height: 36px;
   font-size: 14px;
 `;
 const Name = styled.span``;
 
-const Id = styled.span`
+const Follow = styled.span`
   color: #737373;
 `;
 
