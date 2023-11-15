@@ -2,10 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faUserPlus,
+  faPenToSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { BackArrow, BackChevron } from "@/components/atoms/Icon";
 
-export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
+interface HeaderProps {
+  title?: string;
+}
+
+export const PageHeader: React.FC<HeaderProps> = ({ title }) => {
   return (
     <Header>
       <BackChevron />
@@ -14,17 +22,73 @@ export const PageHeader: React.FC<PageHeaderProps> = ({ title }) => {
   );
 };
 
-export const DirectHeader: React.FC = () => {
+export const SearchHistoryHeader: React.FC = () => {
+  return (
+    <HistoryHeader>
+      <HistoryTitle>최근 검색 항목</HistoryTitle>
+      <DeleteBtn>모두 지우기</DeleteBtn>
+    </HistoryHeader>
+  );
+};
+
+interface MyHeaderProps {
+  userInfo: { nickname: string };
+  memberInfo: { nickname: string };
+  isNotMe: boolean;
+}
+
+export const MyPageHeader: React.FC<MyHeaderProps> = ({
+  userInfo,
+  memberInfo,
+  isNotMe,
+}) => {
+  return (
+    <>
+      {isNotMe ? (
+        <MyHeader>
+          <BackChevron />
+          <h2>{memberInfo.nickname}</h2>
+          <span></span>
+        </MyHeader>
+      ) : (
+        <MyHeader>
+          <Link href="/my/settings">
+            <FontAwesomeIcon icon={faGear} fontSize={"24"} />
+          </Link>
+          <h2>{userInfo.nickname}</h2>
+          <Link href="my/recommend" passHref>
+            <FontAwesomeIcon icon={faUserPlus} fontSize={"24"} />
+          </Link>
+        </MyHeader>
+      )}
+    </>
+  );
+};
+
+interface UserInfo {
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+  image: string;
+}
+
+interface DirectHeaderProps {
+  userInfo: UserInfo | null;
+}
+
+export const DirectHeader: React.FC<DirectHeaderProps> = ({ userInfo }) => {
+  if (!userInfo) {
+    return null;
+  }
   return (
     <>
       <DmHeader>
         <BackArrow />
-        <div>februaar</div>
-        <div>
-          <Link href="/direct/new">
-            <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
-          </Link>
-        </div>
+        <h2>{userInfo.nickname}</h2>
+        <Link href="/direct/new">
+          <FontAwesomeIcon icon={faPenToSquare} fontSize={24} />
+        </Link>
       </DmHeader>
     </>
   );
@@ -65,10 +129,6 @@ export const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
   );
 };
 
-interface PageHeaderProps {
-  title?: string;
-}
-
 // Page
 const Title = styled.span`
   margin: 0 auto;
@@ -77,8 +137,28 @@ const Title = styled.span`
   letter-spacing: 0.3px;
 `;
 
+// SearchHistory
+const HistoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 16px 0;
+  border-top: 1px solid #cccccc;
+`;
+
+const HistoryTitle = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const DeleteBtn = styled.button`
+  font-size: 14px;
+  color: #0095f6;
+  border: none;
+  background-color: transparent;
+`;
+
 // Direct
-const Header = styled.div`
+const Header = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -89,6 +169,11 @@ const Header = styled.div`
   letter-spacing: 0.3px;
   padding: 0 16px;
   border-bottom: 1px solid #ccc;
+`;
+
+// My
+const MyHeader = styled(Header)`
+  justify-content: space-between;
 `;
 
 const DmHeader = styled(Header)`

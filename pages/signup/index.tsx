@@ -3,10 +3,17 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { reduceEmail } from "./emailState";
+import { useDispatch } from "react-redux";
 
 const Signup: React.FC = () => {
   const router = useRouter();
+  const dispatch = useDispatch()
+  const BASE_URL = process.env.BASE_URL
   let [email, setEmail] = useState("");
+  const [buttonDisabled, setButtonDisabled] = useState(false)
+
+
 
   const inputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -27,30 +34,34 @@ const Signup: React.FC = () => {
   };
 
   const submitHandler = () => {
+    setButtonDisabled(true)
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailPattern.test(email)) {
       alert("올바른 이메일 형식이 아닙니다");
+      setButtonDisabled(false)
     } else {
-      axios
-        .get("http://localhost:5000/email")
-        .then((response) => {
-          const data = response.data;
-          const filtered = data.filter((v: any) => v.email === email);
-          if (filtered.length === 0) {
-            axios
-              .post("http://localhost:5000/email", { email: `${email}` })
-              .then(() => {
-                router.push("/signup/auth");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          } else {
-            alert("중복된 이메일이 있습니다.");
-          }
+      axios.post(`${BASE_URL}/signup/check/email`, {
+        email: email
+      })
+        .then(() => {
+            dispatch( reduceEmail(email) )
+            axios.post(`${BASE_URL}/signup/auth`,{
+              email: email
+            }).then(() => {
+              router.push("/signup/auth");
+            }).catch((error) => {
+              console.error(error)
+            })
         })
         .catch((error) => {
-          console.log(error);
+          if (error.response.status === 409) {
+            alert("중복된 이메일이 있습니다.");
+            setButtonDisabled(false)
+          }
+          if(error.response.status === 500) {
+            alert("잘못된 접근입니다.")
+            setButtonDisabled(false)
+          }
         });
     }
   };
@@ -73,7 +84,7 @@ const Signup: React.FC = () => {
             <SC.EmailShortcut>@daum.com</SC.EmailShortcut>
             <SC.EmailShortcut>@info.com</SC.EmailShortcut>
           </SC.EmailList>
-          <SC.SubmitButton onClick={submitHandler}>다음</SC.SubmitButton>
+          <SC.SubmitButton disabled={buttonDisabled} onClick={submitHandler}>다음</SC.SubmitButton>
         </SC.Contents>
       </SC.Container>
     </>

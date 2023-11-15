@@ -1,21 +1,18 @@
 import styled from "styled-components";
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { handleError } from "@/utils/errorHandler";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
-
-interface UserInfo {
-  id: string;
-  email: string;
-  nickname: string;
-  profilePic: string;
-}
+import { RootState } from "@/src/redux/Posts/store";
 
 interface PostData {
   postId: number;
   memberId: number;
+  nickname: string;
   image: string;
   contents: string;
   likeCount: number;
@@ -24,22 +21,21 @@ interface PostData {
 }
 
 const Main: React.FC = () => {
+  const userInfo: any = useSelector((state: RootState) => state.user.member);
   const [posts, setPosts] = useState<PostData[]>([]);
-  const userInfo = useSelector<UserInfo[]>((state) => state.user);
-  console.log("User Info:", userInfo);
 
-  const fetchPostData = async () => {
+  const fetchPostData = useCallback(async () => {
     try {
-      const response = await getPostAllAxios();
-      setPosts(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
+      const res = await getPostAllAxios();
+      setPosts(res.data);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchPostData();
-  }, []);
+  }, [fetchPostData]);
 
   return (
     <Layout>
@@ -47,7 +43,7 @@ const Main: React.FC = () => {
         {posts.map((post, index) => (
           <Post key={index}>
             <PostTop post={post} />
-            <PostContents userInfo={userInfo} post={post} />
+            <PostContents post={post} userInfo={userInfo} />
           </Post>
         ))}
       </PostArea>

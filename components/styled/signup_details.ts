@@ -55,6 +55,21 @@ export const Input = styled.input`
     margin-bottom: 10px;
 `
 
+export const Password = styled.input`
+    background-color: gainsboro;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    width: 100%;
+    height: 45px;
+    color: black;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    &::placeholder{
+    font-family: JejuGothic
+  }
+`
+
 export const ProcessState = styled.p`
     color: red;
     top: 40%;

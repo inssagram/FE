@@ -1,10 +1,11 @@
 import * as SC from "@/components/styled/signin";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { login, logout } from "@/src/redux/Posts/userSlice";
+import { loginUser, logoutUser } from "@/src/redux/Posts/userSlice";
 import { RootState } from "@/src/redux/Posts/store";
 
 const Login: React.FC = () => {
@@ -19,14 +20,16 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${backendAPI}/signin`, {
-          email: email,
-          password: password,
+        email: email,
+        password: password,
       });
 
       if (response.status === 200) {
         const token = response.headers.authorization;
         sessionStorage.setItem("token", token);
-        dispatch(login({ email, password }));
+
+        const memberInfo = response.data.data;
+        dispatch(loginUser(memberInfo));
         console.log("토큰: ", token);
         router.push("/main");
       } else {
@@ -37,21 +40,31 @@ const Login: React.FC = () => {
     }
   };
 
-
-
   return (
     <SC.Container>
       <SC.Notification>
         <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
         <SC.Title>Inssagram</SC.Title>
         <SC.LoginCont>
-          <SC.Id alt="이메일입력" placeholder="이메일을 입력하세요" onChange={(e) => setEmail(e.target.value)} />
-          <SC.Password alt="비밀번호입력" placeholder="비밀번호를 입력하세요" onChange={(e) => setPassword(e.target.value)} />
+          <SC.Id
+            alt="이메일입력"
+            placeholder="이메일을 입력하세요"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <SC.Password
+            alt="비밀번호입력"
+            placeholder="비밀번호를 입력하세요"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword>
           <SC.Login onClick={handleLogin}>로그인</SC.Login>
         </SC.LoginCont>
         <SC.NotaMember>
-          계정이 없으신가요?<SC.SignIn>가입하기</SC.SignIn>
+          계정이 없으신가요?
+          <Link href="/signup">
+            <SC.SignIn>가입하기</SC.SignIn>
+          </Link>
         </SC.NotaMember>
       </SC.Notification>
     </SC.Container>

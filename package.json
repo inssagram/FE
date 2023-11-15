@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "server": "json-server --watch kj.json --port 3001",
-    "test": " json-server ./data.json --port 4000"
+    "test": "json-server ./data.json --port 4000",
+    "story": "json-server --watch story.json --port 5000"
   },
   "proxy": "http://localhost:3000",
   "dependencies": {
@@ -18,29 +19,45 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "20.6.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-    "@types/redux-logger": "^3.0.11",
     "@types/react-redux": "^7.1.28",
+    "@types/redux-logger": "^3.0.11",
+    "@types/uuid": "^9.0.7",
     "axios": "^1.5.1",
+    "chokidar": "^3.5.3",
+    "debug": "^4.3.4",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
+    "event-source-polyfill": "^1.0.31",
+    "file-saver": "^2.0.5",
+    "firebase": "^10.5.2",
+    "html2canvas": "^1.4.1",
+    "net": "^1.0.2",
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-helmet": "^6.1.0",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.16.0",
+    "redux": "4",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "sass": "^1.68.0",
+    "sockjs-client": "^1.6.1",
+    "stompjs": "^2.3.3",
     "styled-components": "^6.0.8",
     "typescript": "5.2.2",
-    "vercel": "^32.4.1"
+    "uuid": "^9.0.1",
+    "vercel": "^32.5.3"
   },
   "devDependencies": {
+    "@types/event-source-polyfill": "^1.0.3",
+    "@types/sockjs-client": "^1.5.4",
+    "@types/stompjs": "^2.3.8",
     "@types/styled-components": "^5.1.28"
   }
 }

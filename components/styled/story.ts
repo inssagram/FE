@@ -66,6 +66,11 @@ export const BarCovering = keyframes`
 interface BarProps {
     isAnimating: boolean;
     isComplete: boolean;
+    animationStopped: boolean;
+}
+
+interface filterProps {
+    onFilter: boolean ;
 }
 
 export const BarCover = styled.div<BarProps>`
@@ -86,6 +91,7 @@ export const BarCover = styled.div<BarProps>`
       width: 100%;
       animation: none; // 애니메이션 제거
     `}
+    animation-play-state: ${(props) => (props.animationStopped ? "paused" : 'running')};
 `;
 
 
@@ -132,26 +138,53 @@ export const Contents = styled.div`
 
 
 // ----------------------------------------------------------------------------
-export const Comment = styled.div`
+export const Comment = styled.div<filterProps>`
     position: absolute;
     width: 100%;
     bottom: 0;
     height: 40px;
-    display: flex;
+    display: ${(props) => (props.onFilter ? 'none' : 'flex')};
     align-items: center;
     justify-content: space-around;
     margin-bottom: 10px;
+
 `
 
-export const TextArea = styled.input`
-    color: white;
+export const TextBox = styled.div`
+    display: flex;
+    align-items: center;
+    color: gray;
     border-radius: 50px;
     width: 70%;
     border: 2px white solid;
     height: 100%;
     background-color: transparent;
-    ::placeholder {
-    color: deepPink;
-  }
-  padding-left: 15px;
+    padding-left: 15px;
+`
+
+// --------------------------
+
+export const DMfilter = styled.section<filterProps>`
+    display: ${(props) => (props.onFilter ? 'flex' : 'none')};
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: rgba(0,0,0,0.3fea);
+    top: 0;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+`
+
+export const TextArea = styled.input`
+    position: absolute;
+    bottom: 0;
+    border-radius: 50px;
+    width: 95%;
+    border: 3px white solid;
+    height: 40px;
+    background-color: transparent;
+    padding-left: 15px;
+    margin-bottom: 10px;
 `

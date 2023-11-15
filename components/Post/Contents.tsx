@@ -1,8 +1,9 @@
 import axios from "axios";
-import styled from "styled-components";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as farHeart,
@@ -14,116 +15,132 @@ import {
   faHeart as fasHeart,
   faBookmark as fasBookmark,
 } from "@fortawesome/free-solid-svg-icons";
-
-interface UserInfo {
-  // id: string;
-  // email: string;
-  // nickname: string;
-  // profilePic: string;
-}
+import { handleError } from "@/utils/errorHandler";
+import { HeartButton } from "@/components/atoms/Button";
+import postLikePostAxios from "@/services/postInfo/postLikePost";
+import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
+import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
 
 interface PostData {
   postId: number;
   memberId: number;
-  image: string;
+  nickname: string;
+  image: [string];
   contents: string;
   likeCount: number;
   commentsCounts: number;
   hashTags: string;
 }
 
-interface PostContentsProps {
-  userInfo: UserInfo;
-  post: PostData;
+interface CommentData {
+  postId: number;
 }
 
-const PostContents: React.FC<PostContentsProps> = ({ userInfo, post }) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+interface UserInfo {
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+  profilePic: string;
+}
 
-  const handleLikeClick = () => {
-    setIsLiked(!isLiked);
-    axios
-      .post("http://localhost:3001/likeStatus", {
-        like: !isLiked,
-        user: userInfo,
-      })
-      .then((response) => {
-        console.log("좋아요 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error("좋아요 상태가 업데이트 중 오류가 발생했습니다", error);
-      });
+type HandleLikeClick = (postId: number) => void;
+
+interface PostContentsProps {
+  post: PostData;
+  userInfo: UserInfo;
+  handleLikeClick: HandleLikeClick;
+}
+
+const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const router = useRouter();
+
+  const handleActionClick = async (postId: number, actionType: string) => {
+    try {
+      let res;
+      switch (actionType) {
+        case "like":
+          res = await postLikePostAxios(postId);
+          setIsLiked(!isLiked);
+          break;
+        case "bookmark":
+          res = await (isSaved
+            ? deleteBookmarkPostAxios(postId)
+            : postBookmarkPostAxios(postId));
+          setIsSaved(!isSaved);
+          break;
+        default:
+          break;
+      }
+      console.log("success", res);
+    } catch (err) {
+      handleError(err, "error");
+    }
   };
 
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
-    axios
-      .post("http://localhost:3001/saveStatus", {
-        save: !isSaved,
-        user: userInfo,
-      })
-      .then((response) => {
-        console.log("저장하기 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error(
-          "저장하기 상태가 업데이트 중 오류가 발생했습니다.",
-          error
-        );
-      });
+  const handleCommentClick = () => {
+    router.push(`/my/feeds/${post.postId}/comments`);
   };
 
   return (
-    <>
-      <PostImage
-        src="/images/noImage.svg"
-        alt="게시글"
-        width={412}
-        height={412}
-      />
+    <div>
+      {post.image ? (
+        <PostImage src={post.image[0]} alt="게시글" width={412} height={412} />
+      ) : (
+        <PostImage
+          src={"/images/noImage.svg"}
+          alt="게시글"
+          width={412}
+          height={412}
+        />
+      )}
       <PostDetails>
         <ButtonArea>
           <Left>
-            <FontAwesomeIcon
-              onClick={handleLikeClick}
-              icon={isLiked ? fasHeart : farHeart}
-              fontSize={"24px"}
-              style={{ color: isLiked ? "red" : "inherit" }}
+            <HeartButton
+              isLiked={isLiked}
+              handleLikeClick={() => handleActionClick(post.postId, "like")}
             />
-            <FontAwesomeIcon icon={faComment} fontSize={"24px"} />
-            <Link href={`/direct/in/${post.memberId}`}>
-              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+            <Link href={`/my/feeds/${post.postId}/comments`}>
+              <FontAwesomeIcon icon={faComment} fontSize={24} />
             </Link>
-            {/* {account ? (
+            {userInfo ? (
               <Link href={`/direct/in/${post.memberId}`}>
-                <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
+                <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
               </Link>
             ) : (
-              <FontAwesomeIcon icon={faPaperPlane} fontSize={"24px"} />
-            )} */}
+              <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
+            )}
           </Left>
           <Right>
             <FontAwesomeIcon
-              onClick={handleSaveClick}
+              onClick={() => handleActionClick(post.postId, "bookmark")}
               icon={isSaved ? fasBookmark : farBookmark}
-              fontSize={"24px"}
+              fontSize={24}
             />
           </Right>
         </ButtonArea>
-
-        <LikesArea>godchaani님 외 {post.likeCount}명이 좋아합니다</LikesArea>
-
+        <Link href={`/post/liked_by/${post.postId}`}>
+          <LikesArea>
+            {post.likeCount > 0 && post.likeCount} 명이 좋아합니다
+          </LikesArea>
+        </Link>
         <CommentsArea>
           <Details>
-            <Name>{post.memberId}</Name>
+            <Name>{post.nickname}</Name>
             <Contents>{post.contents}</Contents>
           </Details>
-          <MoreComments>댓글 {post.commentsCounts} 개 모두 보기</MoreComments>
+          {post.commentsCounts > 0 && (
+            <MoreComments onClick={handleCommentClick}>
+              댓글 {post.commentsCounts}개 보기
+            </MoreComments>
+          )}
           <CreatedAt>2일전</CreatedAt>
         </CommentsArea>
       </PostDetails>
-    </>
+    </div>
   );
 };
 
@@ -183,7 +200,7 @@ const CommentsArea = styled.div`
 
 const Details = styled.div`
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 13px;
 `;
 
 const Name = styled.span`

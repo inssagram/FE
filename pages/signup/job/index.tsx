@@ -3,12 +3,31 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { reduceJob } from "../emailState";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { auth } from "@/components/firebase/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const Job = () => {
+  const BASE_URL = process.env.BASE_URL
   const API_KEY = process.env.JOBLIST_API_KEY;
   const [inputValue, setInputValue] = useState("");
   const [jobList, setJobList] = useState<string[]>([]);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const register = useSelector((state: registerState) => state.register)
+
+
+  interface registerState {
+    register: {
+      email: string,
+      password: string,
+      nickname: string,
+      job: string
+    }
+  }
 
   interface JobData {
     job: string;
@@ -30,7 +49,6 @@ const Job = () => {
           }
         }
         setJobList(jobListArr);
-        // console.log(inputValue,jobList);
       } catch (error) {
         console.log(error);
       }
@@ -47,19 +65,21 @@ const Job = () => {
     setInputValue(job);
   };
 
-  const submitButtonHandler = () => {
-    let id = sessionStorage.getItem("accountId");
-    axios
-      .patch(`http://localhost:5000/account/${id}`, {
-        job: inputValue,
+  const submitButtonHandler = async () => {
+    try{
+      await dispatch(reduceJob(inputValue))
+      await createUserWithEmailAndPassword(auth, register.email, register.password)
+      await axios.post(`${BASE_URL}/signup`, {
+        email: register.email,
+        password: register.password,
+        nickname: register.nickname,
+        job: register.job
       })
-      .then(() => {
-        alert("직업이 설정 되었습니다");
-        router.push("/");
-      })
-      .catch((error) => {
+        alert("계정이 생성되었습니다.");
+        router.push("/signin");
+      } catch (error) {
         console.log(error);
-      });
+      }
   };
 
   return (
