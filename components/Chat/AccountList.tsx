@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,42 +15,59 @@ interface AccountData {
 interface AccountListProps {
   searchResults: AccountData[];
   onSelectAccount: (selectedAccount: AccountData) => void;
+  isAccountSelected: boolean;
+  setIsAccountSelected: Dispatch<SetStateAction<boolean>>;
 }
 
 const AccountList: React.FC<AccountListProps> = ({
   searchResults,
   onSelectAccount,
+  isAccountSelected,
+  setIsAccountSelected,
 }) => {
   const handleSelectAccount = (selectedAccount: AccountData) => {
     onSelectAccount(selectedAccount);
+    setIsAccountSelected(true);
   };
+
+  useEffect(() => {
+    setIsAccountSelected(false);
+  }, [setIsAccountSelected]);
 
   return (
     <>
-      {searchResults && searchResults.length > 0 ? (
-        searchResults.map((result, index) => (
-          <ResultContainer key={index}>
-            <Profile>
-              <Image
-                src={result.image ? result.image : "/images/noProfile.jpg"}
-                alt="프로필"
-                width={44}
-                height={44}
-              />
-            </Profile>
-            <Account>
-              <Name>{result.nickName}</Name>
-              <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
-            </Account>
-            <SelectBtn onClick={() => handleSelectAccount(result)}>
-              <Icon icon={faCircleCheck} fontSize={"24px"} />
-            </SelectBtn>
-          </ResultContainer>
-        ))
-      ) : (
+      {isAccountSelected ? (
         <ResultsList>
-          <Results>계정을 찾을 수가 없습니다.</Results>
+          <Results>대화 상대를 검색해보세요.</Results>
         </ResultsList>
+      ) : (
+        <>
+          {searchResults && searchResults.length > 0 ? (
+            searchResults.map((result, index) => (
+              <ResultContainer key={index}>
+                <Profile>
+                  <Image
+                    src={result.image ? result.image : "/images/noProfile.jpg"}
+                    alt="프로필"
+                    width={44}
+                    height={44}
+                  />
+                </Profile>
+                <Account>
+                  <Name>{result.nickName}</Name>
+                  <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
+                </Account>
+                <SelectBtn onClick={() => handleSelectAccount(result)}>
+                  <Icon icon={faCircleCheck} fontSize={"24px"} />
+                </SelectBtn>
+              </ResultContainer>
+            ))
+          ) : (
+            <ResultsList>
+              <Results>계정을 찾을 수가 없습니다.</Results>
+            </ResultsList>
+          )}
+        </>
       )}
     </>
   );
