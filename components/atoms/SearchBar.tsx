@@ -34,7 +34,7 @@ const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
 
   useEffect(() => {
     onSearch(searchValue);
-  }, [searchValue]);
+  }, [onSearch, searchValue]);
 
   return (
     <SearchBarContainer>

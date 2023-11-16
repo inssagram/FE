@@ -11,15 +11,16 @@ interface AccountData {
 
 interface SearchInputProps {
   onSearch: (searchValue: string) => void;
-  selectedAccount: AccountData[];
+  selectedAccount: AccountData | null;
+  isAccountSelected: boolean;
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({
   onSearch,
   selectedAccount,
+  isAccountSelected,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  console.log(searchValue);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -27,20 +28,28 @@ const SearchInput: React.FC<SearchInputProps> = ({
     onSearch(value);
   };
 
+  useEffect(() => {
+    if (isAccountSelected) {
+      setSearchValue("");
+    }
+  }, [isAccountSelected]);
+
   return (
     <>
       <SearchBarContainer>
         <Title>받는 사람:</Title>
-        {selectedAccount && selectedAccount.length > 0 && (
+        {selectedAccount && selectedAccount.nickName && (
           <SelectedAccount>
             <Tag>
-              <Name>{selectedAccount[0].nickName}</Name>
+              <Name>
+                {selectedAccount.nickName ? selectedAccount.nickName : ""}
+              </Name>
             </Tag>
           </SelectedAccount>
         )}
         <Input
           type="text"
-          placeholder="검색..."
+          placeholder={"검색..."}
           value={searchValue}
           onChange={handleInputChange}
         />

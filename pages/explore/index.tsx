@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { handleError } from "@/utils/errorHandler";
-import SearchBar from "@/components/input/SearchBar";
+import SearchBar from "@/components/atoms/SearchBar";
 import Footer from "@/components/Footer";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
 

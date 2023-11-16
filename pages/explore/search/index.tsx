@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { handleError } from "@/utils/errorHandler";
 import { SearchHistoryHeader } from "@/components/atoms/Header";
 import { SearchItem } from "@/components/atoms/Item";
-import SearchBar from "@/components/input/SearchBar";
+import SearchBar from "@/components/atoms/SearchBar";
 import Footer from "@/components/Footer";
 import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import getSearchHistoryAxios from "@/services/searchInfo/getSearchHistory";
@@ -84,6 +84,8 @@ const Search: React.FC = () => {
   useEffect(() => {
     if (searchTerm) {
       fetchSearchResultData(searchTerm);
+    } else {
+      setSearchResults([]);
     }
   }, [searchTerm]);
 
@@ -102,7 +104,8 @@ const Search: React.FC = () => {
             />
           ))}
         {searchResults.length > 0 ? "" : <SearchHistoryHeader />}
-        {searchHistory.length > 0 ? (
+        {searchHistory.length > 0 &&
+          !searchTerm &&
           searchHistory.map((history, index) => (
             <SearchItem
               key={index}
@@ -110,8 +113,8 @@ const Search: React.FC = () => {
               handleDelete={() => handleSearchItemDeleteClick(history.searched)}
               isHistory
             />
-          ))
-        ) : (
+          ))}
+        {!searchResults.length && !searchHistory.length && (
           <NoHistory>최근 검색 기록이 없습니다.</NoHistory>
         )}
       </Container>
