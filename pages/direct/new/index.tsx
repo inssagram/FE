@@ -3,105 +3,98 @@ import Link from "next/link";
 import styled from "styled-components";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { handleError } from "@/utils/errorHandler";
-import { BackArrow } from "@/components/atoms/Icon";
+import { DirectNewHeader } from "@/components/atoms/Header";
 import SearchInput from "@/components/Chat/SearchInput";
 import AccountList from "@/components/Chat/AccountList";
+import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
+import WebSocketHandler from "@/services/chatInfo/webSocketHandler";
 import postChatRoomAxios from "@/services/chatInfo/postChatRoom";
+import { RootState } from "@/src/redux/Posts/store";
 
-interface SearchData {
-  memberId: number;
+interface UserData {
+  member_id: number;
   nickname: string;
-  profileImg: string;
+  job: string;
+  image: string;
 }
 
-const New: React.FC<SearchData> = () => {
+interface AccountData {
+  memberId: number;
+  nickName: string;
+  job: string;
+  friendStatus: boolean;
+  image: string;
+}
+
+const New: React.FC<AccountData> = () => {
+  const userInfo = useSelector((state: RootState) => state.user.member);
   const userToken = sessionStorage.getItem("token");
   const [roomId, setRoomId] = useState<number | null>(null);
+  console.log(roomId);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState<AccountData[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<AccountData[]>([]);
+  console.log(selectedAccount);
 
   const router = useRouter();
 
-  // 채팅방 구독
-  const subscribeToChatRoom = (roomId: number | null, token: string) => {
-    if (roomId !== null) {
-      const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
-      const stompClient = Stomp.over(socket);
-
-      const connectCallback = () => {
-        console.log("Stomp client 연결됐어!!");
-
-        stompClient.subscribe(
-          `/exchange/chat.exchange/room.${roomId}`,
-          (message) => {
-            const receivedMessage = JSON.parse(message.body);
-            console.log("Received message:", receivedMessage);
-          }
-        );
-      };
-
-      stompClient.connect({ Authorization: token }, connectCallback);
-    }
-  };
-
   const handleSearch = (searchValue: string) => {
     setSearchTerm(searchValue);
-  };
-
-  const handleAccountSelect = (selectedAccount: SearchData) => {
-    setSelectedAccount(selectedAccount);
-  };
-
-  const handleNextClick = () => {
-    if (selectedAccount) {
-      const { memberId } = selectedAccount;
-      handleChatRoomClick(memberId, memberId);
+    if (!searchValue) {
+      setSelectedAccount([]);
     }
   };
 
-  // 채팅방 생성 및 입장 선택된 유저 id 담아서 요청?
-  const handleChatRoomClick = async (
-    firstParticipantId: number,
-    secondParticipantId: number
-  ) => {
-    if (selectedAccount) {
+  // 검색 결과 조회
+  const fetchSearchResultList = async (keyword: string) => {
+    try {
+      const res = await getSearchResultAxios(keyword);
+      setSearchResults(res);
+    } catch (err) {
+      handleError(err, "Error searching result:");
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchSearchResultList(searchTerm);
+    }
+  }, [searchTerm]);
+
+  const handleSelectedAccount = (account: AccountData) => {
+    setSelectedAccount([account]);
+  };
+
+  const handleChatRoomClick = async () => {
+    if (userInfo && selectedAccount.length > 0) {
+      const firstParticipantId = userInfo.member_id;
+      const secondParticipantId = selectedAccount[0].memberId;
+
       try {
         const res = await postChatRoomAxios(
           firstParticipantId,
           secondParticipantId
         );
-        const createdRoomId = res.roomId;
-
-        // 채팅방 입장
-        setRoomId(createdRoomId);
-        subscribeToChatRoom(createdRoomId, userToken || "");
-        console.log(`Joining Chat Room: ${createdRoomId}`);
-        router.push(`/direct/in/${createdRoomId}`);
+        const createdRoomId = res;
+        setRoomId(createdRoomId.chatRoomId);
+        router.push(`/direct/in/${createdRoomId.chatRoomId}`);
       } catch (err) {
         handleError(err, "Error creating chat room:");
       }
     }
   };
 
-  useEffect(() => {
-    if (roomId !== null) {
-      subscribeToChatRoom(roomId, userToken || "");
-    }
-  }, [roomId, userToken]);
-
   return (
     <>
-      <NewHeader>
-        <BackArrow />
-        <HeaderTitle>새로운 메시지</HeaderTitle>
-        {selectedAccount && (
-          <Link href={`/direct/in/${selectedAccount.id}`}>
-            <Next onClick={handleNextClick}>다음</Next>
-          </Link>
-        )}
-      </NewHeader>
+      {/* <WebSocketHandler
+        onConnect={() => {}}
+        roomId={roomId}
+        // onMessageReceived={handleNewMessageReceived}
+      /> */}
+      <DirectNewHeader onChatRoomClick={handleChatRoomClick} />
       <div>
         <SearchInput
           onSearch={handleSearch}
@@ -109,8 +102,8 @@ const New: React.FC<SearchData> = () => {
         />
         <ResultsContainer>
           <AccountList
-            searchTerm={searchTerm}
-            onAccountSelect={handleAccountSelect}
+            searchResults={searchResults}
+            onSelectAccount={handleSelectedAccount}
           />
         </ResultsContainer>
       </div>
@@ -118,32 +111,8 @@ const New: React.FC<SearchData> = () => {
   );
 };
 
-export default New;
-
-const NewHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 44px;
-  padding: 0 16px;
-  border-bottom: 1px solid #ccc;
-`;
-
-const HeaderTitle = styled.h2`
-  margin: 0 auto;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-`;
-
-const Next = styled.button`
-  padding-left: 12px;
-  border: none;
-  font-size: 14px;
-  color: #0095f6;
-  background-color: transparent;
-`;
-
 const ResultsContainer = styled.div`
   margin-top: 16px;
 `;
+
+export default New;
