@@ -15,11 +15,8 @@ export interface PostType {
 
 export interface CreatePostType {
   memberId: number;
-  image: string;
+  image: string[];
   contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  postId: number;
   // 필요한 경우 여기에 더 많은 필드를 추가할 수 있습니다.
 }
 

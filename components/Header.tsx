@@ -1,103 +1,93 @@
-import React from "react";
 import Link from "next/link";
-import { useState, useRef } from "react";
-import axios from "axios";
-import styled, { css } from "styled-components";
+import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import * as SC from "@/components/styled/header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquarePlus, faHeart } from "@fortawesome/free-regular-svg-icons";
-import { useRouter } from "next/router";
-
-const Title = styled.h1`
-  font-size: 25px;
-`;
-
-const Container = styled.div`
-  width: 412px;
-  height: 44px;
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 16px;
-  position: fixed;
-  background-color: #ffffff;
-  color: #222222;
-  z-index: 10;
-  border-bottom: 1px solid #e2e2e2;
-`;
-
-const IconPannels = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-`;
-
-const PlusBtn = styled.button`
-  border-style: none;
-  background-color: transparent;
-  padding: 12px;
-`;
-
-const HeartBtn = styled.button`
-  border-style: none;
-  background-color: transparent;
-`;
+import { faComment } from "@fortawesome/free-solid-svg-icons";
+import { RootState } from "@/src/redux/Posts/store";
 
 interface HeaderProps {
   setSelectedImage: (src: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-  const router = useRouter();
+  const userInfo = useSelector((state: RootState) => state.user.member);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [showBubble, setShowBubble] = useState<boolean>(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const eventSource = new EventSource(
+      `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
+    );
+
+    eventSource.addEventListener("sse", (event) => {
+      const eventData = JSON.parse(event.data);
+      console.log("message: " + eventData.message);
+      console.log("unreadCount: " + eventData.unreadCount);
+      setUnreadCount(eventData.unreadCount);
+    });
+
+    eventSource.onerror = (error) => {
+      console.error("SSE connection error:", error);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowBubble(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [userInfo?.member_id]);
 
   const createBoards = () => {
-    fileInputRef.current?.click();
-  };
-  const [selectedImage, setSelectedImage] = useState<string>("");
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 파일 선택하더라도 아래 이미지 주소만 사용하려고 테스트 중임다
-    const fixedImageSrc =
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg";
-    setSelectedImage(fixedImageSrc);
-
-    localStorage.setItem("selectedImage", fixedImageSrc);
-    try {
-      const response = await axios.post("http://localhost:4000/posts", {
-        image: fixedImageSrc,
-      });
-      if (response.status === 201) {
-        alert("Image uploaded!");
-        router.push("/create");
-      }
-    } catch (error) {
-      alert("Failed to upload the image");
-    }
+    router.push("create/details");
   };
 
   return (
-    <Container>
-      <Title>
+    <SC.Container>
+      <SC.Title>
         <Link href="/">Inssagram</Link>
-      </Title>
-      <IconPannels>
-        <PlusBtn id="createBoards" onClick={createBoards}>
+      </SC.Title>
+      <SC.IconPannels>
+        <SC.PlusBtn id="createBoards" onClick={createBoards}>
           <FontAwesomeIcon icon={faSquarePlus} fontSize={"24px"} />
-        </PlusBtn>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-          accept="image/*"
-        />
-        <HeartBtn>
-          <Link href="/notifications">
-            <FontAwesomeIcon icon={faHeart} fontSize={"24px"} />
-          </Link>
-        </HeartBtn>
-      </IconPannels>
-    </Container>
+        </SC.PlusBtn>
+        {unreadCount > 0 && <SC.NotiAlarm />}
+        {showBubble && unreadCount > 0 ? (
+          <SC.HeartBtn>
+            <Link href="/notifications">
+              <FontAwesomeIcon icon={faHeart} fontSize={"24px"} />
+            </Link>
+            <SC.SpeechBubble>
+              <FontAwesomeIcon
+                icon={faComment}
+                fontSize={"18px"}
+                flip="horizontal"
+              />
+              <SC.NotiCount>{unreadCount}</SC.NotiCount>
+            </SC.SpeechBubble>
+          </SC.HeartBtn>
+        ) : (
+          <SC.HeartBtn>
+            <Link href="/notifications">
+              <FontAwesomeIcon icon={faHeart} fontSize={"24px"} />
+            </Link>
+          </SC.HeartBtn>
+        )}
+      </SC.IconPannels>
+    </SC.Container>
   );
 };
 

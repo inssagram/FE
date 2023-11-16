@@ -3,9 +3,13 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { reduceNickname, reducePassword } from "../emailState";
+import { useDispatch } from "react-redux";
 
 const Details: React.FC = () => {
   const router = useRouter();
+  const BASE_URL = process.env.BASE_URL
+  const dispatch = useDispatch()
   const [nicknameSet, setNicknameSet] = useState(false);
   const [passwordSet, setPasswordSet] = useState(false);
 
@@ -21,6 +25,7 @@ const Details: React.FC = () => {
   const [passwordCheckProcessState, setPasswordCheckProcessState] =
     useState("");
   const [wrongWayPasswordCheck, setWrongWayPasswordCheck] = useState(false);
+
   const inputNicknameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   };
@@ -57,19 +62,21 @@ const Details: React.FC = () => {
       setNicknameSet(false);
       return;
     } else {
-      axios.get("http://localhost:5000/account").then((response) => {
-        const data = response.data;
-        const filtered = data.filter((v: any) => v.nickname === nickname);
-        if (filtered.length === 0) {
-          setNicknameProcessState("");
-          setWrongWayNickname(false);
-          setNicknameSet(true);
-        } else {
-          setNicknameProcessState("중복된 계정이 있습니다.");
-          setWrongWayNickname(true);
-          setNicknameSet(false);
-          return;
-        }
+      axios.post(`${BASE_URL}/signup/check/nickname`,{
+        nickname: nickname
+      })
+      .then(() => {
+        setNicknameProcessState("");
+        setWrongWayNickname(false);
+        setNicknameSet(true);
+      })
+      .catch((error) => {
+        setNicknameProcessState(
+          error.response.data.message
+        );
+        console.log(error)
+        setWrongWayNickname(true);
+        setNicknameSet(false); 
       });
     }
   };
@@ -113,19 +120,9 @@ const Details: React.FC = () => {
 
   const setHandler = () => {
     if (passwordSet && nicknameSet) {
-      axios
-        .post("http://localhost:5000/account", {
-          nickname: nickname,
-          password: password,
-        })
-        .then((response) => {
-          alert("아이디와 비밀번호가 설정 되었습니다");
-          sessionStorage.setItem("accountId", response.data.id);
-          router.push("/signup/job");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        dispatch(reduceNickname(nickname))
+        dispatch(reducePassword(password))
+        router.push('/signup/job')
     } else {
       alert("계정 정보가 잘못입력 되었습니다");
     }
@@ -153,7 +150,7 @@ const Details: React.FC = () => {
               onBlur={nicknameHandler}
               style={{ borderColor: wrongWayNickname ? "red" : "transparent" }}
             ></SC.Input>
-            <SC.Input
+            <SC.Password
               type="password"
               placeholder="비밀번호를 입력하세요"
               onChange={inputPasswordHandler}
@@ -163,8 +160,8 @@ const Details: React.FC = () => {
                 borderColor: wrongWayPassword ? "red" : "transparent",
                 fontFamily: "Aria",
               }}
-            ></SC.Input>
-            <SC.Input
+            ></SC.Password>
+            <SC.Password
               type="password"
               placeholder="비밀번호를 재확인 해주세요"
               onChange={inputPasswordCheckHandler}
@@ -174,7 +171,7 @@ const Details: React.FC = () => {
                 borderColor: wrongWayPasswordCheck ? "red" : "transparent",
                 fontFamily: "Aria",
               }}
-            ></SC.Input>
+            ></SC.Password>
           </SC.InputBox>
           <SC.ProcessState>
             {nicknameProcessState}

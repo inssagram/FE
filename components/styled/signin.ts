@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Container = styled.div`
   width: 100%;
   height: 915px;
-  background-color: aliceblue;
 `;
 
 export const Notification = styled.div`
@@ -42,6 +41,7 @@ export const Id = styled.input`
   border-style: none;
   background-color: whitesmoke;
   padding-left: 5px;
+  color: black;
 `;
 
 export const Password = styled.input`
@@ -51,6 +51,11 @@ export const Password = styled.input`
   border-style: none;
   background-color: whitesmoke;
   padding-left: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+  &::placeholder {
+    font-family: JejuGothic;
+  }
 `;
 
 export const DownButton = styled.button`

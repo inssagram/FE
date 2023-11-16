@@ -1,121 +1,169 @@
-import React, { useState, useEffect, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTable, faMobileScreen, faGear, faChevronDown, faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/components/styled/my";
-import Footer from "@/components/Footer";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
-import { useCallback} from "react";
 import { useRouter } from "next/router";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useSelector } from "react-redux";
+import * as SC from "@/components/styled/my";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTable,
+  faMobileScreen,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
+import { RootState } from "@/src/redux/Posts/store";
+import { handleError } from "@/utils/errorHandler";
+import { MyPageHeader } from "@/components/atoms/Header";
+import { FollowButton } from "@/components/atoms/Button";
+import Footer from "@/components/Footer";
+import getUserDetailAxios from "@/services/userInfo/getUserDetail";
+import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
+import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
 
-export interface Post {
-  id: number;
-  userId: string;
-  content: string;
-  imageUrl: string;
+interface MemberData {
+  email: string;
+  memberId: number;
+  nickname: string;
+  companyName: string;
+  profilePic: string;
+  followers: [followerId: number, followerName: string];
+  following: string[];
+  posts: number;
+}
+
+interface PostData {
+  memberId: number;
+  nickName: string;
+  followed: boolean;
+  postId: number;
+  image: string[];
+  contents: string;
+  postLike: boolean;
+  bookmarked: boolean;
+  likeCount: number;
+  createdAt: string;
+  commentsCounts: number;
+  location: string;
+  taggedMemberIds: string;
 }
 
 interface MyProps {
+  memberInfo: MemberData;
+  posts: PostData;
   selectedUserName?: string;
 }
 
-const My: React.FC<MyProps> = ({ selectedUserName = "아무개" }) => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [isClient, setIsClient] = useState(false);
-  const sentinelRef = useRef(null);
-  const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
-  const [userName, setUserName] = useState<string | null>(null);
-  
+const User: React.FC<MyProps> = () => {
+  const userInfo = useSelector((state: RootState) => state.user.member);
+  const [memberInfo, setMemberInfo] = useState<MemberData>();
+  const [posts, setPosts] = useState<PostData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  // const [isClient, setIsClient] = useState(false);
+  // const sentinelRef = useRef(null);
+  // const feedViewConRef = useRef(null);
+
   const router = useRouter();
-  const userNameFromQuery = router.query.userName as string;
-  const userIdFromPath = router.query.id as string;
+  const { id } = router.query;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/posts");
-        setPosts(response.data);
-      } catch (error) {
-        console.error("데이터를 불러오는 데 실패했습니다.", error);
-      }
-    };
+  // const userNameFromQuery = router.query.userName as string;
+  // const userIdFromPath = router.query.id as string;
 
-    setIsClient(true);
-    fetchData();
-  }, []);
-
-  const repeatData = useCallback(() => {
-    const currentDataLength = posts.length;
-    const newPosts = posts.map((post, index) => {
-      return {
-        ...post,
-        id: post.id + currentDataLength,
-      };
-    });
-    setPosts((prev) => [...prev, ...newPosts]);
-  }, [posts]);
-
-  useEffect(() => {
-    const options = {
-      root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
-      rootMargin: "0px",
-      threshold: 0.1,
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        repeatData();
-      }
-    }, options);
-
-    const currentSentinel = sentinelRef.current;
-
-    if (currentSentinel) {
-      observer.observe(currentSentinel);
+  // 특정 유저 상세 정보 조회
+  const fetchUserDetailData = async (id: number) => {
+    try {
+      const res = await getUserDetailAxios(id);
+      setMemberInfo(res.data);
+      getFollowStatus(res.data.followers);
+    } catch (err) {
+      handleError(err, "Error fetcing member detail:");
     }
+  };
 
-    return () => {
-      if (currentSentinel) {
-        observer.unobserve(currentSentinel);
-      }
-    };
-  }, [repeatData]);
+  // 특정 유저가 작성한 게시글 조회
+  const fetchMyPostAllData = async (memberId: number) => {
+    try {
+      const res = await getMyPostAllAxios(memberId);
+      setPosts(res.data);
+      setLoading(false);
+    } catch (err) {
+      handleError(err, "Error fetching posts:");
+      setLoading(true);
+    }
+  };
 
-  if (!isClient) {
-    return null;
-  }
+  // 팔로우 상태
+  const getFollowStatus = (memberInfo) => {
+    if (userInfo) {
+      const isFollowing = memberInfo.some(
+        (follower) => follower.followerName === userInfo.nickname
+      );
+      setIsFollowing(isFollowing);
+    }
+  };
+
+  const handleFollowClick = async (followId: number) => {
+    try {
+      const response = await postMemberFollowAxios(followId);
+      console.log("success", response);
+      setIsFollowing((setIsFollowing) => !setIsFollowing);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchUserDetailData(id);
+      fetchMyPostAllData(id);
+    }
+  }, [id]);
+
   return (
     <>
-      <SC.Header>
-        <FontAwesomeIcon icon={faGear} fontSize={"2rem"} />
-        <SC.HeaderCon>
-          <h2>{userIdFromPath || "Default ID"}</h2>
-          <FontAwesomeIcon icon={faChevronDown} fontSize={"1.5rem"} />
-        </SC.HeaderCon>
-        <Link href="my/recommend" passHref>
-          <FontAwesomeIcon icon={faUserPlus} fontSize={"2rem"} />
-        </Link>
-      </SC.Header>
-      <SC.Container>
-        <SC.ProfileLeft>
-          <SC.MyProfile />
-          <SC.UserName>{userNameFromQuery || "아무개"}</SC.UserName>
-        </SC.ProfileLeft>
-        <SC.MyIdContainer>
-          <SC.UserId>{userIdFromPath || "랜덤 아이디"}</SC.UserId>
-          <SC.MyIdGroup>
-            <SC.ProfileEdit>
-              <Link href="my/settings/profile" passHref>
-                <SC.ProfileBox>팔로잉</SC.ProfileBox>
-              </Link>
-            </SC.ProfileEdit>
-            <SC.ProfileEdit>
-              <SC.ProfileBox>메세지</SC.ProfileBox>
-            </SC.ProfileEdit>
-          </SC.MyIdGroup>
-        </SC.MyIdContainer>
-      </SC.Container>
+      {userInfo && memberInfo && (
+        <MyPageHeader
+          userInfo={userInfo}
+          memberInfo={memberInfo}
+          isNotMe={true}
+        />
+      )}
+
+      {memberInfo && (
+        <SC.Container>
+          <SC.Profile>
+            <Image
+              src={
+                memberInfo.profilePic
+                  ? memberInfo.profilePic
+                  : "/images/noProfile.jpg"
+              }
+              alt="프로필"
+              width={77}
+              height={77}
+              style={{ borderRadius: "100%" }}
+            />
+          </SC.Profile>
+
+          <SC.MyDescContainer>
+            <SC.Intro>
+              <SC.Id>{memberInfo.nickname}</SC.Id>
+              <SC.Company>{memberInfo.companyName}</SC.Company>
+            </SC.Intro>
+            <SC.DetailArea>
+              <FollowButton
+                onClick={() => handleFollowClick(id)}
+                isFollowing={isFollowing}
+              />
+              <SC.Detail href="/direct/new">
+                <SC.Desc>메세지 보내기</SC.Desc>
+              </SC.Detail>
+            </SC.DetailArea>
+          </SC.MyDescContainer>
+        </SC.Container>
+      )}
+
       <SC.MyDataContainer>
         <SC.MyDataValue>
           <SC.DataName>게시물</SC.DataName>
@@ -123,30 +171,114 @@ const My: React.FC<MyProps> = ({ selectedUserName = "아무개" }) => {
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로워</SC.DataName>
-          <SC.DataValue>485</SC.DataValue>
+          <Link href="/my/followers">
+            <SC.DataValue>485</SC.DataValue>
+          </Link>
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로우</SC.DataName>
-          <SC.DataValue>557</SC.DataValue>
+          <Link href="/my/follows">
+            <SC.DataValue>557</SC.DataValue>
+          </Link>
         </SC.MyDataValue>
       </SC.MyDataContainer>
       <SC.IconContainer>
         <FontAwesomeIcon icon={faTable} />
         <FontAwesomeIcon icon={faMobileScreen} />
-        <FontAwesomeIcon icon={faBookmark} />
         <FontAwesomeIcon icon={faUser} />
       </SC.IconContainer>
-      <SC.FeedViewCon>
+
+      {/* <SC.FeedViewCon>
         {posts.map((post) => (
           <Link href={`/my/feeds/${post.id}`} passHref key={post.id}>
-            <SC.Feed style={{ backgroundImage: `url(${post.imageUrl})` }}></SC.Feed>
+            <SC.Feed
+              style={{ backgroundImage: `url(${post.imageUrl})` }}
+            ></SC.Feed>
           </Link>
         ))}
         <SC.Sentinel ref={sentinelRef}></SC.Sentinel>
-      </SC.FeedViewCon>
+      </SC.FeedViewCon> */}
+
+      <SC.Content>
+        {posts.length > 0 && loading ? (
+          <SC.Loading>
+            <FontAwesomeIcon icon={faSpinner} fontSize={"25px"} />
+          </SC.Loading>
+        ) : (
+          posts.map((post) => (
+            <Link key={post.postId} href={`/my/feeds/${post.postId}`} passHref>
+              {post.image.map((image, index) => (
+                <Image
+                  key={index}
+                  src={image}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              ))}
+            </Link>
+          ))
+        )}
+        {/* <SC.Sentinel ref={sentinelRef}></SC.Sentinel> */}
+      </SC.Content>
+
       <Footer />
     </>
   );
 };
 
-export default My;
+export default User;
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     try {
+//       const response = await axios.get("http://localhost:4000/posts");
+//       setPosts(response.data);
+//     } catch (err) {
+//       handleError(err, "데이터를 불러오는 데 실패했습니다.");
+//     }
+//   };
+//   setIsClient(true);
+//   fetchData();
+// }, []);
+
+// const repeatData = useCallback(() => {
+//   const currentDataLength = posts.length;
+//   const newPosts = posts.map((post, index) => {
+//     return {
+//       ...post,
+//       id: post.id + currentDataLength,
+//     };
+//   });
+//   setPosts((prev) => [...prev, ...newPosts]);
+// }, [posts]);
+
+// useEffect(() => {
+//   const options = {
+//     root: feedViewConRef.current,
+//     rootMargin: "0px",
+//     threshold: 0.1,
+//   };
+
+//   const observer = new IntersectionObserver((entries) => {
+//     if (entries[0].isIntersecting) {
+//       repeatData();
+//     }
+//   }, options);
+
+//   const currentSentinel = sentinelRef.current;
+
+//   if (currentSentinel) {
+//     observer.observe(currentSentinel);
+//   }
+
+//   return () => {
+//     if (currentSentinel) {
+//       observer.unobserve(currentSentinel);
+//     }
+//   };
+// }, [repeatData]);
+
+// if (!isClient) {
+//   return null;
+// }

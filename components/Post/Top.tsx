@@ -1,42 +1,67 @@
-import axios from "axios";
-import styled from "styled-components";
+import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { EllipsisModal, AccountInfoModal } from "../atoms/Modal";
+import {
+  EllipsisModal,
+  MyEllipsisModal,
+  AccountInfoModal,
+  EditModal,
+} from "../atoms/Modal";
+import { RootState } from "@/src/redux/Posts/store";
+import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
+
+interface UserInfo {
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+}
 
 interface PostData {
   postId: number;
   memberId: number;
+  nickName: string;
   image: string;
+  memberImage: string;
   contents: string;
   likeCount: number;
   commentsCounts: number;
   hashTags: string;
 }
 
-const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
+interface PostContentsProps {
+  post: PostData;
+}
+
+const PostTop: React.FC<PostContentsProps> = ({ post }) => {
+  const userInfo = useSelector(
+    (state: RootState) => state.user.member
+  ) as UserInfo;
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const handleFollowClick = () => {
-    setIsFollowing(!isFollowing);
-    axios
-      .post("http://localhost:3001/followStatus", {
-        follow: !isFollowing,
-      })
-      .then((response) => {
-        console.log("팔로우 상태가 서버에 업데이트되었습니다.", response);
-      })
-      .catch((error) => {
-        console.error("팔로우 상태가 업데이트 중 오류가 발생했습니다.", error);
-      });
+  const isCurrentUserPost = userInfo.member_id === post.memberId;
+  const isCurrentUser = userInfo.nickname === post.nickName;
+
+  const handleFollowClick = async () => {
+    try {
+      const followId = post.memberId;
+      const response = await postMemberFollowAxios(followId);
+      console.log("success", response);
+      setIsFollowing(!isFollowing);
+    } catch (error) {
+      console.error("error", error);
+    }
   };
 
   const handleEtcClick = () => {
-    setIsEllipsisModalOpen(!isEllipsisModalOpen);
+    setIsEllipsisModalOpen(true);
   };
 
   const handleAccountInfoClick = () => {
@@ -44,7 +69,13 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
     setIsAccountInfoModalOpen(true);
   };
 
+  const handleEditClick = () => {
+    setIsEllipsisModalOpen(false);
+    setIsEditModalOpen(true);
+  };
+
   const handleInfoClose = () => {
+    setIsEllipsisModalOpen(false);
     setIsAccountInfoModalOpen(false);
   };
 
@@ -59,35 +90,51 @@ const PostTop: React.FC<{ post: PostData | undefined }> = ({ post }) => {
   return (
     <Top>
       <Account>
-        <ProfileImage
-          src="/images/noProfile.jpg"
-          alt="프로필"
-          width={32}
-          height={32}
-          style={{ borderRadius: "100%" }}
-        />
-        <Id>{post.memberId}</Id>
-        <FollowBtn
-          onClick={handleFollowClick}
-          style={{
-            color: isFollowing ? "#262626" : "#0095f6",
-          }}
-        >
-          {isFollowing ? `팔로잉` : `팔로우`}
-        </FollowBtn>
+        <Link href={isCurrentUser ? "/my" : `/user/${post.memberId}`}>
+          <ProfileImage
+            src={post.memberImage ? post.memberImage : "/images/noProfile.jpg"}
+            alt="프로필"
+            width={32}
+            height={32}
+            style={{ borderRadius: "100%" }}
+          />
+        </Link>
+        <Id>{post.nickName}</Id>
+        {!isCurrentUserPost && (
+          <FollowBtn
+            onClick={handleFollowClick}
+            style={{
+              color: isFollowing ? "#262626" : "#0095f6",
+            }}
+          >
+            {isFollowing ? `팔로잉` : `팔로우`}
+          </FollowBtn>
+        )}
       </Account>
       <EtcIcon onClick={handleEtcClick}>
         <FontAwesomeIcon icon={faEllipsis} fontSize={"24px"} />
       </EtcIcon>
-      {isEllipsisModalOpen && (
-        <EllipsisModal
-          handleAccountInfoClick={handleAccountInfoClick}
-          handleEtcClick={handleEtcClick}
-          post={post}
-        />
-      )}
+      {isCurrentUserPost
+        ? isEllipsisModalOpen && (
+            <MyEllipsisModal
+              post={post}
+              handleEditClick={handleEditClick}
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleInfoClose={handleInfoClose}
+            />
+          )
+        : isEllipsisModalOpen && (
+            <EllipsisModal
+              post={post}
+              handleAccountInfoClick={handleAccountInfoClick}
+              handleInfoClose={handleInfoClose}
+            />
+          )}
       {isAccountInfoModalOpen && (
-        <AccountInfoModal handleInfoClose={handleInfoClose} post={post} />
+        <AccountInfoModal post={post} handleInfoClose={handleInfoClose} />
+      )}
+      {isEditModalOpen && (
+        <EditModal post={post} handleEditClick={handleEditClick} />
       )}
     </Top>
   );
