@@ -20,7 +20,6 @@ import { storage } from "@/components/firebase/firebase";
 import axiosInstance from "@/services/axiosInstance";
 
 
-
 const Details: React.FC = () => {
   const router = useRouter();
   const [post, setPost] = useState<CreatePostType | null>(null);
@@ -33,7 +32,7 @@ const Details: React.FC = () => {
   const [fileData, setFileData] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
-
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   interface imageState {
     image: string
@@ -51,11 +50,12 @@ const Details: React.FC = () => {
   }, [contents]);
 
 
-  const uploadImageToServer = async (imageBlob: string, contents: string) => {
+  const uploadImageToServer = async (imageBlob: string, contents: string, fileName: string) => {
     const postData = {
       "type": "post",
       "image": [imageBlob],
       "contents": contents,
+      "fileName": [fileName]
     }
     try{
       const res = await axiosInstance({
@@ -81,8 +81,7 @@ const Details: React.FC = () => {
         const uploadTask = uploadBytes(storageRef, fileData);
         const blobImage = await uploadTask;
         const downloadURL = await getDownloadURL(blobImage.ref);
-        await uploadImageToServer(downloadURL, contents)
-        const postId = await uploadImageToServer(downloadURL, contents)
+        const postId = await uploadImageToServer(downloadURL, contents, uuid)
         router.push(`/my/feeds/${postId}`)
      }
     }catch (error) {
@@ -171,6 +170,7 @@ const Details: React.FC = () => {
           <FontAwesomeIcon icon={faChevronRight} />
         </SC.Button>
       </SC.FunctionPannels>
+      <canvas ref={canvasRef}></canvas>
     </>
   );
 };
