@@ -256,7 +256,7 @@
     }
   ],
   "followStatus": {
-    "follow": true
+    "follow": false
   },
   "likeStatus": {
     "like": true

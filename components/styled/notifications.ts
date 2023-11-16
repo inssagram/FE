@@ -1,36 +1,5 @@
 import styled from "styled-components";
 
-export const Header = styled.div`
-  position: fixed;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  height: 44px;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  padding: 0 16px;
-  border-bottom: 1px solid #ccc;
-`;
-
-export const BackIcon = styled.div`
-  padding-right: 8px;
-`;
-
-export const PageTitle = styled.h1`
-  display: block;
-  flex-basis: 0px;
-  flex-grow: 1;
-  flex-shrink: 1;
-  padding: 0;
-  text-align: center;
-  text-overflow: ellipsis;
-  vertical-align: baseline;
-  white-space: nowrap;
-  font-size: 16px;
-`;
-
 export const Notifications = styled.div`
   position: absolute;
   top: 44px;
@@ -52,13 +21,20 @@ export const ContentArea = styled.div`
   height: 60px;
   padding: 8px 16px;
 `;
+// transform: ${({ isSwiping }) =>
+//   isSwiping
+//     ? "translateX(-100px)"
+//     : "none"}; /* Adjust the value to your preference */
+// transition: transform 0.3s ease;
 
 export const Account = styled.div`
   margin-right: 14px;
   border-radius: 100%;
 `;
 
-export const Content = styled.span`
+export const Content = styled.p`
+  min-width: 266px;
+  height: 36px;
   font-size: 14px;
 `;
 
@@ -66,12 +42,19 @@ export const Board = styled.div`
   margin-left: 14px;
 `;
 
-export const Follow = styled.div`
+export const DeleteIcon = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0 7px;
+`;
+
+export const Follow = styled.p`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 82px;
-  height: 32px;
+  min-width: 82px;
+  min-height: 32px;
+  font-size: 14px;
   margin-left: 12px;
   padding: 7px 16px;
   border-radius: 10px;

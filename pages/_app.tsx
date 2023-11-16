@@ -6,13 +6,13 @@ import { Provider } from "react-redux";
 import { persistor, store } from "@/src/redux/Posts/store";
 import { PersistGate } from "redux-persist/integration/react";
 
-const App = ({ Component, pageProps }: AppProps)=>{
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-      <Component {...pageProps} />
-      </PersistGate>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Component {...pageProps} />
+        </PersistGate>
       </Provider>
     </>
   );

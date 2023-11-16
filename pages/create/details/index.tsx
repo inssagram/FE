@@ -1,31 +1,47 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faPlusCircle
+} from "@fortawesome/free-solid-svg-icons";
 import * as SC from "@/components/styled/main_boardwrite_details";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { ImageUrlFunction, CreatePostType } from "@/src/redux/Posts/postSlice";
 import { useDispatch } from "react-redux";
-import {addPost} from "@/src/redux/Posts/postSlice";
+import { addPost } from "@/src/redux/Posts/postSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
+import { v4 as uuidv4} from "uuid"
+import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
+import { storage } from "@/components/firebase/firebase";
+import axiosInstance from "@/services/axiosInstance";
 
 
-const Details: React.FC = ()=> {
-  const router = useRouter()
+
+const Details: React.FC = () => {
+  const router = useRouter();
   const [post, setPost] = useState<CreatePostType | null>(null);
-  const [image, setImage] = useState("이미지");
   const [contents, setContents] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
   const memberId = 1;
-  const postData = useSelector((state: RootState) => state.posts);
+  // const postData = useSelector((state: RootState) => state.posts);
+  const [previewImage,setPreviewImage] = useState<string>('')
+  const [fileData, setFileData] = useState<File | null>(null)
+  const fileRef = useRef<HTMLInputElement | null>(null)
+  const user = useSelector((state: any) => state.user)
+
+
+  interface imageState {
+    image: string
+  }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContents(event.target.value);
-  }
+  };
 
   useEffect(() => {
     // inputRef에 input 요소를 할당
@@ -34,45 +50,71 @@ const Details: React.FC = ()=> {
     }
   }, [contents]);
 
-  const handleCreateBoard = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    
-    try {
-      // 게시글 데이터 생성
-      const createdPost: CreatePostType = {
-        memberId: memberId,
-        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg",
-        contents: contents, // 이 부분을 입력 내용으로 수정해야 함
-        likeCount: 0,
-        commentsCounts: 0,
-        postId: postData.posts.length + 1, // 새로운 글의 ID를 정의
-      };
-  
-      dispatch(addPost(createdPost)); // 리덕스 스토어에 글 추가
-      router.push('/main'); // 페이지 이동은 여기서 호출하지 않고 상태 업데이트 후에 이동해야 함
-    } catch (error) {
-      console.error(error);
+
+  const uploadImageToServer = async (imageBlob: string, contents: string) => {
+    const postData = {
+      "type": "post",
+      "image": [imageBlob],
+      "contents": contents,
+    }
+    try{
+      const res = await axiosInstance({
+        method: "post",
+        url: "/post/create",
+        headers: {
+          "Content-Type": "application/json",
+          charset: "utf-8",
+        },
+        data: postData,
+      });
+      return res.data.postId
+    }catch(error){
+      console.error(error)
     }
   };
-  
-  const handlePrevClick = () => {
-    router.push('/create');
-    
+
+  const handleCreateBoard = async () => {
+    try {
+      if(fileData !== null){
+        const uuid = uuidv4()
+        const storageRef = ref(storage, `post/${user.member.nickname}/${uuid}`);
+        const uploadTask = uploadBytes(storageRef, fileData);
+        const blobImage = await uploadTask;
+        const downloadURL = await getDownloadURL(blobImage.ref);
+        await uploadImageToServer(downloadURL, contents)
+        const postId = await uploadImageToServer(downloadURL, contents)
+        router.push(`/my/feeds/${postId}`)
+     }
+    }catch (error) {
+      console.error(error);
+    }
+
+  };
+
+  const handleAddFile = () => {
+    if(fileRef.current){
+      fileRef.current.click();
+    }
   }
- // 임시로 띄운 오른쪽 이미지 미리보기
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/posts");
-        if (response.data && response.data.length > 0) {
-          setPost(response.data[0]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+
+  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files !== null){
+      const image = e.target.files[0]
+      const imageURL = URL.createObjectURL(image)
+      setPreviewImage(imageURL)
+      setFileData(image)
+    }else{
+      setPreviewImage((prev) => prev)
+    }
+  }
+
+  const handlePrevClick = () => {
+    router.push("/");
+  };
+
+
+  
+
   return (
     <>
       <SC.Header>
@@ -80,14 +122,30 @@ const Details: React.FC = ()=> {
           <FontAwesomeIcon icon={faChevronLeft} />
         </SC.Prev>
         <SC.H1>새 게시물</SC.H1>
-        <SC.Next onClick={(event: React.MouseEvent<HTMLButtonElement>) => handleCreateBoard(event)}>공유하기</SC.Next>
+        <SC.Next
+          onClick={handleCreateBoard}
+        >
+          공유하기
+        </SC.Next>
       </SC.Header>
       <SC.Container>
         <SC.MyProfile />
         <SC.TextCont>
-          <SC.InputText ref={inputRef} type="text" value={contents} onChange={handleInputChange} placeholder="내용을 입력하세요" />
+          <SC.InputText
+            ref={inputRef}
+            type="text"
+            value={contents}
+            onChange={handleInputChange}
+            placeholder="내용을 입력하세요"
+          />
+          <input
+            ref={fileRef}
+            type="file"
+            onChange={(e) => handleFileChange(e)}
+            style={{display: 'none'}}
+          />
+          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle}/>}
         </SC.TextCont>
-        <SC.PicCon> {post && <Image src={"https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Bradypus.jpg/450px-Bradypus.jpg"} alt="fetched image" width={50} height={50} />}</SC.PicCon>
       </SC.Container>
       <SC.FunctionPannels>
         <SC.Button>
