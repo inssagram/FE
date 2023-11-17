@@ -8,6 +8,7 @@ import {
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { BackArrow, BackChevron } from "@/components/atoms/Icon";
+import { MemberInfoData } from "@/types/ChatRoomTypes";
 
 interface HeaderProps {
   title?: string;
@@ -112,32 +113,22 @@ export const DirectNewHeader: React.FC<DirectNewHeaderProps> = ({
   );
 };
 
-interface MemberInfoData {
-  chatRoomId: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
-
 interface MemberInfoProps {
-  memberInfo: MemberInfoData | null;
+  receiver: MemberInfoData | null;
 }
 
-export const ChatRoomHeader: React.FC<MemberInfoProps> = ({ memberInfo }) => {
+export const ChatRoomHeader: React.FC<MemberInfoProps> = ({ receiver }) => {
   return (
     <>
       <Header>
         <BackArrow />
-        {memberInfo && (
+        {receiver && (
           <Info>
             <Profile>
               <Image
                 src={
-                  memberInfo.secondMemberProfile
-                    ? memberInfo.secondMemberProfile
+                  receiver.memberProfile
+                    ? receiver.memberProfile
                     : "/images/noProfile.jpg"
                 }
                 alt="프로필"
@@ -147,9 +138,7 @@ export const ChatRoomHeader: React.FC<MemberInfoProps> = ({ memberInfo }) => {
             </Profile>
             <Recent>
               <Account>
-                {memberInfo.secondMemberNickname
-                  ? memberInfo.secondMemberNickname
-                  : ""}
+                {receiver.memberNickname ? receiver.memberNickname : ""}
               </Account>
               <RecentTime>1시간 전에 활동</RecentTime>
             </Recent>

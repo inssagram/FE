@@ -1,61 +1,77 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 import { fileToDataUrl } from "@/utils/fileToDataUrl";
+import {
+  MemberInfoData,
+  PreviousMessageData,
+  NewMessageData,
+} from "@/types/ChatRoomTypes";
 
-const ChatRoom: React.FC<{
-  messages: string[];
-  images: File[];
-  contentRef: React.MutableRefObject<HTMLDivElement | null>;
-}> = ({ messages, images, contentRef }) => {
-  const [imageDataUrls, setImageDataUrls] = useState<string[]>([]);
+interface ChatRoomProps {
+  userInfo: any;
+  sender: MemberInfoData | null;
+  receiver: MemberInfoData | null;
+  previousMessages: PreviousMessageData[];
+  newMessage: NewMessageData[];
+}
 
-  const router = useRouter();
-  const { id } = router.query;
+const ChatRoom: React.FC<ChatRoomProps> = ({
+  userInfo,
+  sender,
+  receiver,
+  previousMessages,
+  newMessage,
+}) => {
+  // const [imageDataUrls, setImageDataUrls] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchImageUrls = async () => {
-      const urls: string[] = await Promise.all(
-        images.map(async (image) => await fileToDataUrl(image))
-      );
-      setImageDataUrls(urls);
-    };
+  // useEffect(() => {
+  //   const fetchImageUrls = async () => {
+  //     const urls: string[] = await Promise.all(
+  //       images.map(async (image) => await fileToDataUrl(image))
+  //     );
+  //     setImageDataUrls(urls);
+  //   };
 
-    if (images.length > 0) {
-      fetchImageUrls();
-    }
-  }, [images]);
+  //   if (images.length > 0) {
+  //     fetchImageUrls();
+  //   }
+  // }, [images]);
 
-  useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.scrollTop = contentRef.current.scrollHeight;
-      contentRef.current.focus();
-    }
-  }, [contentRef, messages, imageDataUrls]);
+  // useEffect(() => {
+  //   if (contentRef.current) {
+  //     contentRef.current.scrollTop = contentRef.current.scrollHeight;
+  //     contentRef.current.focus();
+  //   }
+  // }, [contentRef, messages, newMessage]);
 
   return (
-    <Content ref={contentRef}>
+    // <Content ref={contentRef}>
+    <Content>
       <RecentTime>(일) 오후 12:00</RecentTime>
-      {images.length > 0 &&
+      {/* {images.length > 0 &&
         imageDataUrls.map((dataUrl, index) => (
           <ImagePreview
             key={index}
             src={dataUrl}
             alt={`Selected Image ${index}`}
           />
+        ))} */}
+      {previousMessages &&
+        previousMessages.map((message, index) => (
+          <MessageContainer key={index}>
+            {message.senderMemberId === userInfo.member_id ? (
+              <MyMessage>{message.message}</MyMessage>
+            ) : (
+              <OtherMessage>{message.message}</OtherMessage>
+            )}
+          </MessageContainer>
         ))}
-      {messages.map((message, index) => (
-        <MessageContainer
-          key={index}
-          // mine={/* 여기에 적절한 조건을 추가하세요 */}
-        >
-          {/* {mine ? ( */}
-          <MyMessage>{message}</MyMessage>
-          {/* ) : ( */}
-          <OtherMessage>{message}</OtherMessage>
-          {/* )} */}
-        </MessageContainer>
-      ))}
+      {newMessage &&
+        newMessage.map((message, index) => (
+          <MessageContainer key={index}>
+            <MyMessage>{message.message}</MyMessage>
+          </MessageContainer>
+        ))}
     </Content>
   );
 };
@@ -85,11 +101,11 @@ const Message = styled.div`
   border-radius: 8px;
 `;
 
-const MessageContainer = styled.div<{ mine?: boolean }>`
+const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: ${({ mine }) => (mine ? "flex-end" : "flex-start")};
   margin-bottom: 10px;
+  width: 100%;
 `;
 
 const MyMessage = styled(Message)`
@@ -100,6 +116,8 @@ const MyMessage = styled(Message)`
 
 const OtherMessage = styled(Message)`
   background-color: #efefef;
+  text-align: left;
+  margin-right: auto;
   align-self: flex-start;
 `;
 

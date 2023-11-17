@@ -1,37 +1,29 @@
 import Image from "next/image";
 import styled from "styled-components";
-
-interface ChatRoomListData {
-  chatRoomId: number;
-  firstMemberId: number;
-  firstMemberNickname: string;
-  firstMemberProfile: string;
-  firstMemberFollowState: boolean;
-  firstMemberFollowerCounts: number;
-  firstMemberPostCounts: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
+import { ChatListData } from "@/types/ChatRoomTypes";
 
 interface ChatRoomListProps {
-  chatRooms: ChatRoomListData[];
+  myChatList: ChatListData[] | null;
+  onChatRoomClick: (roomId: number) => void;
 }
 
-const ChatRoomList: React.FC<ChatRoomListProps> = ({ chatRooms }) => {
+const ChatRoomList: React.FC<ChatRoomListProps> = ({
+  myChatList,
+  onChatRoomClick,
+}) => {
   return (
     <>
-      {chatRooms &&
-        chatRooms.map((chatRoom) => (
-          <ContentContainer key={chatRoom.chatRoomId}>
+      {myChatList ? (
+        myChatList.map((list) => (
+          <ContentContainer
+            key={list.chatroom_id}
+            onClick={() => onChatRoomClick(list.chatroom_id)}
+          >
             <Profile>
               <Image
                 src={
-                  chatRoom.secondMemberProfile
-                    ? chatRoom.secondMemberProfile
+                  list.sender_image
+                    ? list.sender_image
                     : "/images/noProfile.jpg"
                 }
                 alt="프로필"
@@ -40,14 +32,17 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ chatRooms }) => {
               />
             </Profile>
             <Content>
-              <Name>{chatRoom.secondMemberNickname}</Name>
+              <Name>{list.sender_name}</Name>
               <Recent>
-                <span>최근 대화 내용</span>
-                <span>| 2일전</span>
+                <span>{list.message}</span>
+                <span>{list.created_at}</span>
               </Recent>
             </Content>
           </ContentContainer>
-        ))}
+        ))
+      ) : (
+        <Error>참여중인 방이 없습니다.</Error>
+      )}
     </>
   );
 };
@@ -89,4 +84,10 @@ const Recent = styled.div`
   flex-direction: row;
   color: #737373;
   gap: 5px;
+`;
+
+const Error = styled.p`
+  font-size: 14px;
+  margin-top: 5px;
+  padding: 14px 16px;
 `;

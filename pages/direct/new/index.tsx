@@ -8,7 +8,7 @@ import { DirectNewHeader } from "@/components/atoms/Header";
 import SearchInput from "@/components/Chat/SearchInput";
 import AccountList from "@/components/Chat/AccountList";
 import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
-import postChatRoomAxios from "@/services/chatInfo/postChatRoom";
+import postNewChatRoomAxios from "@/services/chatInfo/postNewChatRoom";
 
 interface AccountData {
   memberId: number;
@@ -67,7 +67,7 @@ const New: React.FC<AccountData> = () => {
       const secondParticipantId = selectedAccount.memberId;
 
       try {
-        const res = await postChatRoomAxios(
+        const res = await postNewChatRoomAxios(
           firstParticipantId,
           secondParticipantId
         );
@@ -81,13 +81,8 @@ const New: React.FC<AccountData> = () => {
 
   return (
     <>
-      {/* <WebSocketHandler
-        onConnect={() => {}}
-        roomId={roomId}
-        // onMessageReceived={handleNewMessageReceived}
-      /> */}
       <DirectNewHeader onChatRoomClick={handleChatRoomClick} />
-      <div>
+      <>
         <SearchInput
           onSearch={handleSearch}
           selectedAccount={selectedAccount}
@@ -101,13 +96,13 @@ const New: React.FC<AccountData> = () => {
             setIsAccountSelected={setIsAccountSelected}
           />
         </ResultsContainer>
-      </div>
+      </>
     </>
   );
 };
 
+export default New;
+
 const ResultsContainer = styled.div`
   margin-top: 16px;
 `;
-
-export default New;

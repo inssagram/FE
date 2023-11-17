@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance";
 
-const postChatRoomAxios = (
+const postNewChatRoomAxios = (
   firstParticipantId: number,
   secondParticipantId: number
 ): Promise<any> => {
@@ -19,4 +19,4 @@ const postChatRoomAxios = (
   });
 };
 
-export default postChatRoomAxios;
+export default postNewChatRoomAxios;

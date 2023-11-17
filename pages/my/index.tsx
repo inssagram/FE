@@ -28,14 +28,22 @@ interface UserInfo {
 }
 
 interface PostData {
-  postId: number;
+  type: string;
   memberId: number;
+  memberImage: string;
+  nickName: number;
+  followed: string;
+  postId: number;
   image: string;
   contents: string;
+  location: string;
+  postLike: string;
   likeCount: number;
   commentsCounts: number;
   taggedMembers: string;
   hashTags: string;
+  bookmarked: string;
+  createdAt: string;
 }
 
 interface MyProps {
@@ -47,8 +55,9 @@ const My: React.FC<MyProps> = () => {
   const userInfo = useSelector(
     (state: RootState) => state.user.member
   ) as UserInfo;
-  const [posts, setPosts] = useState<PostData[]>([]);
-  const [bookmarkedPost, setBookmarkedPost] = useState<PostData[]>([]);
+  const [posts, setPosts] = useState<PostData[] | null>([]);
+  console.log(posts);
+  const [bookmarkedPost, setBookmarkedPost] = useState<PostData[] | null>([]);
   const [isShowBookmarked, setIsShowBookmarked] = useState(false);
   const [taggedPost, setTaggedPost] = useState<PostData[]>([]);
   const [isShowTagged, setIsShowTagged] = useState(false);
@@ -60,10 +69,10 @@ const My: React.FC<MyProps> = () => {
   };
 
   // 내가 작성한 게시글 조회
-  const fetchMyPostAllData = async (memberId: number) => {
+  const fetchMyPostAllData = async () => {
     try {
-      const res = await getMyPostAllAxios(memberId);
-      setPosts(res.data);
+      const res = await getMyPostAllAxios();
+      setPosts(res);
       setLoading(false);
     } catch (err) {
       handleError(err, "Error fetching posts:");
@@ -116,11 +125,9 @@ const My: React.FC<MyProps> = () => {
   // };
 
   useEffect(() => {
-    if (userInfo && userInfo.member_id) {
-      fetchMyPostAllData(userInfo.member_id);
-      handleIconClick("table");
-    }
-  }, [userInfo]);
+    fetchMyPostAllData();
+    handleIconClick("table");
+  }, []);
 
   // 무한스크롤
   // const [isClient, setIsClient] = useState(false);
@@ -192,7 +199,7 @@ const My: React.FC<MyProps> = () => {
           <SC.Intro>
             <SC.Id>{userInfo.nickname}</SC.Id>
             {userInfo.job ? (
-              <SC.Company>{userInfo.job}123</SC.Company>
+              <SC.Company>{userInfo.job}</SC.Company>
             ) : (
               <Link href="/my/settings/profile" passHref>
                 <SC.Company>직업을 입력해보세요</SC.Company>

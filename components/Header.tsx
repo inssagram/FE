@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = (props) => {
   return (
     <SC.Container>
       <SC.Title>
-        <Link href="/">Inssagram</Link>
+        <Link href="/main">Inssagram</Link>
       </SC.Title>
       <SC.IconPannels>
         <SC.PlusBtn id="createBoards" onClick={createBoards}>

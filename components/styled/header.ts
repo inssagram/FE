@@ -51,10 +51,6 @@ export const NotiAlarm = styled.span`
   z-index: 100;
 `;
 
-export const NotiCount = styled.span`
-  padding-left: 2px;
-`;
-
 export const SpeechBubble = styled.div`
   z-index: 1000;
   display: flex;
@@ -81,4 +77,8 @@ export const SpeechBubble = styled.div`
     border-color: transparent transparent #ff3040;
     transform: translateX(-20%);
   }
+`;
+
+export const NotiCount = styled.span`
+  padding-left: 2px;
 `;
