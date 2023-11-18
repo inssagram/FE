@@ -1,25 +1,23 @@
-import * as SC from "@/components/styled/signin";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
-import { useRouter } from "next/router";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { loginUser, logoutUser } from "@/src/redux/Posts/userSlice";
-import { RootState } from "@/src/redux/Posts/store";
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { loginUser } from "@/src/redux/Posts/userSlice";
+import * as SC from "@/components/styled/signin";
+import { handleError } from "@/utils/errorHandler";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
   const dispatch = useDispatch();
-  const backendAPI = process.env.BASE_URL;
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${backendAPI}/signin`, {
+      const response = await axios.post(`${process.env.BASE_URL}/signin`, {
         email: email,
         password: password,
       });
@@ -33,10 +31,10 @@ const Login: React.FC = () => {
         console.log("토큰: ", token);
         router.push("/main");
       } else {
-        console.log("로그인 실패: ", response.data.error); // 백엔드에서 전달한 에러 메시지 출력
+        console.log("로그인 실패: ", response.data.error);
       }
     } catch (error) {
-      console.error("로그인 중 오류 발생:", error);
+      handleError(error, "로그인 중 오류 발생:");
     }
   };
 
@@ -57,15 +55,15 @@ const Login: React.FC = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword>
+          {/* <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword> */}
           <SC.Login onClick={handleLogin}>로그인</SC.Login>
         </SC.LoginCont>
-        <SC.NotaMember>
-          계정이 없으신가요?
+        <SC.SignupArea>
+          <span>계정이 없으신가요?</span>
           <Link href="/signup">
-            <SC.SignIn>가입하기</SC.SignIn>
+            <SC.SignUp>가입하기</SC.SignUp>
           </Link>
-        </SC.NotaMember>
+        </SC.SignupArea>
       </SC.Notification>
     </SC.Container>
   );

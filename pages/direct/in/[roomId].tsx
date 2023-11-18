@@ -1,5 +1,5 @@
-import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import SockJS from "sockjs-client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
@@ -10,7 +10,7 @@ import {
   PreviousMessageData,
   NewMessageData,
 } from "@/types/ChatRoomTypes";
-import { ChatRoomHeader } from "@/components/atoms/Header";
+import { ChatRoomHeader } from "@/components/Chat/Header";
 import MemberProfile from "@/components/Chat/MemberProfile";
 import ChatRoom from "@/components/Chat/ChatRoom";
 import MessageInput from "@/components/Chat/MessageInput";

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 import { RootState } from "@/src/redux/Posts/store";
+import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
-import { ChatListData } from "@/types/ChatRoomTypes";
-import { DirectHeader } from "@/components/atoms/Header";
+import { ChatListHeader } from "@/components/Chat/Header";
 import ChatRoomList from "@/components/Chat/ChatRoomList";
 import getMyChatListAllAxios from "@/services/chatInfo/getMyChatListAll";
+import { ChatListData } from "@/types/ChatRoomTypes";
 
 interface ChatRoomListProps {
   myChatList: ChatListData[] | null;
@@ -40,8 +40,8 @@ const Direct: React.FC<ChatRoomListProps> = () => {
 
   return (
     <Container>
-      <DirectHeader userInfo={userInfo} />
-      <PageTitle>메시지</PageTitle>
+      <ChatListHeader userInfo={userInfo} />
+      <Title>메시지</Title>
       <ChatRoomList
         myChatList={myChatList}
         onChatRoomClick={handleChatRoomClick}
@@ -58,7 +58,7 @@ const Container = styled.section`
   background-color: #fff;
 `;
 
-const PageTitle = styled.div`
+const Title = styled.span`
   display: flex;
   padding: 14px 16px 10px;
   font-size: 16px;

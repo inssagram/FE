@@ -101,7 +101,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
           <Left>
             <HeartButton
               isLiked={isLiked}
-              handleLikeClick={() => handleActionClick(post.postId, "like")}
+              onClick={() => handleActionClick(post.postId, "like")}
             />
             <Link href={`/my/feeds/${post.postId}/comments`}>
               <FontAwesomeIcon icon={faComment} fontSize={24} />

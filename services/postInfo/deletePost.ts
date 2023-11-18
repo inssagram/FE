@@ -1,9 +1,9 @@
 import axiosInstance from "../axiosInstance";
 
-const getMyPostAllAxios = (): Promise<any> => {
+const deletePostAxios = (postId: number): Promise<any> => {
   return axiosInstance({
-    method: "get",
-    url: `/post/my`,
+    method: "delete",
+    url: `/post/delete/${postId}`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
@@ -11,4 +11,4 @@ const getMyPostAllAxios = (): Promise<any> => {
   });
 };
 
-export default getMyPostAllAxios;
+export default deletePostAxios;
