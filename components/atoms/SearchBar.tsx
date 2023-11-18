@@ -8,6 +8,62 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
+const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
+  onSearch,
+}) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setSearchValue(newValue);
+  };
+
+  const clearInput = () => {
+    setSearchValue("");
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleCancleClick = () => {
+    router.back();
+  };
+
+  useEffect(() => {
+    onSearch(searchValue);
+  }, [onSearch, searchValue]);
+
+  return (
+    <SearchBarContainer>
+      <SearchArea>
+        <SearchIcon>
+          <FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"15px"} />
+        </SearchIcon>
+        <Link href="/explore/search" style={{ width: "100%" }}>
+          <Input
+            type="text"
+            placeholder="검색"
+            value={searchValue}
+            onChange={handleInputChange}
+            onFocus={handleFocus}
+          />
+        </Link>
+        {searchValue && (
+          <Xmark onClick={clearInput}>
+            <FontAwesomeIcon icon={faCircleXmark} fontSize={"15px"} />
+          </Xmark>
+        )}
+      </SearchArea>
+      {isFocused && (
+        <CancleButton onClick={handleCancleClick}>취소</CancleButton>
+      )}
+    </SearchBarContainer>
+  );
+};
+
 const SearchBarContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -53,61 +109,5 @@ const CancleButton = styled.div`
   margin-left: 8px;
   cursor: pointer;
 `;
-
-const SearchBar: React.FC<{ onSearch: (searchValue: string) => void }> = ({
-  onSearch,
-}) => {
-  const [searchValue, setSearchValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const router = useRouter();
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setSearchValue(newValue);
-  };
-
-  const clearInput = () => {
-    setSearchValue("");
-  };
-
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleCancleClick = () => {
-    router.back();
-  };
-
-  useEffect(() => {
-    onSearch(searchValue);
-  }, [searchValue]);
-
-  return (
-    <SearchBarContainer>
-      <SearchArea>
-        <SearchIcon>
-          <FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"15px"} />
-        </SearchIcon>
-        <Link href="/explore/search" style={{ width: "100%" }}>
-          <Input
-            type="text"
-            placeholder="검색"
-            value={searchValue}
-            onChange={handleInputChange}
-            onFocus={handleFocus}
-          />
-        </Link>
-        {searchValue && (
-          <Xmark onClick={clearInput}>
-            <FontAwesomeIcon icon={faCircleXmark} fontSize={"15px"} />
-          </Xmark>
-        )}
-      </SearchArea>
-      {isFocused && (
-        <CancleButton onClick={handleCancleClick}>취소</CancleButton>
-      )}
-    </SearchBarContainer>
-  );
-};
 
 export default SearchBar;

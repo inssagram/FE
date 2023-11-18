@@ -33,7 +33,8 @@ export const Account = styled.div`
 `;
 
 export const Content = styled.p`
-  min-width: 200px;
+  min-width: 266px;
+  height: 36px;
   font-size: 14px;
 `;
 

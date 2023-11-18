@@ -1,74 +1,73 @@
-import { useState, useEffect } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { handleError } from "@/utils/errorHandler";
-import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 
-interface SearchData {
+interface AccountData {
   memberId: number;
-  nickname: string;
-  profileImg: string;
+  nickName: string;
+  job: string;
+  friendStatus: boolean;
+  image: string;
 }
 
-interface SearchDataProps {
-  searchTerm: string;
-  onAccountSelect: (selectedAccount: SearchData) => void;
+interface AccountListProps {
+  searchResults: AccountData[];
+  onSelectAccount: (selectedAccount: AccountData) => void;
+  isAccountSelected: boolean;
+  setIsAccountSelected: Dispatch<SetStateAction<boolean>>;
 }
 
-const AccountList: React.FC<SearchDataProps> = ({
-  searchTerm,
-  onAccountSelect,
+const AccountList: React.FC<AccountListProps> = ({
+  searchResults,
+  onSelectAccount,
+  isAccountSelected,
+  setIsAccountSelected,
 }) => {
-  const [searchResults, setSearchResults] = useState<SearchData[]>([]);
-
-  // 검색 결과 조회
-  const fetchSearchResultList = async (keyword: string) => {
-    try {
-      const res = await getSearchResultAxios(keyword);
-      setSearchResults(res.data);
-    } catch (err) {
-      handleError(err, "Error searching result:");
-    }
+  const handleSelectAccount = (selectedAccount: AccountData) => {
+    onSelectAccount(selectedAccount);
+    setIsAccountSelected(true);
   };
 
   useEffect(() => {
-    if (searchTerm) {
-      fetchSearchResultList(searchTerm);
-    }
-  }, [searchTerm]);
-
-  const handleSelectAccount = (selectedAccount: SearchData) => {
-    onAccountSelect(selectedAccount);
-  };
+    setIsAccountSelected(false);
+  }, [setIsAccountSelected]);
 
   return (
     <>
-      {searchResults && searchResults.length > 0 ? (
-        searchResults.map((result, index) => (
-          <ResultContainer key={index}>
-            <Profile>
-              <Image
-                src="/images/noProfile.jpg"
-                alt="프로필"
-                width={44}
-                height={44}
-              />
-            </Profile>
-            <Account>
-              <Name>{result.nickname}</Name>
-              <Id>{result.memberId}</Id>
-            </Account>
-            <SelectBtn onClick={() => handleSelectAccount(result)}>
-              <Icon icon={faCircleCheck} fontSize={"24px"} />
-            </SelectBtn>
-          </ResultContainer>
-        ))
-      ) : (
+      {isAccountSelected ? (
         <ResultsList>
-          <Results>계정을 찾을 수가 없습니다.</Results>
+          <Results>대화 상대를 검색해보세요.</Results>
         </ResultsList>
+      ) : (
+        <>
+          {searchResults && searchResults.length > 0 ? (
+            searchResults.map((result, index) => (
+              <ResultContainer key={index}>
+                <Profile>
+                  <Image
+                    src={result.image ? result.image : "/images/noProfile.jpg"}
+                    alt="프로필"
+                    width={44}
+                    height={44}
+                  />
+                </Profile>
+                <Account>
+                  <Name>{result.nickName}</Name>
+                  <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
+                </Account>
+                <SelectBtn onClick={() => handleSelectAccount(result)}>
+                  <Icon icon={faCircleCheck} fontSize={"24px"} />
+                </SelectBtn>
+              </ResultContainer>
+            ))
+          ) : (
+            <ResultsList>
+              <Results>계정을 찾을 수가 없습니다.</Results>
+            </ResultsList>
+          )}
+        </>
       )}
     </>
   );
@@ -98,13 +97,14 @@ const Account = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 3px;
   min-width: 288px;
   height: 36px;
   font-size: 14px;
 `;
 const Name = styled.span``;
 
-const Id = styled.span`
+const Follow = styled.span`
   color: #737373;
 `;
 

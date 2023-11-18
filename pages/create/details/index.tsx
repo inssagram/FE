@@ -18,7 +18,7 @@ import { v4 as uuidv4} from "uuid"
 import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
 import { storage } from "@/components/firebase/firebase";
 import axiosInstance from "@/services/axiosInstance";
-
+import { handleResizeImage } from "./handleResizeImage";
 
 
 const Details: React.FC = () => {
@@ -33,7 +33,7 @@ const Details: React.FC = () => {
   const [fileData, setFileData] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
-
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
   interface imageState {
     image: string
@@ -51,11 +51,12 @@ const Details: React.FC = () => {
   }, [contents]);
 
 
-  const uploadImageToServer = async (imageBlob: string, contents: string) => {
+  const uploadImageToServer = async (imageBlob: string, contents: string, fileName: string) => {
     const postData = {
       "type": "post",
       "image": [imageBlob],
       "contents": contents,
+      "fileName": [fileName]
     }
     try{
       const res = await axiosInstance({
@@ -73,22 +74,23 @@ const Details: React.FC = () => {
     }
   };
 
+  
+
   const handleCreateBoard = async () => {
     try {
       if(fileData !== null){
         const uuid = uuidv4()
+        const resizedImage = (await handleResizeImage(fileData)) as File
         const storageRef = ref(storage, `post/${user.member.nickname}/${uuid}`);
-        const uploadTask = uploadBytes(storageRef, fileData);
+        const uploadTask = uploadBytes(storageRef, resizedImage);
         const blobImage = await uploadTask;
         const downloadURL = await getDownloadURL(blobImage.ref);
-        await uploadImageToServer(downloadURL, contents)
-        const postId = await uploadImageToServer(downloadURL, contents)
+        const postId = await uploadImageToServer(downloadURL, contents, uuid)
         router.push(`/my/feeds/${postId}`)
      }
-    }catch (error) {
+    }catch (error) {``
       console.error(error);
     }
-
   };
 
   const handleAddFile = () => {
@@ -100,6 +102,11 @@ const Details: React.FC = () => {
   const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     if(e.target.files !== null){
       const image = e.target.files[0]
+      const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+      if (!supportedFormats.includes(image.type)) {
+        alert("지원되지 않는 이미지 형식입니다. JPEG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요.");
+        return;
+      }
       const imageURL = URL.createObjectURL(image)
       setPreviewImage(imageURL)
       setFileData(image)
@@ -171,6 +178,7 @@ const Details: React.FC = () => {
           <FontAwesomeIcon icon={faChevronRight} />
         </SC.Button>
       </SC.FunctionPannels>
+      <canvas ref={canvasRef}></canvas>
     </>
   );
 };

@@ -10,11 +10,11 @@ import getLikeCommentMemberListAxios from "@/services/postInfo/getLikeCommentMem
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 
 interface LikeMemberData {
-  member_id: number;
+  memberId: number;
   email: string;
-  nickname: string;
+  memberNickname: string;
   job: string;
-  image: string;
+  memberProfile: string;
   friendStatus: boolean;
 }
 
@@ -37,12 +37,11 @@ const LikedPost: React.FC<LikeMemberData> = () => {
     }
   };
 
-  const handleFollowClick = async () => {
+  const handleFollowClick = async (followId: number) => {
     try {
-      const followId = post.memberId;
       const response = await postMemberFollowAxios(followId);
       console.log("success", response);
-      setIsFollowing(!isFollowing);
+      setIsFollowing((prevIsFollowing) => !prevIsFollowing);
     } catch (error) {
       console.error("error", error);
     }
@@ -59,21 +58,23 @@ const LikedPost: React.FC<LikeMemberData> = () => {
       <PageHeader title={PageTitle} />
 
       {commentMembers.map((comment) => (
-        <ItemContainer key={comment.member_id}>
-          <ClickTo href="/" passHref>
+        <ItemContainer key={comment.memberId}>
+          <ClickTo href={`/user/${comment.memberId}`} passHref>
             <AccountImg
-              src={comment.image || "/images/noProfile.jpg"}
+              src={comment.memberProfile || "/images/noProfile.jpg"}
               alt="프로필 이미지"
               width={44}
               height={44}
             />
             <ContentArea>
               <AccountInfo>
-                <Id>{comment.nickname}</Id>
+                <Id>{comment.memberNickname}</Id>
                 <Status>{comment.job && <Job>{comment.job}</Job>}</Status>
               </AccountInfo>
-              <FollowButton onClick={handleFollowClick} />
-              {/* <Follow>{comment.friendStatus ? "팔로잉" : "팔로잉"}</Follow> */}
+              <FollowButton
+                onClick={() => handleFollowClick(comment.memberId)}
+                isFollowing={isFollowing}
+              />
             </ContentArea>
           </ClickTo>
         </ItemContainer>

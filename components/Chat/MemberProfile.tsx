@@ -1,42 +1,41 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import { MemberInfoData } from "@/types/ChatRoomTypes";
 
-interface Item {
-  memberId: string;
-  nickname: string;
-  profileImg: string;
+interface MemberInfoProps {
+  receiver: MemberInfoData | null;
 }
 
-const DirectPartner: React.FC<{ selectedItem: Item | null }> = ({
-  selectedItem,
-}) => {
+const MemberProfile: React.FC<MemberInfoProps> = ({ receiver }) => {
   return (
     <>
-      <Partner>
-        {/* {selectedItem && ( */}
-        <Picture>
-          <Img>
+      {receiver && (
+        <Partner>
+          <Profile>
             <Image
-              src="/images/noProfile.jpg"
+              src={
+                receiver.memberProfile
+                  ? receiver.memberProfile
+                  : "/images/noProfile.jpg"
+              }
               alt="프로필"
               width={56}
               height={56}
             />
-          </Img>
-        </Picture>
-        {/* )} */}
-        <Name>{selectedItem?.nickname}</Name>
-        <Id>{selectedItem?.nickname} Inssagram</Id>
-        <Profile>
-          <Link href="/user/${memberId}">프로필 보기</Link>
-        </Profile>
-      </Partner>
+          </Profile>
+          <Name>{receiver.memberNickname}</Name>
+          <Desc>{receiver.memberNickname} | Inssagram</Desc>
+          <ClickTo>
+            <Link href={`/user/${receiver.memberId}`}>프로필 보기</Link>
+          </ClickTo>
+        </Partner>
+      )}
     </>
   );
 };
 
-export default DirectPartner;
+export default MemberProfile;
 
 const Partner = styled.div`
   display: flex;
@@ -46,15 +45,12 @@ const Partner = styled.div`
   width: 100%;
 `;
 
-const Picture = styled.div`
-  padding: 16px 0;
-`;
-
-const Img = styled.div`
+const Profile = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
   border-radius: 100%;
+  padding: 16px 0;
 `;
 
 const Name = styled.span`
@@ -63,14 +59,14 @@ const Name = styled.span`
   font-weight: 600;
 `;
 
-const Id = styled.span`
+const Desc = styled.span`
   font-size: 14px;
   font-weight: 400;
   color: #737373;
   padding: 12px 0 24px 0;
 `;
 
-const Profile = styled.div`
+const ClickTo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -8,6 +8,7 @@ import {
   faPenToSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { BackArrow, BackChevron } from "@/components/atoms/Icon";
+import { MemberInfoData } from "@/types/ChatRoomTypes";
 
 interface HeaderProps {
   title?: string;
@@ -94,36 +95,55 @@ export const DirectHeader: React.FC<DirectHeaderProps> = ({ userInfo }) => {
   );
 };
 
-interface Item {
-  name: string;
-  profileUrl: string;
+interface DirectNewHeaderProps {
+  onChatRoomClick: () => void;
 }
 
-export const DirectInHeader: React.FC<{ selectedItem: Item | null }> = ({
-  selectedItem,
+export const DirectNewHeader: React.FC<DirectNewHeaderProps> = ({
+  onChatRoomClick,
 }) => {
+  return (
+    <>
+      <NewHeader>
+        <BackArrow />
+        <HeaderTitle>새로운 메시지</HeaderTitle>
+        <Next onClick={onChatRoomClick}>다음</Next>
+      </NewHeader>
+    </>
+  );
+};
+
+interface MemberInfoProps {
+  receiver: MemberInfoData | null;
+}
+
+export const ChatRoomHeader: React.FC<MemberInfoProps> = ({ receiver }) => {
   return (
     <>
       <Header>
         <BackArrow />
-        <Info>
-          <Profile>
-            {selectedItem && (
+        {receiver && (
+          <Info>
+            <Profile>
               <Image
-                src={selectedItem.profileUrl}
+                src={
+                  receiver.memberProfile
+                    ? receiver.memberProfile
+                    : "/images/noProfile.jpg"
+                }
                 alt="프로필"
                 width={24}
                 height={24}
               />
-            )}
-          </Profile>
-          <Recent>
-            <Account>
-              {selectedItem ? selectedItem.name : "No User Selected"}
-            </Account>
-            <RecentTime>1시간 전에 활동</RecentTime>
-          </Recent>
-        </Info>
+            </Profile>
+            <Recent>
+              <Account>
+                {receiver.memberNickname ? receiver.memberNickname : ""}
+              </Account>
+              <RecentTime>1시간 전에 활동</RecentTime>
+            </Recent>
+          </Info>
+        )}
       </Header>
     </>
   );
@@ -179,6 +199,31 @@ const MyHeader = styled(Header)`
 const DmHeader = styled(Header)`
   justify-content: space-between;
   border-bottom: none;
+`;
+
+// DirectNew
+const NewHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid #ccc;
+`;
+
+const HeaderTitle = styled.h2`
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+`;
+
+const Next = styled.button`
+  padding-left: 12px;
+  border: none;
+  font-size: 14px;
+  color: #0095f6;
+  background-color: transparent;
 `;
 
 // DirectIn
