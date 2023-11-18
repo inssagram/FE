@@ -1,56 +1,51 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
+import { ChatListData } from "@/types/ChatRoomTypes";
 import { DirectHeader } from "@/components/atoms/Header";
 import ChatRoomList from "@/components/Chat/ChatRoomList";
-import getChatRoomListAxios from "@/services/chatInfo/getChatRoomList";
-
-interface ChatRoomListData {
-  chatRoomId: number;
-  firstMemberId: number;
-  firstMemberNickname: string;
-  firstMemberProfile: string;
-  firstMemberFollowState: boolean;
-  firstMemberFollowerCounts: number;
-  firstMemberPostCounts: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
+import getMyChatListAllAxios from "@/services/chatInfo/getMyChatListAll";
 
 interface ChatRoomListProps {
-  chatRooms: ChatRoomListData[];
+  myChatList: ChatListData[] | null;
 }
 
 const Direct: React.FC<ChatRoomListProps> = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
-  const [chatRooms, setChatRooms] = useState([]);
+  const [myChatList, setMyChatList] = useState<ChatListData[] | null>(null);
+  console.log(myChatList);
+  const router = useRouter();
 
-  const fetchChatRoomList = async (memberId: number) => {
+  const fetchChatRoomList = async () => {
     try {
-      const res = await getChatRoomListAxios(memberId);
-      setChatRooms(res);
+      const res = await getMyChatListAllAxios();
+      setMyChatList(res.data);
     } catch (err) {
       handleError(err, "fetching chat room data error");
     }
   };
 
   useEffect(() => {
-    if (userInfo) {
-      fetchChatRoomList(userInfo.member_id);
+    if (myChatList) {
+      fetchChatRoomList();
     }
-  }, [userInfo]);
+  }, [myChatList]);
+
+  const handleChatRoomClick = (roomId: number) => {
+    router.push(`/direct/in/${roomId}`);
+  };
 
   return (
     <Container>
       <DirectHeader userInfo={userInfo} />
       <PageTitle>메시지</PageTitle>
-      <ChatRoomList chatRooms={chatRooms} />
+      <ChatRoomList
+        myChatList={myChatList}
+        onChatRoomClick={handleChatRoomClick}
+      />
     </Container>
   );
 };

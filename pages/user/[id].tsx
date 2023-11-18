@@ -19,7 +19,7 @@ import { FollowButton } from "@/components/atoms/Button";
 import Footer from "@/components/Footer";
 import getUserDetailAxios from "@/services/userInfo/getUserDetail";
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
-import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
+import getMemberPostAllAxios from "@/services/postInfo/getMemberPostAll";
 
 interface MemberData {
   email: string;
@@ -84,7 +84,7 @@ const User: React.FC<MyProps> = () => {
   // 특정 유저가 작성한 게시글 조회
   const fetchMyPostAllData = async (memberId: number) => {
     try {
-      const res = await getMyPostAllAxios(memberId);
+      const res = await getMemberPostAllAxios(memberId);
       setPosts(res.data);
       setLoading(false);
     } catch (err) {

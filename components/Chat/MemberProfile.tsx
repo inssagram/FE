@@ -1,31 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-
-interface MemberInfoData {
-  chatRoomId: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
+import { MemberInfoData } from "@/types/ChatRoomTypes";
 
 interface MemberInfoProps {
-  memberInfo: MemberInfoData | null;
+  receiver: MemberInfoData | null;
 }
 
-const MemberProfile: React.FC<MemberInfoProps> = ({ memberInfo }) => {
+const MemberProfile: React.FC<MemberInfoProps> = ({ receiver }) => {
   return (
     <>
-      {memberInfo && (
+      {receiver && (
         <Partner>
           <Profile>
             <Image
               src={
-                memberInfo.secondMemberProfile
-                  ? memberInfo.secondMemberProfile
+                receiver.memberProfile
+                  ? receiver.memberProfile
                   : "/images/noProfile.jpg"
               }
               alt="프로필"
@@ -33,10 +24,10 @@ const MemberProfile: React.FC<MemberInfoProps> = ({ memberInfo }) => {
               height={56}
             />
           </Profile>
-          <Name>{memberInfo.secondMemberNickname}</Name>
-          <Desc>{memberInfo.secondMemberNickname} | Inssagram</Desc>
+          <Name>{receiver.memberNickname}</Name>
+          <Desc>{receiver.memberNickname} | Inssagram</Desc>
           <ClickTo>
-            <Link href={`/user/${memberInfo.secondMemberId}`}>프로필 보기</Link>
+            <Link href={`/user/${receiver.memberId}`}>프로필 보기</Link>
           </ClickTo>
         </Partner>
       )}

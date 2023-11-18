@@ -1,133 +1,125 @@
+import SockJS from "sockjs-client";
+import Stomp from "stompjs";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
-import Stomp from "stompjs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
+import {
+  MemberInfoData,
+  PreviousMessageData,
+  NewMessageData,
+} from "@/types/ChatRoomTypes";
 import { ChatRoomHeader } from "@/components/atoms/Header";
 import MemberProfile from "@/components/Chat/MemberProfile";
 import ChatRoom from "@/components/Chat/ChatRoom";
 import MessageInput from "@/components/Chat/MessageInput";
 import WebSocketHandler from "@/services/chatInfo/webSocketHandler";
 import getChatRoomDataAxios from "@/services/chatInfo/getChatRoom";
+import getChatRoomHistoryAxios from "@/services/chatInfo/getChatRoomHistory";
 
-interface ChatRoomData {
-  chatRoomId: number;
-  firstMemberId: number;
-  firstMemberNickname: string;
-  firstMemberProfile: string;
-  firstMemberFollowState: boolean;
-  firstMemberFollowerCounts: number;
-  firstMemberPostCounts: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
-interface InProps {}
-
-const In: React.FC<InProps> = () => {
+const In: React.FC = () => {
   const contentRef = useRef<HTMLDivElement | null>(null);
-  const [chatRoom, setChatRoom] = useState<ChatRoomData | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [images, setImages] = useState<File[]>([]);
-
+  const userInfo = useSelector((state: RootState) => state.user.member);
+  const [chatRoom, setChatRoom] = useState<{
+    sender: MemberInfoData | null;
+    receiver: MemberInfoData | null;
+  } | null>(null);
+  const [previousMessages, setPreviousMessages] = useState<
+    PreviousMessageData[]
+  >([]);
+  const [newMessage, setNewMessage] = useState<NewMessageData[]>([]);
   const router = useRouter();
   const { roomId } = router.query;
 
-  // 웹소켓 연결 시 호출될 함수
+  const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
+  const stompClient = Stomp.over(socket);
+  const accessToken = sessionStorage.getItem("token");
+
+  const parsedRoomId =
+    typeof roomId === "string" ? parseInt(roomId, 10) : undefined;
+
   const handleConnect = () => {
-    console.log("WebSocket connected!");
+    console.log("웹 소켓 연결 됐어용");
   };
 
-  // 특정 채팅방 조회
+  // 특정 채팅방
   const fetchChatRoomDataAll = async (roomId: number) => {
     try {
       const res = await getChatRoomDataAxios(roomId);
-      setChatRoom(res);
+
+      const memberList = res.memberList;
+      const senderId = Object.keys(memberList)[0];
+      const receiverId = Object.keys(memberList)[1];
+      const sender = memberList[senderId];
+      const receiver = memberList[receiverId];
+
+      setChatRoom({
+        sender: sender || null,
+        receiver: receiver || null,
+      });
     } catch (err) {
       handleError(err, "fetching chat room data error");
     }
   };
 
-  // 메시지 수신 시 호출될 함수
-  const handleMessageReceived = (message: any) => {
-    console.log("Received message:", message);
-    setMessages((prevMessages) => [...prevMessages, message]);
+  // 특정 채팅방 과거 대화내용
+  const fetchChatRoomContents = async (roomId: number) => {
+    try {
+      const res = await getChatRoomHistoryAxios(roomId);
+      setPreviousMessages(res.data);
+    } catch (err) {
+      handleError(err, "fetching chat room contents error");
+    }
   };
 
   useEffect(() => {
-    if (roomId) {
-      fetchChatRoomDataAll(roomId);
-      // 채팅방에 들어가면 웹소켓 연결
-      console.log("Joining Chat Room:", roomId);
+    if (parsedRoomId !== undefined) {
+      fetchChatRoomDataAll(parsedRoomId);
+      fetchChatRoomContents(parsedRoomId);
     }
-  }, [roomId]);
+  }, [parsedRoomId]);
 
-  // // 메세지 보내기
-  // const handleSendMessage = (message: string, images: File[]) => {
-  //   // const getCurrentTime = (): string => {
-  //   //   const now = new Date();
-  //   //   const hours = now.getHours();
-  //   //   const minutes = now.getMinutes();
-  //   //   const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-  //   //   const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-  //   //   return `${formattedHours}:${formattedMinutes}`;
-  //   // };
+  // 메시지 보내기
+  const handleSendMessage = (messageData: NewMessageData) => {
+    if (stompClient && messageData.message.trim() !== "" && chatRoom) {
+      stompClient.send(
+        `/pub/chat.message.${parsedRoomId}`,
+        { token: accessToken },
+        JSON.stringify(messageData)
+      );
 
-  //   setMessages((prevMessages) => [...prevMessages, message]);
-  //   setImages((prevImages) => [...prevImages, ...images]);
+      setNewMessage((prevMessages) => [...prevMessages, messageData]);
+    }
+  };
 
-  //   const messageData = {
-  //     type: "message",
-  //     chatRoomId: roomId,
-  //     sender: "userInfo.nickname",
-  //     message: message,
-  //     // postId: 1,
-  //     timestamp: getCurrentTime(),
-  //   };
-
-  //   if (stompClient) {
-  //     stompClient.send(
-  //       `/pub/chat.message.${roomId}`,
-  //       {},
-  //       JSON.stringify(messageData)
-  //     );
-  //     stompClient.send(
-  //       `/pub/chat.messageWithPost.${roomId}`,
-  //       {},
-  //       JSON.stringify({ images })
-  //     );
-  //   }
-
-  //   if (contentRef.current) {
-  //     contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  //     contentRef.current.focus();
-  //   } else {
-  //     console.error("WebSocket is not connected.");
-  //   }
-  //   console.log(`전달된 메시지: ${message}`);
-  // };
+  const handleEnterKeyPress = (messageData: NewMessageData) => {
+    handleSendMessage(messageData);
+  };
 
   return (
     <>
-      {roomId && (
+      {parsedRoomId !== undefined && (
         <>
           <WebSocketHandler
             onConnect={handleConnect}
-            roomId={roomId}
-            onMessageReceived={handleMessageReceived}
+            roomId={parsedRoomId}
+            // onMessageReceived={previouseMessage}
           />
-          <ChatRoomHeader memberInfo={chatRoom} />
-          <MemberProfile memberInfo={chatRoom} />
+          <ChatRoomHeader receiver={chatRoom?.receiver} />
+          <MemberProfile receiver={chatRoom?.receiver} />
           <ChatRoom
-            messages={messages}
-            images={images}
-            contentRef={contentRef}
+            userInfo={userInfo}
+            sender={chatRoom?.sender}
+            receiver={chatRoom?.receiver}
+            previousMessages={previousMessages}
+            newMessage={newMessage}
           />
-          <MessageInput images={images} />
+          <MessageInput
+            roomId={roomId}
+            receiver={chatRoom?.receiver}
+            onEnterKeyPress={handleEnterKeyPress}
+          />
         </>
       )}
     </>
@@ -135,3 +127,48 @@ const In: React.FC<InProps> = () => {
 };
 
 export default In;
+
+// // 메세지 보내기
+// const handleSendMessage = (message: string, images: File[]) => {
+//   // const getCurrentTime = (): string => {
+//   //   const now = new Date();
+//   //   const hours = now.getHours();
+//   //   const minutes = now.getMinutes();
+//   //   const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
+//   //   const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+//   //   return `${formattedHours}:${formattedMinutes}`;
+//   // };
+
+//   setMessages((prevMessages) => [...prevMessages, message]);
+//   setImages((prevImages) => [...prevImages, ...images]);
+
+//   const messageData = {
+//     type: "message",
+//     chatRoomId: roomId,
+//     sender: "userInfo.nickname",
+//     message: message,
+//     // postId: 1,
+//     timestamp: getCurrentTime(),
+//   };
+
+//   if (stompClient) {
+//     stompClient.send(
+//       `/pub/chat.message.${roomId}`,
+//       {},
+//       JSON.stringify(messageData)
+//     );
+//     stompClient.send(
+//       `/pub/chat.messageWithPost.${roomId}`,
+//       {},
+//       JSON.stringify({ images })
+//     );
+//   }
+
+//   if (contentRef.current) {
+//     contentRef.current.scrollTop = contentRef.current.scrollHeight;
+//     contentRef.current.focus();
+//   } else {
+//     console.error("WebSocket is not connected.");
+//   }
+//   console.log(`전달된 메시지: ${message}`);
+// };
