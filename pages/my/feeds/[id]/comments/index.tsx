@@ -1,15 +1,12 @@
 import axios from "axios";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile, faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { deleteComment } from "@/src/redux/Posts/commentSlice";
 import Modal from "./modal";
-import useLongPress from "./useLongPress";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
@@ -57,10 +54,10 @@ const Comments: React.FC = () => {
   const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
   const [commentLikes, setCommentLikes] = useState<boolean[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
   const router = useRouter();
   const { id } = router.query;
   const pageTitle = "댓글";
+  const commentInputRef = useRef<HTMLInputElement>(null);
 
   // 게시글 상세 조회
   const fetchPostDetailData = async (postId: number) => {
@@ -203,6 +200,8 @@ const Comments: React.FC = () => {
     setIsEditModalOpen(false);
   };
 
+  
+
   return (
     <Container>
       <PageHeader title={pageTitle} />
@@ -231,7 +230,7 @@ const Comments: React.FC = () => {
           </SmileIcon>
         </CommentsForm>
       </CommentsContainer>
-      {post && <CommentItem post={post} isReply={false} />}
+      {post && <CommentItem post={post} isReply={false}/>}
       {commentAll ? (
         commentAll.map((comment, index) => (
           <div key={index}>
@@ -243,6 +242,7 @@ const Comments: React.FC = () => {
               handleShowModal={handleShowModal}
               index={index}
               isReply={true}
+              commentInputRef={commentInputRef}
             />
           </div>
         ))
@@ -306,5 +306,5 @@ const SmileIcon = styled.div`
 
 const Empty = styled.span`
   padding: 12px;
-  color: #22222;
+  color: #222222;
 `;
