@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
+import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
-import { DirectNewHeader } from "@/components/atoms/Header";
-import SearchInput from "@/components/Chat/SearchInput";
+import { NewChatRoomHeader } from "@/components/Chat/Header";
 import AccountList from "@/components/Chat/AccountList";
+import SearchInput from "@/components/Chat/SearchInput";
 import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import postNewChatRoomAxios from "@/services/chatInfo/postNewChatRoom";
 
@@ -81,7 +81,7 @@ const New: React.FC<AccountData> = () => {
 
   return (
     <>
-      <DirectNewHeader onChatRoomClick={handleChatRoomClick} />
+      <NewChatRoomHeader onClick={handleChatRoomClick} />
       <>
         <SearchInput
           onSearch={handleSearch}

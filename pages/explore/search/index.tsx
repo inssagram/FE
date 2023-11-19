@@ -1,7 +1,6 @@
-import styled from "styled-components";
 import { useState, useEffect } from "react";
+import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
-import { SearchHistoryHeader } from "@/components/atoms/Header";
 import { SearchItem } from "@/components/atoms/Item";
 import SearchBar from "@/components/atoms/SearchBar";
 import Footer from "@/components/Footer";
@@ -103,7 +102,14 @@ const Search: React.FC = () => {
               handleClick={() => handleSearchItemClick(result.memberId)}
             />
           ))}
-        {searchResults.length > 0 ? "" : <SearchHistoryHeader />}
+        {searchResults.length > 0 ? (
+          ""
+        ) : (
+          <HistoryHeader>
+            <HistoryTitle>최근 검색 항목</HistoryTitle>
+            <DeleteBtn>모두 지우기</DeleteBtn>
+          </HistoryHeader>
+        )}
         {searchHistory.length > 0 &&
           !searchTerm &&
           searchHistory.map((history, index) => (
@@ -136,6 +142,25 @@ const Container = styled.section`
 
 const PageHeader = styled.div`
   padding: 10px 16px;
+`;
+
+const HistoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 16px 0;
+  border-top: 1px solid #cccccc;
+`;
+
+const HistoryTitle = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const DeleteBtn = styled.button`
+  font-size: 14px;
+  color: #0095f6;
+  border: none;
+  background-color: transparent;
 `;
 
 const NoHistory = styled.div`

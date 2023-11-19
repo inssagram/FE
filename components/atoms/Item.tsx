@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
-import { CloseButton } from "@/components/atoms/Button";
+import { DeleteButton } from "@/components/atoms/Button";
 import React, {useState, useRef} from "react";
 import postReplyAxios from "@/services/postInfo/postReply";
 import { handleError } from "@/utils/errorHandler";
@@ -68,7 +68,7 @@ export const SearchItem: React.FC<SearchItemProps> = ({
                   {/* <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow> */}
                 </Status>
               </AccountInfo>
-              <CloseButton onClick={handleSearchItemDeleteClick} />
+              <DeleteButton onClick={handleSearchItemDeleteClick} />
             </ContentArea>
           </ClickTo>
         </ItemContainer>
