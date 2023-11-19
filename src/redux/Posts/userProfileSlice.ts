@@ -24,11 +24,11 @@ export const profileSlice = createSlice({
         addPicture: (state, action: PayloadAction<ImageType>) => {
             state.contents = [...state.contents, action.payload];
         },
-        addIntro: (state, action: PayloadAction<IntroType>) => {
+        addCompany: (state, action: PayloadAction<IntroType>) => {
             state.contents = [...state.contents, action.payload];
     },
     }
 })
 
-export const {addPicture, addIntro} = profileSlice.actions;
+export const {addPicture, addCompany} = profileSlice.actions;
 export default profileSlice.reducer;
