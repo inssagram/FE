@@ -193,3 +193,25 @@ export const PostEditModal: React.FC<PostEditModalProps> = ({
     </SC.ModalBackdrop>
   );
 };
+
+interface CommentDeleteModalProps {
+  onDelete: () => void;
+  onCancel: () => void;
+}
+
+export const CommentDeleteModal: React.FC<CommentDeleteModalProps> = ({
+  onDelete,
+  onCancel,
+}) => {
+  return (
+    <SC.ModalBackdrop>
+      <SC.ModalContent>
+        <SC.ModalText>댓글을 정말 삭제하시겠습니까?</SC.ModalText>
+        <SC.ModalButtons>
+          <SC.DeleteButton onClick={onDelete}>삭제하기</SC.DeleteButton>
+          <SC.CancelButton onClick={onCancel}>취소하기</SC.CancelButton>
+        </SC.ModalButtons>
+      </SC.ModalContent>
+    </SC.ModalBackdrop>
+  );
+};

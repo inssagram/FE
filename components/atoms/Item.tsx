@@ -151,7 +151,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   const [replyToReply, setReplyToReplyId] = useState<number | null>(null);
   const [isReplying, setIsReplying] = useState(false);
   const [isReplyingToReply, setIsReplyingToReply] = useState(false);
-  const [replycomments, setReplyComments] = useState<Array>([]);
+  const [replycomments, setReplyComments] = useState<Array<string>>([]);
 
   //   //답글달기 api 요청
   //   const fetchPostReplyData = async (parentCommentId: number, contents: string, mentionList: string[]) => {
@@ -253,9 +253,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
     }
   };
 
-  useEffect(() => {
-    console.log("Component re-rendered!", replycomments);
-  }, [replycomments, replyContent, replyToCommentId]);
+  useEffect(() => {}, [replycomments, replyContent, replyToCommentId]);
 
   const isCurrentUserCommentAuthor =
     userInfo && comment && userInfo.member_id === comment.memberId;
@@ -263,8 +261,8 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   return (
     <>
       {!isReply ? (
-        <Comment>
-          <Profile>
+        <OriginalComment>
+          <OriginalProfile>
             <Image
               src={
                 post.memberImage ? post.memberImage : "/images/noProfile.jpg"
@@ -274,140 +272,144 @@ export const CommentItem: React.FC<CommentDataProps> = ({
               height={42}
               style={{ borderRadius: "100%" }}
             />
-          </Profile>
-          <Info>
+          </OriginalProfile>
+          <OriginalInfo>
             <Desc>
               <ID>{post.nickName}</ID>
               <Content>{post.contents}</Content>
             </Desc>
             <Date>16주</Date>
-          </Info>
-        </Comment>
+          </OriginalInfo>
+        </OriginalComment>
       ) : (
-        <ReplyContainer>
-          <Profile>
-            <Image
-              src={
-                comment.memberImage
-                  ? comment.memberImage
-                  : "/images/noProfile.jpg"
-              }
-              alt="프로필"
-              width={42}
-              height={42}
-              style={{ borderRadius: "100%" }}
-            />
-          </Profile>
-          <Reply>
-            <Info>
-              <Desc>
-                <ID>{comment.nickname}</ID>
-                <Content>{comment.content}</Content>
-              </Desc>
-              <Desc>
-                <Date>16주</Date>
-                <Link href={`/post/comment/liked_by/${comment.commentId}`}>
-                  <Likes>좋아요 {comment.likeCount}개</Likes>
-                </Link>
-                <MoreComment
-                  onClick={() => handleMoreCommentClick(comment.commentId)}
-                >
-                  답글달기
-                </MoreComment>
-                {isCurrentUserCommentAuthor && (
-                  <DeleteComment onClick={() => handleShowModal(comment)}>
-                    삭제하기
-                  </DeleteComment>
-                )}
-              </Desc>
-              <AllComment onClick={() => getMoreComment(comment.commentId)}>
-                {replycomments.length > 0 ? "답글 숨기기" : "답글 보기"}
-              </AllComment>
-            </Info>
-            <HeartButton>
-              <FontAwesomeIcon
-                onClick={() => handleLikeCommentClick(comment.commentId)}
-                icon={commentLikes[index] ? fasHeart : farHeart}
-                style={{ color: commentLikes[index] ? "red" : "inherit" }}
-                fontSize={"12px"}
+        <>
+          <CommentContainer>
+            <Profile>
+              <Image
+                src={
+                  comment.memberImage
+                    ? comment.memberImage
+                    : "/images/noProfile.jpg"
+                }
+                alt="프로필"
+                width={42}
+                height={42}
+                style={{ borderRadius: "100%" }}
               />
-            </HeartButton>
-
-            {replycomments.map((replyComment: any, index: number) => (
-              <ReplyContainer key={index}>
-                <Profile>
-                  <Image
-                    src={
-                      replyComment.memberImage
-                        ? replyComment.memberImage
-                        : "/images/noProfile.jpg"
-                    }
-                    alt="프로필"
-                    width={42}
-                    height={42}
-                    style={{ borderRadius: "100%" }}
-                  />
-                </Profile>
-                <Reply>
-                  <Info>
-                    <Desc>
-                      <ID>{replyComment.nickname}</ID>
-                      <Content>{replyComment.content}</Content>
-                    </Desc>
-                    <Desc>
-                      <Date>16주</Date>
-                      <Link
-                        href={`/post/comment/liked_by/${replyComment.commentId}`}
+            </Profile>
+            <Comment>
+              <Info>
+                <Desc>
+                  <ID>{comment.nickname}</ID>
+                  <Content>{comment.content}</Content>
+                </Desc>
+                <Desc>
+                  <Date>16주</Date>
+                  <Link href={`/post/comment/liked_by/${comment.commentId}`}>
+                    <Likes>좋아요 {comment.likeCount}개</Likes>
+                  </Link>
+                  <MoreComment
+                    onClick={() => handleMoreCommentClick(comment.commentId)}
+                  >
+                    답글달기
+                  </MoreComment>
+                  {isCurrentUserCommentAuthor && (
+                    <DeleteComment onClick={() => handleShowModal(comment)}>
+                      삭제하기
+                    </DeleteComment>
+                  )}
+                </Desc>
+              </Info>
+              <ReplyComment>
+                <AllComment onClick={() => getMoreComment(comment.commentId)}>
+                  {replycomments.length > 0 ? "답글 숨기기" : "답글 보기"}
+                </AllComment>
+              </ReplyComment>
+              <HeartButton>
+                <FontAwesomeIcon
+                  onClick={() => handleLikeCommentClick(comment.commentId)}
+                  icon={commentLikes[index] ? fasHeart : farHeart}
+                  style={{ color: commentLikes[index] ? "red" : "inherit" }}
+                  fontSize={"12px"}
+                />
+              </HeartButton>
+            </Comment>
+          </CommentContainer>
+          {replycomments.map((replyComment: any, index: number) => (
+            <ReplyContainer key={index}>
+              <Profile>
+                <Image
+                  src={
+                    replyComment.memberImage
+                      ? replyComment.memberImage
+                      : "/images/noProfile.jpg"
+                  }
+                  alt="프로필"
+                  width={42}
+                  height={42}
+                  style={{ borderRadius: "100%" }}
+                />
+              </Profile>
+              <Comment>
+                <Info>
+                  <Desc>
+                    <ID>{replyComment.nickname}</ID>
+                    <Content>{replyComment.content}</Content>
+                  </Desc>
+                  <Desc>
+                    <Date>16주</Date>
+                    <Link
+                      href={`/post/comment/liked_by/${replyComment.commentId}`}
+                    >
+                      <Likes>좋아요 {replyComment.likeCount}개</Likes>
+                    </Link>
+                    <MoreComment
+                      onClick={() =>
+                        handleReplyToReply(
+                          replyComment.commentId,
+                          comment.commentId
+                        )
+                      }
+                    >
+                      답글달기
+                    </MoreComment>
+                    {isCurrentUserCommentAuthor && (
+                      <DeleteComment
+                        onClick={() => handleShowModal(replyComment)}
                       >
-                        <Likes>좋아요 {replyComment.likeCount}개</Likes>
-                      </Link>
-                      <MoreComment
-                        onClick={() =>
-                          handleReplyToReply(
-                            replyComment.commentId,
-                            comment.commentId
-                          )
-                        }
-                      >
-                        답글달기
-                      </MoreComment>
-                      {isCurrentUserCommentAuthor && (
-                        <DeleteComment
-                          onClick={() => handleShowModal(replyComment)}
-                        >
-                          삭제하기
-                        </DeleteComment>
-                      )}
-                    </Desc>
-                  </Info>
-                  <HeartButton>
-                    <FontAwesomeIcon
-                      onClick={() => handleLikeCommentClick(comment.commentId)}
-                      icon={commentLikes[index] ? fasHeart : farHeart}
-                      style={{ color: commentLikes[index] ? "red" : "inherit" }}
-                      fontSize={"12px"}
-                    />
-                  </HeartButton>
-                </Reply>
-                {isReplyingToReply && (
-                  <NewReplyInput
-                    value={replyContent}
-                    onChange={(e) => setReplyContent(e.target.value)}
-                    onKeyDown={handleSendReplytoReply}
+                        삭제하기
+                      </DeleteComment>
+                    )}
+                  </Desc>
+                </Info>
+                <HeartButton>
+                  <FontAwesomeIcon
+                    onClick={() => handleLikeCommentClick(comment.commentId)}
+                    icon={commentLikes[index] ? fasHeart : farHeart}
+                    style={{ color: commentLikes[index] ? "red" : "inherit" }}
+                    fontSize={"12px"}
                   />
-                )}
-              </ReplyContainer>
-            ))}
-
-            {isReplying && (
+                </HeartButton>
+              </Comment>
+            </ReplyContainer>
+          ))}
+          {isReplying && (
+            <InputContainer>
               <NewReplyInput
                 value={replyContent}
                 onChange={(e) => setReplyContent(e.target.value)}
                 onKeyDown={handleKeyPress}
               />
-            )}
-          </Reply>
-        </ReplyContainer>
+            </InputContainer>
+          )}
+        </>
+      )}
+      {isReplyingToReply && (
+        <NewReplyInput
+          value={replyContent}
+          onChange={(e) => setReplyContent(e.target.value)}
+          onKeyDown={handleSendReplytoReply}
+        />
       )}
     </>
   );
@@ -486,13 +488,21 @@ const Follow = styled.span`
   color: #7c7c7c;
 `;
 
-const Comment = styled.div`
-  min-height: 80px;
-  display: flex;
-  padding: 12px;
-  border-bottom: 1px solid #cccccc;
-  margin-top: -1rem;
+// Comment Item
+const OriginalComment = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #cccccc;
+  height: 60px;
+  // margin-top: -1rem;
+  // position: relative;
+`;
+
+const OriginalProfile = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Profile = styled.div`
@@ -500,29 +510,42 @@ const Profile = styled.div`
   align-items: center;
 `;
 
+const OriginalInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 5px;
+  margin-left: 5px;
+  width: 100%;
+  height: 80%;
+`;
+
 const Info = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  margin-left: 1.5rem;
-  min-height: 40px;
-  margin-top: 1.5rem;
-  line-height: 1.5rem;
+  justify-content: space-between;
+  padding-left: 5px;
+  margin-left: 5px;
+  height: 100%;
 `;
 
 const ID = styled.p`
   padding-right: 5px;
-  color: #262626;
+  color: #222222;
 `;
 
 const Content = styled.p`
   max-width: 370px;
+  color: #222222;
 `;
 
 const Desc = styled.div`
   display: flex;
   flex-direction: row;
   max-width: 265px;
+  padding-bottom: 7px;
+  font-size: 12px;
+  color: #737373;
 `;
 
 const Date = styled.p`
@@ -539,63 +562,72 @@ const Likes = styled.p`
   margin-right: 12px;
 `;
 
-const ReplyContainer = styled.div`
+const CommentContainer = styled.div`
   position: relative;
   display: flex;
-  padding: 12px;
+  padding: 10px 12px;
   align-items: center;
   min-height: 80px;
 `;
 
-const Reply = styled.div`
-  position: absolute;
+const Comment = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 316px;
-  top: 0;
-  left: 3.5rem;
+  height: 90%;
 `;
 
 const MoreComment = styled.button`
-  width: 60px;
-  font-size: 12px;
-  color: #737373;
+  margin-right: 12px;
   border: none;
-  background-color: transparent;
-`;
-
-const AllComment = styled.button`
-  width: 60px;
-  font-size: 12px;
-  color: #737373;
-  border: none;
+  font-size: inherit;
+  color: inherit;
   background-color: transparent;
 `;
 
 const DeleteComment = styled.button`
-  width: 60px;
-  font-size: 12px;
-  color: #737373;
   border: none;
+  font-size: inherit;
+  color: inherit;
   background-color: transparent;
 `;
 
-const HeartButton = styled.p`
-  position: relative;
-  top: -2rem;
-  left: 22rem;
-  z-index: 2;
+const HeartButton = styled.button`
+  position: absolute;
+  right: 12px;
+  background-color: transparent;
+  border: none;
 `;
 
+const ReplyContainer = styled.div`
+  display: flex;
+  padding: 10px 12px;
+  align-items: center;
+  margin-left: 50px;
+  min-height: 80px;
+`;
+
+const ReplyComment = styled.div`
+  width: 265px;
+  height: 100%;
+  margin-left: 10px;
+`;
+
+const AllComment = styled.button`
+  border: none;
+  font-size: 12px;
+  color: #737373;
+  background-color: transparent;
+`;
+
+const InputContainer = styled.div``;
+
 const NewReplyInput = styled.textarea`
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: -1rem;
-  left: 0;
-  top: 6rem;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px;
+  margin-left: 55px;
+  width: 314px;
+  height: 40px;
+  border: 1px solid #cccccc;
 `;

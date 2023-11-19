@@ -231,3 +231,36 @@ export const EditInput = styled.input`
   font-size: 16px;
   border-style: none;
 `;
+
+export const ModalText = styled.span`
+  margin: 22px 0 10px 0;
+  font-size: 14px;
+`;
+
+export const ModalButtons = styled.div`
+  padding: 12px 0;
+  display: flex;
+  width: 100%;
+  height: 144px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+export const DeleteButton = styled.button`
+  width: 200px;
+  height: 45px;
+  background-color: #0095f6;
+  border: none;
+  border-radius: 15px;
+  color: #ffffff;
+`;
+
+export const CancelButton = styled.button`
+  width: 200px;
+  height: 45px;
+  background-color: #e5e5e5;
+  border: none;
+  border-radius: 8px;
+  border-radius: 15px;
+`;
