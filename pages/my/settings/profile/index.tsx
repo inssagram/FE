@@ -6,14 +6,15 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import {useState} from 'react';
 import { useDispatch } from "react-redux";
-import { addPicture, addIntro } from "@/src/redux/Posts/userProfileSlice";
+import { addPicture, addCompany } from "@/src/redux/Posts/userProfileSlice";
 import { ImageType } from "@/src/redux/Posts/userProfileSlice";
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/redux/Posts/store";
 const Profile: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [introContent, setIntroContent] = useState<string>("");
+  const [companyContent, setCompanyContent] = useState<string>("");
 
   const handlePrevClick = () => {
     router.push("/my");
@@ -42,14 +43,17 @@ const Profile: React.FC = () => {
     }
   };
 
-  const handleIntroChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleCompanyChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const content = e.target.value;
 
-    setIntroContent(content);
+    setCompanyContent(content);
 
     //store에 소개 업데이트
-    dispatch(addIntro({content}))
+    dispatch(addCompany({content}))
   }
+
+  // const companyContentFromRedux = useSelector((state: RootState) => state.profile.contents);
+ 
   
   return (
     <>
@@ -67,7 +71,7 @@ const Profile: React.FC = () => {
           <SC.MyProfile>
             <SC.ProfileImage style={{  backgroundSize: 'cover', backgroundImage: `url(${profileImage})` }}  />
             <SC.IdCont>
-              <SC.MyId>gummy_jelly</SC.MyId>F
+              <SC.MyId>gummy_jelly</SC.MyId>
               <SC.ChangeProfile><label htmlFor="profileImageInput">프로필 사진 바꾸기</label>
                 <input
                   type="file"
@@ -81,8 +85,8 @@ const Profile: React.FC = () => {
           </SC.MyProfile>
         </SC.ProfileCont>
         <SC.IntroduceCont>
-          <SC.Aside>소개</SC.Aside>
-          <SC.TextArea value={introContent} onChange={handleIntroChange} placeholder="나를 소개하세요" />
+          <SC.Aside>회사</SC.Aside>
+          <SC.TextArea value={companyContent} onChange={handleCompanyChange} placeholder="회사를 적어주세요" />
         </SC.IntroduceCont>
         <SC.IntroduceCont>
           <SC.Aside>성별</SC.Aside>
