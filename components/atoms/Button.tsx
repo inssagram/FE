@@ -97,11 +97,15 @@ const Copy = styled.button`
 `;
 
 const Follow = styled.button`
-  width: 82px;
-  height: 32px;
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
   padding: 7px 16px;
   border: none;
   border-radius: 10px;
+  min-width: 71px;
+  height: 32px;
+  font-size: 14px;
   color: #ffffff;
   background-color: #0095f6;
 `;

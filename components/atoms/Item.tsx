@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { DeleteButton } from "@/components/atoms/Button";
+import { PostDetailData } from "@/types/PostTypes";
 
 interface SearchItemData {
   memberId: number;
@@ -108,20 +109,6 @@ export const SearchItem: React.FC<SearchItemProps> = ({
   );
 };
 
-interface PostItemData {
-  commentsCounts: number;
-  contents: string;
-  createdAt: number;
-  hashTags: string;
-  memberImage: string;
-  image: string;
-  likeCount: number;
-  memberId: number;
-  nickname: string;
-  postId: number;
-  taggedMemberId: string;
-}
-
 interface CommentItemData {
   commentId: number;
   memberId: number;
@@ -137,7 +124,7 @@ interface CommentItemData {
 }
 
 interface CommentDataProps {
-  post: PostItemData;
+  post: PostDetailData;
   comment: CommentItemData;
   commentLikes: [];
   handleLikeCommentClick: (commentId: number) => void;
@@ -176,7 +163,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
             />
             <Info>
               <Desc>
-                <ID>{post.nickname}</ID>
+                <ID>{post.nickName}</ID>
                 <Content>{post.contents}</Content>
               </Desc>
               <Date>16주</Date>

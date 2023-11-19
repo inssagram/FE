@@ -1,196 +1,230 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import * as SC from "@/components/styled/notifications";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { handleError } from "@/utils/errorHandler";
+import { FollowButton } from "@/components/atoms/Button";
 import { PageHeader } from "@/components/atoms/Header";
 import getNotificationAllAxios from "@/services/notificationInfo/getNotificationAll";
 import deleteNotificationAxios from "@/services/notificationInfo/deleteNotification";
+import deleteNotificationAllAxios from "@/services/notificationInfo/deleteNotificationAll";
+import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
+import { NotificationData } from "@/types/NotificationTypes";
 
-interface NotificationData {
-  id: number;
-  created_at: string;
-  friend_status: boolean;
-  read_status: boolean;
-  post_id: number;
-  post_image: string;
-  message: string;
-  sender_id: number;
-  sender_image: string;
-  sender_name: string;
-}
+interface NotificationProps {}
 
-const Notifications: React.FC = () => {
+const Notifications: React.FC<NotificationProps> = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
-  const [deleteIconVisible, setDeleteIconVisible] = useState(false);
-  const [isSwiping, setIsSwiping] = useState(false);
-  const [startX, setStartX] = useState(0);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [deleteIconVisible, setDeleteIconVisible] = useState({});
   const pageTitle = "알림";
 
-  // 알림 조회
+  useEffect(() => {
+    fetchNotificationAllData();
+  }, []);
+
   const fetchNotificationAllData = async () => {
     try {
       const res = await getNotificationAllAxios();
+      // 기본적으로 모든 알림 항목에 대해 삭제 아이콘 가시성을 비활성화
+      const initialDeleteIconVisible = res.data.reduce(
+        (acc, notification) => ({ ...acc, [notification.id]: false }),
+        {}
+      );
+      setDeleteIconVisible(initialDeleteIconVisible);
       setNotifications(res.data);
     } catch (err) {
       handleError(err, "Error fetching notifications:");
     }
   };
 
-  // 알림 삭제
-  const handleDeleteNotificationClick = async (id: number) => {
+  const handleFollowClick = async (followId: number) => {
     try {
-      const res = await deleteNotificationAxios(id);
-      fetchNotificationAllData();
+      const response = await postMemberFollowAxios(followId);
+      console.log("success", response);
+      setIsFollowing((prevIsFollowing) => !prevIsFollowing);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
+  const handleDeleteNotificationAll = async () => {
+    try {
+      const res = await deleteNotificationAllAxios();
+      console.log("delete all success", res);
+      setNotifications(res);
     } catch (err) {
       handleError(err, "Error deleting notifications:");
     }
   };
 
-  const handleSwipeStart = (e) => {
-    setIsSwiping(true);
-    setStartX(e.clientX || e.touches[0].clientX);
-  };
+  const handleDeleteNotification = async (id: number) => {
+    try {
+      await deleteNotificationAxios(id);
 
-  const handleSwipeMove = (e) => {
-    if (!isSwiping) {
-      return;
+      // 삭제 버튼 가시성을 업데이트
+      setDeleteIconVisible((prevDeleteIconVisible) => ({
+        ...prevDeleteIconVisible,
+        [id]: false,
+      }));
+
+      const updatedNotifications = notifications.filter(
+        (notification) => notification.id !== id
+      );
+      setNotifications(updatedNotifications);
+    } catch (err) {
+      handleError(err, "Error deleting notifications:");
     }
-
-    const currentX = e.clientX || e.touches[0].clientX;
-    const diffX = startX - currentX;
-
-    if (diffX > 100) {
-      setDeleteIconVisible(true); // Keep the delete icon visible
-      setIsSwiping(false);
-    }
   };
 
-  const handleSwipeEnd = () => {
-    setIsSwiping(false);
-    setDeleteIconVisible(deleteIconVisible);
+  const handleNotificationClick = (id: number) => {
+    // 클릭한 알림 항목에 대한 삭제 아이콘 가시성을 토글합니다.
+    setDeleteIconVisible((prevDeleteIconVisible) => ({
+      ...prevDeleteIconVisible,
+      [id]: !prevDeleteIconVisible[id],
+    }));
   };
-
-  useEffect(() => {
-    fetchNotificationAllData();
-  }, []);
 
   return (
     <>
       <PageHeader title={pageTitle} />
-      <SC.Notifications>
-        {/* <SC.Date>오늘</SC.Date> */}
-        {notifications.map((notification, index) => (
-          <SC.ContentArea
-            key={index}
-            onMouseDown={(e) => handleSwipeStart(e)}
-            onMouseMove={(e) => handleSwipeMove(e)}
-            onMouseUp={handleSwipeEnd}
-            onTouchStart={(e) => handleSwipeStart(e)}
-            onTouchMove={(e) => handleSwipeMove(e)}
-            onTouchEnd={handleSwipeEnd}
-          >
-            <SC.Account>
-              {notification.sender_image ? (
+      <Container>
+        {notifications.length > 0 ? (
+          <>
+            <DeleteAll>
+              <DeleteBtn onClick={handleDeleteNotificationAll}>
+                전체 지우기
+              </DeleteBtn>
+            </DeleteAll>
+            <Date>오늘</Date>
+          </>
+        ) : (
+          <Error>조회할 알림이 없습니다.</Error>
+        )}
+        {notifications &&
+          notifications.map((notification, index) => (
+            <ContentArea
+              key={index}
+              onClick={() => handleNotificationClick(notification.id)}
+            >
+              <Account>
                 <Image
-                  src={notification.sender_image}
+                  src={
+                    notification.sender_image
+                      ? notification.sender_image
+                      : "/images/noProfile.jpg"
+                  }
                   alt="프로필"
                   width={44}
                   height={44}
                   style={{ borderRadius: "100%" }}
+                />
+              </Account>
+              <Content>
+                {notification.message}
+                {/* {notification.created_at} */}
+              </Content>
+              {notification.post_id === undefined ? (
+                <FollowButton
+                  onClick={() => handleFollowClick(notification.sender_id)}
+                  isFollowing={isFollowing}
                 />
               ) : (
-                <Image
-                  src="/images/noProfile.jpg"
-                  alt="프로필"
-                  width={44}
-                  height={44}
-                  style={{ borderRadius: "100%" }}
-                />
+                <Board>
+                  <Image
+                    src={
+                      notification.post_image
+                        ? notification.post_image
+                        : "/images/noImage.svg"
+                    }
+                    alt="게시글"
+                    width={44}
+                    height={44}
+                  />
+                </Board>
               )}
-            </SC.Account>
-            <SC.Content>
-              {notification.message} {notification.created_at}
-            </SC.Content>
-            {/* <SC.Follow>팔로우</SC.Follow> */}
-            <SC.Board
-            // style={{ borderRadius: "100%", border: "1px solid #ccc" }}
-            >
-              <Image
-                src={
-                  notification.post_image
-                    ? notification.post_image
-                    : "/images/noImage.svg"
-                }
-                alt="프로필"
-                width={44}
-                height={44}
-                style={{ borderRadius: "100%" }}
-              />
-            </SC.Board>
-
-            {deleteIconVisible && (
-              <SC.DeleteIcon
-                onClick={() => handleDeleteNotificationClick(notification.id)}
-              >
-                <FontAwesomeIcon
-                  icon={faEllipsisVertical}
-                  fontSize={"20px"}
-                  style={{ color: "#0095f6" }}
-                />
-              </SC.DeleteIcon>
-            )}
-          </SC.ContentArea>
-        ))}
-        {/* <ContentArea
-          onMouseDown={(e) => handleSwipeStart(e)}
-          onMouseMove={(e) => handleSwipeMove(e)}
-          onMouseUp={handleSwipeEnd}
-          onTouchStart={(e) => handleSwipeStart(e)}
-          onTouchMove={(e) => handleSwipeMove(e)}
-          onTouchEnd={handleSwipeEnd}
-        >
-          <SC.Account>
-            <Image
-              src="/images/profile.jpg"
-              alt="프로필"
-              width={44}
-              height={44}
-              style={{ borderRadius: "100%" }}
-            />
-          </SC.Account>
-          <SC.Content>
-            king_jungho님이 회원님의 스토리를 좋아합니다. 2시간
-          </SC.Content>
-          <SC.Follow>팔로우</SC.Follow>
-          {deleteIconVisible && (
-            <SC.DeleteIcon onClick={handleDeleteNotificationClick}>
-              <FontAwesomeIcon
-                icon={faEllipsis}
-                fontSize={"24px"}
-                style={{ color: "#0095f6" }}
-              />
-            </SC.DeleteIcon>
-          )}
-        </ContentArea> */}
-      </SC.Notifications>
+              {deleteIconVisible[notification.id] && (
+                <DeleteIcon
+                  onClick={() => handleDeleteNotification(notification.id)}
+                >
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    fontSize={"20px"}
+                    style={{ color: "#0095f6" }}
+                  />
+                </DeleteIcon>
+              )}
+            </ContentArea>
+          ))}
+      </Container>
     </>
   );
 };
 
 export default Notifications;
 
+const Container = styled.div`
+  position: absolute;
+  top: 44px;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+const DeleteAll = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 12px;
+  padding-bottom: 5px;
+`;
+
+const DeleteBtn = styled.button`
+  font-size: 15px;
+  border: none;
+  background-color: transparent;
+`;
+
+const Date = styled.span`
+  display: inline-block;
+  margin: 0 12px;
+  padding-bottom: 16px;
+  font-size: 16px;
+`;
+
 const ContentArea = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   height: 60px;
   padding: 8px 16px;
-  transform: ${({ isSwiping }) =>
-    isSwiping
-      ? "translateX(-100px)"
-      : "none"}; /* Adjust the value to your preference */
-  transition: transform 0.3s ease;
+`;
+
+const Account = styled.div`
+  margin-right: 14px;
+  border-radius: 100%;
+`;
+
+const Content = styled.p`
+  display: flex;
+  min-width: 240px;
+  height: 100%;
+  font-size: 14px;
+  align-items: center;
+`;
+
+const Board = styled.div`
+  display: flex;
+  margin-left: 14px;
+`;
+
+const DeleteIcon = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0 7px;
+`;
+
+const Error = styled.span`
+  font-size: 14px;
+  margin: 0 24px;
 `;
