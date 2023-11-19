@@ -3,12 +3,17 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { useSelector, useDispatch } from "react-redux";
+import { loginUser } from "@/src/redux/Posts/userSlice";
 
 const Job = () => {
   const API_KEY = process.env.JOBLIST_API_KEY;
   const [inputValue, setInputValue] = useState("");
   const [jobList, setJobList] = useState<string[]>([]);
   const router = useRouter();
+  const member = useSelector((state) => state.user.member);
+  const token = sessionStorage.getItem("token");
+  const dispatch = useDispatch();
 
   interface JobData {
     job: string;
@@ -49,19 +54,36 @@ const Job = () => {
   };
 
   const submitButtonHandler = () => {
-    let id = sessionStorage.getItem("accountId");
+    // Check if member and token are valid before making the API call
+    if (!member || !member.member_id || !token) {
+      console.error("Invalid member or token");
+      return;
+    }
+
     axios
-      .patch(`http://localhost:5000/account/${id}`, {
-        job: inputValue,
-      })
+      .put(
+        `http://3.36.239.69:8080/member/update/${member.member_id}`,
+        {
+          companyName: inputValue,
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
       .then(() => {
-        alert("직업이 변경 되었습니다.");
-        router.push("/");
+        dispatch(loginUser({ ...member, job: inputValue }));
+        alert("직업 변경이 완료되었습니다.");
+        router.push("/my");
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  
+  
+  
 
   return (
     <>

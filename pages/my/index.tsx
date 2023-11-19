@@ -223,7 +223,7 @@ const My: React.FC<MyProps> = () => {
       <SC.MyDataContainer>
         <SC.MyDataValue>
           <SC.DataName>게시물</SC.DataName>
-          <SC.DataValue>77</SC.DataValue>
+          <SC.DataValue>{posts.length}</SC.DataValue>
         </SC.MyDataValue>
         <SC.MyDataValue>
           <SC.DataName>팔로워</SC.DataName>

@@ -104,8 +104,8 @@ export const Aside = styled.aside`
 `;
 
 export const TextArea = styled.textarea`
-  width: 90%;
-  min-height: 100px;
+  width: 40%;
+  min-height: 50px;
   border-radius: 8px;
   border: 1px solid #ccc;
 `;
