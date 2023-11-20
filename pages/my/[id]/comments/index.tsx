@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import Modal from "./modal";
+import { CommentDeleteModal } from "@/components/atoms/Modal";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
@@ -200,8 +200,6 @@ const Comments: React.FC = () => {
     setIsEditModalOpen(false);
   };
 
-  
-
   return (
     <Container>
       <PageHeader title={pageTitle} />
@@ -230,7 +228,7 @@ const Comments: React.FC = () => {
           </SmileIcon>
         </CommentsForm>
       </CommentsContainer>
-      {post && <CommentItem post={post} isReply={false}/>}
+      {post && <CommentItem post={post} isReply={false} />}
       {commentAll ? (
         commentAll.map((comment, index) => (
           <div key={index}>
@@ -250,7 +248,10 @@ const Comments: React.FC = () => {
         <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
       )}
       {isEditModalOpen && (
-        <Modal onDelete={handleCommentDelete} onCancel={handleCloseModal} />
+        <CommentDeleteModal
+          onDelete={handleCommentDelete}
+          onCancel={handleCloseModal}
+        />
       )}
       <Footer />
     </Container>

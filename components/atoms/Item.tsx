@@ -65,7 +65,7 @@ export const SearchItem: React.FC<SearchItemProps> = ({
                 <Id>{result.searched}</Id>
                 <Status>
                   {/* <Job>{result.job}</Job> */}
-                  {/* <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow> */}
+                  {/* <Follow>{result.ffriendStatus ? "팔로잉" : ""}</Follow> */}
                 </Status>
               </AccountInfo>
               <DeleteButton onClick={handleSearchItemDeleteClick} />
@@ -163,10 +163,11 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   //     }
   // }
 
+  //답글 달기
   const handleMoreCommentClick = (commentId: number) => {
     setIsReplying((prevIsReplying) => !prevIsReplying);
     setReplyToCommentId(commentId);
-    console.log(commentId);
+    setReplyContent(`@${comment.nickname} `); // Include the tagged username
     commentInputRef?.current?.focus();
   };
   //대댓글 불러오기
