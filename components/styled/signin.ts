@@ -40,6 +40,7 @@ export const Id = styled.input`
   background-color: whitesmoke;
   padding-left: 5px;
   margin-bottom: 12px;
+  color: black;
 `;
 
 export const Password = styled.input`
@@ -51,6 +52,7 @@ export const Password = styled.input`
   padding-left: 5px;
   margin-bottom: 12px;
   font-family: Arial, Helvetica, sans-serif;
+  color: black;
   &::placeholder {
     font-family: JejuGothic;
   }
