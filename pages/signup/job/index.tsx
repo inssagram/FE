@@ -23,7 +23,6 @@ const Job = () => {
       email: string,
       password: string,
       nickname: string,
-      job: string
     }
   }
 
@@ -35,9 +34,7 @@ const Job = () => {
     const fetchData = async () => {
       try {
         const encodedString = encodeURIComponent(inputValue);
-        const response = await axios.get(
-          `https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`
-        );
+        const response = await axios.get(`https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`);
         const data: JobData[] = response.data.dataSearch.content;
         const regexPattern = inputValue ? new RegExp(`^${inputValue}`) : null;
         const jobListArr: string[] = [];
@@ -65,12 +62,11 @@ const Job = () => {
 
   const submitButtonHandler = async () => {
     try{
-      await dispatch(reduceJob(inputValue))
       await axios.post(`${BASE_URL}/signup`, {
         email: register.email,
         password: register.password,
         nickname: register.nickname,
-        job: register.job
+        job: inputValue
       })
         alert("계정이 생성되었습니다.");
         router.push("/signin");
