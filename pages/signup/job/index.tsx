@@ -6,6 +6,8 @@ import { BackArrow } from "@/components/atoms/Icon";
 import { reduceJob } from "../emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import axiosInstance from "@/services/axiosInstance";
+
 
 
 const Job = () => {
@@ -62,12 +64,20 @@ const Job = () => {
 
   const submitButtonHandler = async () => {
     try{
-      await axios.post(`${BASE_URL}/signup`, {
+      const postData = {
         email: register.email,
         password: register.password,
         nickname: register.nickname,
         job: inputValue
-      })
+      }
+        await axiosInstance({
+          url: "signup",
+          headers: {
+            "Content-Type": "application/json",
+            charset: "utf-8",
+          },
+          data: postData,
+        });
         alert("계정이 생성되었습니다.");
         router.push("/signin");
       } catch (error) {
