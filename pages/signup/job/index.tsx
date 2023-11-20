@@ -71,7 +71,8 @@ const Job = () => {
         job: inputValue
       }
         await axiosInstance({
-          url: "signup",
+          method: "post",
+          url: "/signup",
           headers: {
             "Content-Type": "application/json",
             charset: "utf-8",
