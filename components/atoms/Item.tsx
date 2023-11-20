@@ -65,7 +65,7 @@ export const SearchItem: React.FC<SearchItemProps> = ({
                 <Id>{result.searched}</Id>
                 <Status>
                   {/* <Job>{result.job}</Job> */}
-                  {/* <Follow>{result.ffriendStatus ? "팔로잉" : ""}</Follow> */}
+                  {/* <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow> */}
                 </Status>
               </AccountInfo>
               <DeleteButton onClick={handleSearchItemDeleteClick} />
