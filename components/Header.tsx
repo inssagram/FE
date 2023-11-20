@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [userInfo?.member_id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

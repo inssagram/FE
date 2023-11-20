@@ -1,18 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 import styled from "styled-components";
+import { handleError } from "@/utils/errorHandler";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 import { DeleteButton } from "@/components/atoms/Button";
-import React, {useState, useRef} from "react";
-import postReplyAxios from "@/services/postInfo/postReply";
-import { handleError } from "@/utils/errorHandler";
 import getReplyAxios from "@/services/postInfo/getReply";
+import postReplyAxios from "@/services/postInfo/postReply";
 import postReplyToReplyAxios from "@/services/postInfo/postReplyToReply";
-import { useEffect } from "react";
+import { PostDetailData } from "@/types/PostTypes";
 
 interface SearchItemData {
   memberId: number;
@@ -108,20 +108,6 @@ export const SearchItem: React.FC<SearchItemProps> = ({
   );
 };
 
-interface PostItemData {
-  commentsCounts: number;
-  contents: string;
-  createdAt: number;
-  hashTags: string;
-  memberImage: string;
-  image: string;
-  likeCount: number;
-  memberId: number;
-  nickname: string;
-  postId: number;
-  taggedMemberId: string;
-}
-
 interface CommentItemData {
   commentId: number;
   memberId: number;
@@ -137,7 +123,7 @@ interface CommentItemData {
 }
 
 interface CommentDataProps {
-  post: PostItemData;
+  post: PostDetailData;
   comment: CommentItemData;
   commentLikes: [];
   handleLikeCommentClick: (commentId: number) => void;
@@ -165,176 +151,190 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   const [replyToReply, setReplyToReplyId] = useState<number | null>(null);
   const [isReplying, setIsReplying] = useState(false);
   const [isReplyingToReply, setIsReplyingToReply] = useState(false);
-  const [replycomments, setReplyComments] = useState<Array>([]);
+  const [replycomments, setReplyComments] = useState<Array<string>>([]);
 
-//   //답글달기 api 요청
-//   const fetchPostReplyData = async (parentCommentId: number, contents: string, mentionList: string[]) => {
-//     try {
-//         const res = await postReplyAxios(parentCommentId, contents, mentionList);
-//         setReplyContent(res.data);
-//     } catch (err) {
-//         handleError(err, "Error fetching posts reply");
-//     }
-// }
+  //   //답글달기 api 요청
+  //   const fetchPostReplyData = async (parentCommentId: number, contents: string, mentionList: string[]) => {
+  //     try {
+  //         const res = await postReplyAxios(parentCommentId, contents, mentionList);
+  //         setReplyContent(res.data);
+  //     } catch (err) {
+  //         handleError(err, "Error fetching posts reply");
+  //     }
+  // }
 
-const handleMoreCommentClick = (commentId: number) => {
-  setIsReplying((prevIsReplying) => !prevIsReplying);
-  setReplyToCommentId(commentId);
-  console.log(commentId);
-  commentInputRef?.current?.focus();
-};
-//대댓글 불러오기
-const getMoreComment = async (commentId: number) => {
-  if (replycomments.length > 0) {
-    // 기존 답글이 있는 경우, 숨깁니다.
-    setReplyComments([]);
-  } else {
-    // 기존 답글이 없는 경우, 가져와서 표시합니다.
-    const result = await getReplyAxios(commentId);
-    setReplyComments(result.data);
-  }
-};
+  const handleMoreCommentClick = (commentId: number) => {
+    setIsReplying((prevIsReplying) => !prevIsReplying);
+    setReplyToCommentId(commentId);
+    console.log(commentId);
+    commentInputRef?.current?.focus();
+  };
+  //대댓글 불러오기
+  const getMoreComment = async (commentId: number) => {
+    if (replycomments.length > 0) {
+      // 기존 답글이 있는 경우, 숨깁니다.
+      setReplyComments([]);
+    } else {
+      // 기존 답글이 없는 경우, 가져와서 표시합니다.
+      const result = await getReplyAxios(commentId);
+      setReplyComments(result.data);
+    }
+  };
 
-//대댓글 작성하기
-const handleReplyToReply = async(commentId:number, parentCommentId: number) => {
-  setIsReplyingToReply((prevIsReplying) => !prevIsReplying);
-  setReplyToReplyId(commentId);
-  setReplyToCommentId(parentCommentId);
-  commentInputRef?.current?.focus();
-}
+  //대댓글 작성하기
+  const handleReplyToReply = async (
+    commentId: number,
+    parentCommentId: number
+  ) => {
+    setIsReplyingToReply((prevIsReplying) => !prevIsReplying);
+    setReplyToReplyId(commentId);
+    setReplyToCommentId(parentCommentId);
+    commentInputRef?.current?.focus();
+  };
 
-//대댓글 작성한 데이터 보내기
-const handleSendReplytoReply = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    if (replyContent.trim() !== '') {
-      const data = {
-        parentCommentId: replyToCommentId,
-        replyId: replyToReply,
-        contents: replyContent,
-      };
+  //대댓글 작성한 데이터 보내기
+  const handleSendReplytoReply = async (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (replyContent.trim() !== "") {
+        const data = {
+          parentCommentId: replyToCommentId,
+          replyId: replyToReply,
+          contents: replyContent,
+        };
 
-      try {
+        try {
+          const result = await postReplyToReplyAxios(data);
 
-        const result = await postReplyToReplyAxios(data);
+          setReplyComments((prevComments: CommentItemData[]) => [
+            ...prevComments,
+            result.data,
+          ]);
 
-        setReplyComments((prevComments: CommentItemData[]) => [...prevComments, result.data]);
-
-        // Clear input fields
-        setReplyContent('');
-        setReplyToReplyId(null);
-        setReplyToCommentId(null);
-      } catch (error) {
-        handleError(error, "Error posting reply to reply");
+          // Clear input fields
+          setReplyContent("");
+          setReplyToReplyId(null);
+          setReplyToCommentId(null);
+        } catch (error) {
+          handleError(error, "Error posting reply to reply");
+        }
       }
     }
-  }
-};
+  };
 
-//댓글 작성(엔터)
-const handleKeyPress = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    if (replyContent.trim() !== '') {
-      const data = {
-        parentCommentId: replyToCommentId,
-        contents: replyContent,
-      };
+  //댓글 작성(엔터)
+  const handleKeyPress = async (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      if (replyContent.trim() !== "") {
+        const data = {
+          parentCommentId: replyToCommentId,
+          contents: replyContent,
+        };
 
-      try {
-        const result = await postReplyAxios(data);
+        try {
+          const result = await postReplyAxios(data);
 
-        setReplyComments((prevComments: CommentItemData[]) => [
-          ...prevComments,
-          result.data,
-        ]);
-        
-        setReplyContent('');
-        setReplyToCommentId(null);
-      } catch (error) {
-        handleError(error, "Error posting reply");
+          setReplyComments((prevComments: CommentItemData[]) => [
+            ...prevComments,
+            result.data,
+          ]);
+
+          setReplyContent("");
+          setReplyToCommentId(null);
+        } catch (error) {
+          handleError(error, "Error posting reply");
+        }
       }
     }
-  }
-};
+  };
 
-useEffect(() => {
-  console.log('Component re-rendered!', replycomments);
-}, [replycomments, replyContent, replyToCommentId]);
-
+  useEffect(() => {}, [replycomments, replyContent, replyToCommentId]);
 
   const isCurrentUserCommentAuthor =
     userInfo && comment && userInfo.member_id === comment.memberId;
 
   return (
-  <>
-    {!isReply ? (
-      <Comment>
-        <Profile>
-          <Image
-            src={
-              post.memberImage ? post.memberImage : "/images/noProfile.jpg"
-            }
-            alt="프로필"
-            width={42}
-            height={42}
-            style={{ borderRadius: "100%" }}
-          />
-        </Profile>
-        <Info>
-          <Desc>
-            <ID>{post.nickname}</ID>
-            <Content>{post.contents}</Content>
-          </Desc>
-          <Date>16주</Date>
-        </Info>
-      </Comment>
-    ) : (
-      <ReplyContainer>
-        <Profile>
-          <Image
-            src={
-              comment.memberImage
-                ? comment.memberImage
-                : "/images/noProfile.jpg"
-            }
-            alt="프로필"
-            width={42}
-            height={42}
-            style={{ borderRadius: "100%" }}
-          />
-        </Profile>
-        <Reply>
-          <Info>
-            <Desc>
-              <ID>{comment.nickname}</ID>
-              <Content>{comment.content}</Content>
-            </Desc>
-            <Desc>
-              <Date>16주</Date>
-              <Link href={`/post/comment/liked_by/${comment.commentId}`}>
-                <Likes>좋아요 {comment.likeCount}개</Likes>
-              </Link>
-              <MoreComment onClick={() => handleMoreCommentClick(comment.commentId)}>답글달기</MoreComment>
-              {isCurrentUserCommentAuthor && (
-                <DeleteComment onClick={() => handleShowModal(comment)}>
-                  삭제하기
-                </DeleteComment>
-              )}
-            </Desc>
-            <AllComment onClick={() => getMoreComment(comment.commentId)}>
-              {replycomments.length > 0 ? '답글 숨기기' : '답글 보기'}
-            </AllComment>
-          </Info>
-          <HeartButton>
-            <FontAwesomeIcon
-              onClick={() => handleLikeCommentClick(comment.commentId)}
-              icon={commentLikes[index] ? fasHeart : farHeart}
-              style={{ color: commentLikes[index] ? "red" : "inherit" }}
-              fontSize={"12px"}
+    <>
+      {!isReply ? (
+        <OriginalComment>
+          <OriginalProfile>
+            <Image
+              src={
+                post.memberImage ? post.memberImage : "/images/noProfile.jpg"
+              }
+              alt="프로필"
+              width={42}
+              height={42}
+              style={{ borderRadius: "100%" }}
             />
-          </HeartButton>
-
+          </OriginalProfile>
+          <OriginalInfo>
+            <Desc>
+              <ID>{post.nickName}</ID>
+              <Content>{post.contents}</Content>
+            </Desc>
+            <Date>16주</Date>
+          </OriginalInfo>
+        </OriginalComment>
+      ) : (
+        <>
+          <CommentContainer>
+            <Profile>
+              <Image
+                src={
+                  comment.memberImage
+                    ? comment.memberImage
+                    : "/images/noProfile.jpg"
+                }
+                alt="프로필"
+                width={42}
+                height={42}
+                style={{ borderRadius: "100%" }}
+              />
+            </Profile>
+            <Comment>
+              <Info>
+                <Desc>
+                  <ID>{comment.nickname}</ID>
+                  <Content>{comment.content}</Content>
+                </Desc>
+                <Desc>
+                  <Date>16주</Date>
+                  <Link href={`/post/comment/liked_by/${comment.commentId}`}>
+                    <Likes>좋아요 {comment.likeCount}개</Likes>
+                  </Link>
+                  <MoreComment
+                    onClick={() => handleMoreCommentClick(comment.commentId)}
+                  >
+                    답글달기
+                  </MoreComment>
+                  {isCurrentUserCommentAuthor && (
+                    <DeleteComment onClick={() => handleShowModal(comment)}>
+                      삭제하기
+                    </DeleteComment>
+                  )}
+                </Desc>
+              </Info>
+              <ReplyComment>
+                <AllComment onClick={() => getMoreComment(comment.commentId)}>
+                  {replycomments.length > 0 ? "답글 숨기기" : "답글 보기"}
+                </AllComment>
+              </ReplyComment>
+              <HeartButton>
+                <FontAwesomeIcon
+                  onClick={() => handleLikeCommentClick(comment.commentId)}
+                  icon={commentLikes[index] ? fasHeart : farHeart}
+                  style={{ color: commentLikes[index] ? "red" : "inherit" }}
+                  fontSize={"12px"}
+                />
+              </HeartButton>
+            </Comment>
+          </CommentContainer>
           {replycomments.map((replyComment: any, index: number) => (
             <ReplyContainer key={index}>
               <Profile>
@@ -350,7 +350,7 @@ useEffect(() => {
                   style={{ borderRadius: "100%" }}
                 />
               </Profile>
-              <Reply>
+              <Comment>
                 <Info>
                   <Desc>
                     <ID>{replyComment.nickname}</ID>
@@ -358,12 +358,25 @@ useEffect(() => {
                   </Desc>
                   <Desc>
                     <Date>16주</Date>
-                    <Link href={`/post/comment/liked_by/${replyComment.commentId}`}>
+                    <Link
+                      href={`/post/comment/liked_by/${replyComment.commentId}`}
+                    >
                       <Likes>좋아요 {replyComment.likeCount}개</Likes>
                     </Link>
-                    <MoreComment onClick={() => handleReplyToReply(replyComment.commentId, comment.commentId)}>답글달기</MoreComment>
+                    <MoreComment
+                      onClick={() =>
+                        handleReplyToReply(
+                          replyComment.commentId,
+                          comment.commentId
+                        )
+                      }
+                    >
+                      답글달기
+                    </MoreComment>
                     {isCurrentUserCommentAuthor && (
-                      <DeleteComment onClick={() => handleShowModal(replyComment)}>
+                      <DeleteComment
+                        onClick={() => handleShowModal(replyComment)}
+                      >
                         삭제하기
                       </DeleteComment>
                     )}
@@ -377,29 +390,29 @@ useEffect(() => {
                     fontSize={"12px"}
                   />
                 </HeartButton>
-              </Reply>
-              {isReplyingToReply && (
-                <NewReplyInput
-                  value={replyContent}
-                  onChange={(e) => setReplyContent(e.target.value)}
-                  onKeyDown={handleSendReplytoReply}
-                />
-              )}
+              </Comment>
             </ReplyContainer>
           ))}
-
           {isReplying && (
-            <NewReplyInput
-              value={replyContent}
-              onChange={(e) => setReplyContent(e.target.value)}
-              onKeyDown={handleKeyPress}
-            />
+            <InputContainer>
+              <NewReplyInput
+                value={replyContent}
+                onChange={(e) => setReplyContent(e.target.value)}
+                onKeyDown={handleKeyPress}
+              />
+            </InputContainer>
           )}
-        </Reply>
-      </ReplyContainer>
-    )}
-  </>
-);
+        </>
+      )}
+      {isReplyingToReply && (
+        <NewReplyInput
+          value={replyContent}
+          onChange={(e) => setReplyContent(e.target.value)}
+          onKeyDown={handleSendReplytoReply}
+        />
+      )}
+    </>
+  );
 };
 
 const ItemContainer = styled.div`
@@ -475,13 +488,21 @@ const Follow = styled.span`
   color: #7c7c7c;
 `;
 
-const Comment = styled.div`
-  min-height: 80px;
-  display: flex;
-  padding: 12px;
-  border-bottom: 1px solid #cccccc;
-  margin-top:-1rem;
+// Comment Item
+const OriginalComment = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #cccccc;
+  height: 60px;
+  // margin-top: -1rem;
+  // position: relative;
+`;
+
+const OriginalProfile = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Profile = styled.div`
@@ -489,30 +510,42 @@ const Profile = styled.div`
   align-items: center;
 `;
 
+const OriginalInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 5px;
+  margin-left: 5px;
+  width: 100%;
+  height: 80%;
+`;
+
 const Info = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  margin-left: 1.5rem;
-  min-height: 40px;
-  margin-top: 1.5rem;
-  line-height: 1.5rem;
+  justify-content: space-between;
+  padding-left: 5px;
+  margin-left: 5px;
+  height: 100%;
 `;
-
 
 const ID = styled.p`
   padding-right: 5px;
-  color: #262626;
+  color: #222222;
 `;
 
 const Content = styled.p`
   max-width: 370px;
+  color: #222222;
 `;
 
 const Desc = styled.div`
   display: flex;
   flex-direction: row;
   max-width: 265px;
+  padding-bottom: 7px;
+  font-size: 12px;
+  color: #737373;
 `;
 
 const Date = styled.p`
@@ -529,63 +562,72 @@ const Likes = styled.p`
   margin-right: 12px;
 `;
 
-const ReplyContainer = styled.div`
+const CommentContainer = styled.div`
   position: relative;
   display: flex;
-  padding: 12px;
+  padding: 10px 12px;
   align-items: center;
   min-height: 80px;
 `;
 
-const Reply = styled.div`
-  position: absolute;
+const Comment = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   width: 316px;
-  top: 0;
-  left: 3.5rem;
+  height: 90%;
 `;
 
 const MoreComment = styled.button`
-  width: 60px;
-  font-size: 12px;
-  color: #737373;
+  margin-right: 12px;
   border: none;
+  font-size: inherit;
+  color: inherit;
   background-color: transparent;
+`;
+
+const DeleteComment = styled.button`
+  border: none;
+  font-size: inherit;
+  color: inherit;
+  background-color: transparent;
+`;
+
+const HeartButton = styled.button`
+  position: absolute;
+  right: 12px;
+  background-color: transparent;
+  border: none;
+`;
+
+const ReplyContainer = styled.div`
+  display: flex;
+  padding: 10px 12px;
+  align-items: center;
+  margin-left: 50px;
+  min-height: 80px;
+`;
+
+const ReplyComment = styled.div`
+  width: 265px;
+  height: 100%;
+  margin-left: 10px;
 `;
 
 const AllComment = styled.button`
-  width: 60px;
+  border: none;
   font-size: 12px;
   color: #737373;
-  border: none;
-  background-color: transparent;
-`
-
-const DeleteComment = styled.button`
-  width: 60px;
-  font-size: 12px;
-  color: #737373;
-  border: none;
   background-color: transparent;
 `;
 
-const HeartButton = styled.p`
-  position: relative;
-  top: -2rem;
-  left: 22rem;
-  z-index: 2;
-`
+const InputContainer = styled.div``;
 
 const NewReplyInput = styled.textarea`
-  width: 100%;
-  height: 30px;
-  position: absolute;
-  bottom: -1rem;
-  left: 0;
-  top: 6rem;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px;
+  margin-left: 55px;
+  width: 314px;
+  height: 40px;
+  border: 1px solid #cccccc;
 `;
