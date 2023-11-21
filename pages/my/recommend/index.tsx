@@ -1,25 +1,27 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as SC from "@/components/styled/my_recommend";
-import Image from "next/image";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
+import getUserRecommendAxios from "@/services/userInfo/getUserRecommed";
+import Image from "next/image";
 
 export interface Post {
   id: number;
   userId: string;
   userName: string;
   introduce: string;
+  image: string;
+  nickname: string;
+  job: string;
+  member_id: number;
 }
 
 interface MyProps {
   selectedUserName?: string;
 }
-
-const API_ENDPOINT = "http://localhost:4000/recommend";
 
 const Recommend: React.FC<MyProps> = ({ selectedUserName = "아무개" }) => {
   const router = useRouter();
@@ -28,26 +30,33 @@ const Recommend: React.FC<MyProps> = ({ selectedUserName = "아무개" }) => {
   const [recommendPosts, setRecommendPosts] = useState<Post[]>([]);
   const [following, setFollowing] = useState<boolean[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const { userId } = router.query; // URL 경로에서 userId 가져오기
-  const userName = router.query.userName; // URL 쿼리에서 userName 가져오기
+
+  const fetchData = async () => {
+  try {
+    console.log("Fetching data...");
+    const response = await getUserRecommendAxios(Number(id));
+    console.log("Response:", response);
+
+    const { data } = response;
+
+    if (data && data.content) {
+      // Assuming "content" contains the array of user data
+      setRecommendPosts(data.content);
+      setFollowing(data.content.map(() => false));
+    } else {
+      // Handle the case where the data structure is unexpected
+      console.error("Unexpected data structure:", data);
+      setError("Failed to fetch recommendations. Unexpected data structure.");
+    }
+  } catch (error) {
+    console.error("Failed to fetch the data.", error);
+    setError("Failed to fetch recommendations. Please try again later.");
+  }
+};
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Fetching data...");
-        const { data } = await axios.get(API_ENDPOINT);
-        console.log("Data fetched:", data);
-        
-        setRecommendPosts(data);
-        setFollowing(data.map(() => false)); // Initialize follow array
-      } catch (error) {
-        console.error("Failed to fetch the data.", error);
-        setError("Failed to fetch recommendations. Please try again later.");
-      }
-    };
-
-    fetchData();
-  }, []);
+    fetchData(); // Call fetchData when the component mounts
+  }, [id]);
 
   const handleFollow = (index: number) => {
     const updatedFollowing = [...following];
@@ -74,13 +83,32 @@ const Recommend: React.FC<MyProps> = ({ selectedUserName = "아무개" }) => {
         {error && <p>{error}</p>}
 
         {recommendPosts.map((post, index) => (
-          <Link href={`/user/${post.userId}?userName=${post.userName}`} key={index}>
-            <SC.UserCont>
-              <SC.UserProfile />
+  <Link href={`/user/${post.member_id}`} key={index}>
+    <SC.UserCont>
+      {post.image ? (
+        <SC.UserProfile>
+          {/* Render the actual profile image */}
+          <Image
+            src={post.image} // Replace with the correct image source property
+            alt={`Profile Image of ${post.nickname}`}
+            width={100} // Adjust the width accordingly
+            height={100} // Adjust the height accordingly
+          />
+        </SC.UserProfile>
+      ) : (
+        <SC.UserProfile>
+          {/* Render the placeholder image if post.image is null */}
+          <Image
+            src="/images/noProfile.jpg"
+            alt="No Profile Image"
+            width={50} // Adjust the width accordingly
+            height={50} // Adjust the height accordingly
+          />
+        </SC.UserProfile>
+      )}
               <SC.UserStatus>
-                <SC.UserId>{post.userId}</SC.UserId>
-                {post.introduce && <SC.UserIntro>{post?.introduce}</SC.UserIntro>}
-                <SC.UserFollower>회원님을 팔로우합니다</SC.UserFollower>
+                <SC.UserId>{post.nickname}</SC.UserId>
+                {post.job && <SC.UserIntro>{post?.job}</SC.UserIntro>}
               </SC.UserStatus>
               <SC.FollowButton
                 onClick={() => handleFollow(index)}

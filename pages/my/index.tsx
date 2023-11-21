@@ -1,48 +1,63 @@
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 import * as SC from "@/components/styled/my";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faTable,
   faMobileScreen,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
 import { handleError } from "@/utils/errorHandler";
-import Footer from "@/components/Footer";
 import { MyPageHeader } from "@/components/atoms/Header";
+import Footer from "@/components/Footer";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
-import getBookmarkPostAllAxios from "@/services/postInfo/getBookmarkPostAll";
 import getTaggedPostAllAxios from "@/services/postInfo/getTaggedPostAll";
-import { UserInfoData } from "@/types/UserTypes";
-import { PostDetailData } from "@/types/PostTypes";
+import getBookmarkPostAllAxios from "@/services/postInfo/getBookmarkPostAll";
+
+interface UserInfo {
+  email: string;
+  member_id: number;
+  nickname: string;
+  job: string;
+  profilePic: string;
+  image: string;
+}
+
+interface PostData {
+  postId: number;
+  memberId: number;
+  image: string;
+  contents: string;
+  likeCount: number;
+  commentsCounts: number;
+  taggedMembers: string;
+  hashTags: string;
+}
 
 interface MyProps {
-  userInfo: UserInfoData;
-  post: PostDetailData;
+  userInfo: UserInfo;
+  post: PostData;
 }
 
 const My: React.FC<MyProps> = () => {
   const userInfo = useSelector(
     (state: RootState) => state.user.member
-  ) as UserInfoData;
-  const [posts, setPosts] = useState<PostDetailData[] | null>([]);
-  console.log(posts);
-  const [bookmarkedPost, setBookmarkedPost] = useState<PostDetailData[] | null>(
-    []
-  );
-  const [taggedPost, setTaggedPost] = useState<PostDetailData[]>([]);
+  ) as UserInfo;
+  const [posts, setPosts] = useState<PostData[]>([]);
+  const [bookmarkedPost, setBookmarkedPost] = useState<PostData[]>([]);
   const [isShowBookmarked, setIsShowBookmarked] = useState(false);
+  const [taggedPost, setTaggedPost] = useState<PostData[]>([]);
   const [isShowTagged, setIsShowTagged] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState<string>("table");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchMyPostAllData = async () => {
+  // 내가 작성한 게시글 조회
+  const fetchMyPostAllData = async (memberId: number) => {
     try {
-      const res = await getMyPostAllAxios();
+      const res = await getMyPostAllAxios(memberId);
       setPosts(res.data);
       setLoading(false);
     } catch (err) {
@@ -51,6 +66,7 @@ const My: React.FC<MyProps> = () => {
     }
   };
 
+  // 내가 북마크한 게시글 조회
   const fetchBookmarkPostAllData = async () => {
     try {
       const res = await getBookmarkPostAllAxios();
@@ -62,42 +78,36 @@ const My: React.FC<MyProps> = () => {
     }
   };
 
+  const handleBookmarkIconClick = () => {
+    fetchBookmarkPostAllData();
+    setIsShowBookmarked(!isShowBookmarked);
+  };
+
   const fetchTaggedPostAllData = async (memberId: number) => {
     try {
       const res = await getTaggedPostAllAxios(memberId);
       setTaggedPost(res.data);
       setLoading(false);
     } catch (err) {
-      handleError(err, "Error fetching tagged posts:");
+      handleError(err, "Error fetching bookmarked posts:");
       setLoading(true);
     }
   };
 
-  const handleIconClick = (icon: string) => {
-    setSelectedIcon(icon);
-  };
-
-  const handleBookmarkIconClick = () => {
-    handleIconClick("bookmark");
-    fetchBookmarkPostAllData();
-    setIsShowBookmarked(!isShowBookmarked);
-  };
-
   const handleTaggedIconClick = () => {
-    handleIconClick("tagged");
     fetchTaggedPostAllData(userInfo.member_id);
     setIsShowTagged(!isShowTagged);
   };
 
   useEffect(() => {
-    fetchMyPostAllData();
-    handleIconClick("table");
-  }, []);
+    if (userInfo && userInfo.member_id) {
+      fetchMyPostAllData(userInfo.member_id);
+    }
+  }, [userInfo]);
 
   return (
     <>
       <MyPageHeader userInfo={userInfo} />
-
       <SC.Container>
         <SC.Profile>
           <Image
@@ -112,13 +122,6 @@ const My: React.FC<MyProps> = () => {
         <SC.MyDescContainer>
           <SC.Intro>
             <SC.Id>{userInfo.nickname}</SC.Id>
-            {userInfo.job ? (
-              <SC.Company>{userInfo.job}</SC.Company>
-            ) : (
-              <Link href="/my/settings/profile" passHref>
-                <SC.Company>직업을 입력해보세요</SC.Company>
-              </Link>
-            )}
             <SC.Company>{userInfo.job}</SC.Company>
           </SC.Intro>
           <SC.EditArea>
@@ -153,14 +156,8 @@ const My: React.FC<MyProps> = () => {
         </SC.MyDataValue>
       </SC.MyDataContainer>
       <SC.IconContainer>
-        <FontAwesomeIcon
-          icon={faTable}
-          onClick={() => handleIconClick("table")}
-        />
-        <FontAwesomeIcon
-          icon={faMobileScreen}
-          onClick={() => handleIconClick("mobile")}
-        />
+        <FontAwesomeIcon icon={faTable} />
+        <FontAwesomeIcon icon={faMobileScreen} />
         <FontAwesomeIcon icon={faBookmark} onClick={handleBookmarkIconClick} />
         <FontAwesomeIcon icon={faUser} onClick={handleTaggedIconClick} />
       </SC.IconContainer>
@@ -170,48 +167,44 @@ const My: React.FC<MyProps> = () => {
           <SC.Loading>
             <FontAwesomeIcon icon={faSpinner} fontSize={"25px"} />
           </SC.Loading>
-        ) : selectedIcon === "bookmark" ? (
-          isShowBookmarked ? (
-            bookmarkedPost.length === 0 ? (
-              <SC.Text>저장된 게시물이 없습니다</SC.Text>
-            ) : (
-              bookmarkedPost.map((post) => (
-                <Link
-                  key={post.postId}
-                  href={`/my/feeds/${post.postId}`}
-                  passHref
-                >
-                  <Image
-                    src={post.image[0]}
-                    alt="이미지"
-                    width={135}
-                    height={135}
-                  />
-                </Link>
-              ))
-            )
-          ) : null
-        ) : selectedIcon === "tagged" ? (
-          isShowTagged ? (
-            taggedPost.length === 0 ? (
-              <SC.Text>태그된 게시물이 없습니다</SC.Text>
-            ) : (
-              taggedPost.map((post) => (
-                <Link
-                  key={post.postId}
-                  href={`/my/feeds/${post.postId}`}
-                  passHref
-                >
-                  <Image
-                    src={post.image[0]}
-                    alt="이미지"
-                    width={135}
-                    height={135}
-                  />
-                </Link>
-              ))
-            )
-          ) : null
+        ) : isShowBookmarked ? (
+          bookmarkedPost.length === 0 ? (
+            <SC.Text>저장된 게시물이 없습니다</SC.Text>
+          ) : (
+            bookmarkedPost.map((post) => (
+              <Link
+                key={post.postId}
+                href={`/my/feeds/${post.postId}`}
+                passHref
+              >
+                <Image
+                  src={post.image[0]}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              </Link>
+            ))
+          )
+        ) : isShowTagged ? (
+          taggedPost.length === 0 ? (
+            <SC.Text>태그된 게시물이 없습니다</SC.Text>
+          ) : (
+            taggedPost.map((post) => (
+              <Link
+                key={post.postId}
+                href={`/my/feeds/${post.postId}`}
+                passHref
+              >
+                <Image
+                  src={post.image[0]}
+                  alt="이미지"
+                  width={135}
+                  height={135}
+                />
+              </Link>
+            ))
+          )
         ) : (
           posts.map((post) => (
             <Link key={post.postId} href={`/my/feeds/${post.postId}`} passHref>
@@ -232,54 +225,54 @@ const My: React.FC<MyProps> = () => {
 };
 
 export default My;
+       
+  // 무한스크롤
+  // const [isClient, setIsClient] = useState(false);
+  // const sentinelRef = useRef(null);
+  // const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
+  // const userProfile = useSelector((state: RootState) => {
+  //   const contents = state.profile.contents as ImageType[];
+  //   const latestProfile = contents.slice().reverse()[0];
+  //   return latestProfile;
+  // });
 
-// 무한스크롤
-// const [isClient, setIsClient] = useState(false);
-// const sentinelRef = useRef(null);
-// const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
-// const userProfile = useSelector((state: RootState) => {
-//   const contents = state.profile.contents as ImageType[];
-//   const latestProfile = contents.slice().reverse()[0];
-//   return latestProfile;
-// });
+  // const repeatData = useCallback(() => {
+  //   const currentDataLength = posts.length;
+  //   const newPosts = posts.map((post, index) => {
+  //     return {
+  //       ...post,
+  //       id: post.id + currentDataLength,
+  //     };
+  //   });
+  //   setPosts((prev) => [...prev, ...newPosts]);
+  // }, [posts]);
 
-// const repeatData = useCallback(() => {
-//   const currentDataLength = posts.length;
-//   const newPosts = posts.map((post, index) => {
-//     return {
-//       ...post,
-//       id: post.id + currentDataLength,
-//     };
-//   });
-//   setPosts((prev) => [...prev, ...newPosts]);
-// }, [posts]);
+  // useEffect(() => {
+  //   const options = {
+  //     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
+  //     rootMargin: "0px",
+  //     threshold: 0.1,
+  //   };
 
-// useEffect(() => {
-//   const options = {
-//     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
-//     rootMargin: "0px",
-//     threshold: 0.1,
-//   };
+  //   const observer = new IntersectionObserver((entries) => {
+  //     if (entries[0].isIntersecting) {
+  //       repeatData();
+  //     }
+  //   }, options);
 
-//   const observer = new IntersectionObserver((entries) => {
-//     if (entries[0].isIntersecting) {
-//       repeatData();
-//     }
-//   }, options);
+  //   const currentSentinel = sentinelRef.current;
 
-//   const currentSentinel = sentinelRef.current;
+  //   if (currentSentinel) {
+  //     observer.observe(currentSentinel);
+  //   }
 
-//   if (currentSentinel) {
-//     observer.observe(currentSentinel);
-//   }
+  //   return () => {
+  //     if (currentSentinel) {
+  //       observer.unobserve(currentSentinel);
+  //     }
+  //   };
+  // }, [repeatData]);
 
-//   return () => {
-//     if (currentSentinel) {
-//       observer.unobserve(currentSentinel);
-//     }
-//   };
-// }, [repeatData]);
-
-// if (!isClient) {
-//   return null;
-// }
+  // if (!isClient) {
+  //   return null;
+  // }

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import Modal from "./modal";
+import { CommentDeleteModal } from "@/components/atoms/Modal";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
@@ -200,8 +200,6 @@ const Comments: React.FC = () => {
     setIsEditModalOpen(false);
   };
 
-  
-
   return (
     <Container>
       <PageHeader title={pageTitle} />
@@ -224,12 +222,13 @@ const Comments: React.FC = () => {
             onChange={handleCommentChange}
             placeholder="댓글 달기..."
           />
-          {/* <SmileIcon>
+
+          <SmileIcon>
             <FontAwesomeIcon icon={faFaceSmile} fontSize={"2rem"} />
-          </SmileIcon> */}
+          </SmileIcon>
         </CommentsForm>
       </CommentsContainer>
-      {post && <CommentItem post={post} isReply={false}/>}
+      {post && <CommentItem post={post} isReply={false} />}
       {commentAll ? (
         commentAll.map((comment, index) => (
           <div key={index}>
@@ -249,7 +248,10 @@ const Comments: React.FC = () => {
         <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
       )}
       {isEditModalOpen && (
-        <Modal onDelete={handleCommentDelete} onCancel={handleCloseModal} />
+        <CommentDeleteModal
+          onDelete={handleCommentDelete}
+          onCancel={handleCloseModal}
+        />
       )}
       <Footer />
     </Container>
@@ -260,16 +262,22 @@ export default Comments;
 
 const Container = styled.section`
   width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
 `;
 
 const CommentsContainer = styled.div`
   width: 100%;
-  height: 80px;
+  height: 8vh;
   border-top: 1px solid #e2e2e2;
   display: flex;
   align-items: center;
-  padding: 10px 15px;
+  padding-left: 1rem;
 `;
 
 const UserProfile = styled.div`
@@ -279,24 +287,23 @@ const UserProfile = styled.div`
 
 const CommentsForm = styled.form`
   width: 100%;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
+  position: relative;
+  padding-left: 1rem;
 `;
 
 const CommentsInput = styled.input`
-  width: 100%;
-  height: 37px;
+  width: 95%;
+  height: 4vh;
   border-radius: 10px;
-  padding-left: 12px;
+  padding-left: 0.5rem;
 `;
 
-// const SmileIcon = styled.div`
-//   position: absolute;
-//   right: 10%;
-//   top: 50%;
-//   transform: translateY(-50%);
-// `;
+const SmileIcon = styled.div`
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transform: translateY(-50%);
+`;
 
 const Empty = styled.span`
   padding: 12px;
