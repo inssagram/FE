@@ -46,10 +46,14 @@ export const NewChatRoomHeader: React.FC<NewChatRoomHeaderProps> = ({
 };
 
 interface ChatRoomHeaderProps {
-  receiver: MemberInfoData | null;
+  chatRoom: {
+    receiver: MemberInfoData | null;
+  } | null;
 }
 
-export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({ receiver }) => {
+export const ChatRoomHeader: React.FC<ChatRoomHeaderProps> = ({ chatRoom }) => {
+  const receiver = chatRoom?.receiver;
+
   return (
     <>
       <ChatRoom>

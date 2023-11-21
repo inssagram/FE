@@ -8,16 +8,10 @@ import { PageHeader } from "@/components/atoms/Header";
 import { FollowButton } from "@/components/atoms/Button";
 import getLikePostMemberListAxios from "@/services/postInfo/getLikePostMemberList";
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
+import { LikedPostMemberData } from "@/types/PostTypes";
 
-interface LikeMemberData {
-  memberId: number;
-  memberNickname: string;
-  memberProfile: string;
-  followedState: boolean;
-}
-
-const LikedPost: React.FC<LikeMemberData> = () => {
-  const [postMembers, setPostMembers] = useState<LikeMemberData[]>([]);
+const LikedPost: React.FC<LikedPostMemberData> = () => {
+  const [postMembers, setPostMembers] = useState<LikedPostMemberData[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
 
   const router = useRouter();

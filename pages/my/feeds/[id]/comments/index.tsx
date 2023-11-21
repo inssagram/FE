@@ -222,10 +222,9 @@ const Comments: React.FC = () => {
             onChange={handleCommentChange}
             placeholder="댓글 달기..."
           />
-
-          <SmileIcon>
+          {/* <SmileIcon>
             <FontAwesomeIcon icon={faFaceSmile} fontSize={"2rem"} />
-          </SmileIcon>
+          </SmileIcon> */}
         </CommentsForm>
       </CommentsContainer>
       {post && <CommentItem post={post} isReply={false} />}
@@ -262,22 +261,16 @@ export default Comments;
 
 const Container = styled.section`
   width: 100%;
-  min-height: 100vh;
-  background-color: white;
-  color: black;
   overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
 `;
 
 const CommentsContainer = styled.div`
   width: 100%;
-  height: 8vh;
+  height: 80px;
   border-top: 1px solid #e2e2e2;
   display: flex;
   align-items: center;
-  padding-left: 1rem;
+  padding: 10px 15px;
 `;
 
 const UserProfile = styled.div`
@@ -287,23 +280,24 @@ const UserProfile = styled.div`
 
 const CommentsForm = styled.form`
   width: 100%;
-  position: relative;
-  padding-left: 1rem;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
 `;
 
 const CommentsInput = styled.input`
-  width: 95%;
-  height: 4vh;
+  width: 100%;
+  height: 37px;
   border-radius: 10px;
-  padding-left: 0.5rem;
+  padding-left: 12px;
 `;
 
-const SmileIcon = styled.div`
-  position: absolute;
-  right: 10%;
-  top: 50%;
-  transform: translateY(-50%);
-`;
+// const SmileIcon = styled.div`
+//   position: absolute;
+//   right: 10%;
+//   top: 50%;
+//   transform: translateY(-50%);
+// `;
 
 const Empty = styled.span`
   padding: 12px;

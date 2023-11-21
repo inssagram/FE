@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 import * as SC from "../styled/atoms_modal";
 import {
   faCalendarDays,
@@ -7,6 +8,7 @@ import {
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { LinkCopyButton } from "./Button";
+import SearchInput from "../Chat/SearchInput";
 import { PostDetailData } from "@/types/PostTypes";
 
 interface EllipsisModalProps {

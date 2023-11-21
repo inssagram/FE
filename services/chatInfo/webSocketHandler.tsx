@@ -5,7 +5,7 @@ import Stomp from "stompjs";
 interface WebSocketHandlerProps {
   roomId: number;
   onConnect: () => void;
-  onMessageReceived: (message: any) => void;
+  onMessageReceived: any;
 }
 
 const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
@@ -34,7 +34,7 @@ const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
             }
           }
         );
-        stompClient.connect({ Authorization: token }, connectCallback);
+        stompClient.connect({ token: token }, connectCallback);
 
         return () => {
           if (stompClient.connected) {

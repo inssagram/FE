@@ -4,10 +4,14 @@ import styled from "styled-components";
 import { MemberInfoData } from "@/types/ChatRoomTypes";
 
 interface MemberInfoProps {
-  receiver: MemberInfoData | null;
+  chatRoom: {
+    receiver: MemberInfoData | null;
+  } | null;
 }
 
-const MemberProfile: React.FC<MemberInfoProps> = ({ receiver }) => {
+const MemberProfile: React.FC<MemberInfoProps> = ({ chatRoom }) => {
+  const receiver = chatRoom?.receiver;
+
   return (
     <>
       {receiver && (

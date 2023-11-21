@@ -8,16 +8,7 @@ import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import getSearchHistoryAxios from "@/services/searchInfo/getSearchHistory";
 import postSearchTermAxios from "@/services/searchInfo/postSearchTerm";
 import deleteSearchHistoryAxios from "@/services/searchInfo/deleteSearchHistory";
-
-interface SearchItemData {
-  memberId: number;
-  email: string;
-  searched: string;
-  nickName: string;
-  friendStatus: boolean;
-  job: string;
-  image: string;
-}
+import { SearchItemData } from "@/types/SearchItemTypes";
 
 const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");

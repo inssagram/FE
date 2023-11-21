@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { handleError } from "@/utils/errorHandler";
 import Footer from "@/components/Footer";
-import { MyHeader } from "@/components/atoms/Header";
+import { MyPageHeader } from "@/components/atoms/Header";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
 import getBookmarkPostAllAxios from "@/services/postInfo/getBookmarkPostAll";
 import getTaggedPostAllAxios from "@/services/postInfo/getTaggedPostAll";
@@ -96,7 +96,7 @@ const My: React.FC<MyProps> = () => {
 
   return (
     <>
-      <MyHeader userInfo={userInfo} />
+      <MyPageHeader userInfo={userInfo} />
 
       <SC.Container>
         <SC.Profile>

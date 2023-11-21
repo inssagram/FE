@@ -19,27 +19,27 @@ const Header: React.FC<HeaderProps> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const eventSource = new EventSource(
-      `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
-    );
+  // useEffect(() => {
+  //   const eventSource = new EventSource(
+  //     `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
+  //   );
 
-    eventSource.addEventListener("sse", (event) => {
-      const eventData = JSON.parse(event.data);
-      console.log("message: " + eventData.message);
-      console.log("unreadCount: " + eventData.unreadCount);
-      setUnreadCount(eventData.unreadCount);
-    });
+  //   eventSource.addEventListener("sse", (event) => {
+  //     const eventData = JSON.parse(event.data);
+  //     console.log("message: " + eventData.message);
+  //     console.log("unreadCount: " + eventData.unreadCount);
+  //     setUnreadCount(eventData.unreadCount);
+  //   });
 
-    eventSource.onerror = (error) => {
-      console.error("SSE connection error:", error);
-      eventSource.close();
-    };
+  //   eventSource.onerror = (error) => {
+  //     console.error("SSE connection error:", error);
+  //     eventSource.close();
+  //   };
 
-    return () => {
-      eventSource.close();
-    };
-  }, [userInfo?.member_id]);
+  //   return () => {
+  //     eventSource.close();
+  //   };
+  // }, [userInfo?.member_id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

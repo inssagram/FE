@@ -6,7 +6,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin: 16px 16px 24px 16px;
+  margin: 16px 16px 24px;
 `;
 
 export const Profile = styled.div`
@@ -70,7 +70,6 @@ export const DetailArea = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-top: 10px;
 `;
 
@@ -85,8 +84,18 @@ export const Detail = styled(Link)`
   background-color: #efefef;
 `;
 
-export const Desc = styled.span`
-  font-size: 1rem;
+export const Desc = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 10px;
+  width: 134px;
+  height: 32px;
+  font-size: 14px;
+  color: #000000;
+  background-color: #efefef;
 `;
 
 export const MyDataContainer = styled.div`

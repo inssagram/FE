@@ -16,7 +16,6 @@ interface ChatRoomListProps {
 const Direct: React.FC<ChatRoomListProps> = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
   const [myChatList, setMyChatList] = useState<ChatListData[] | null>(null);
-  console.log(myChatList);
   const router = useRouter();
 
   const fetchChatRoomList = async () => {
@@ -29,7 +28,7 @@ const Direct: React.FC<ChatRoomListProps> = () => {
   };
 
   useEffect(() => {
-    if (myChatList) {
+    if (!myChatList) {
       fetchChatRoomList();
     }
   }, [myChatList]);
@@ -42,10 +41,14 @@ const Direct: React.FC<ChatRoomListProps> = () => {
     <Container>
       <ChatListHeader userInfo={userInfo} />
       <Title>메시지</Title>
-      <ChatRoomList
-        myChatList={myChatList}
-        onChatRoomClick={handleChatRoomClick}
-      />
+      {myChatList && myChatList.length > 0 ? (
+        <ChatRoomList
+          myChatList={myChatList}
+          onChatRoomClick={handleChatRoomClick}
+        />
+      ) : (
+        <Error>참여중인 방이 없습니다.</Error>
+      )}
     </Container>
   );
 };
@@ -62,4 +65,10 @@ const Title = styled.span`
   display: flex;
   padding: 14px 16px 10px;
   font-size: 16px;
+`;
+
+const Error = styled.p`
+  font-size: 14px;
+  margin-top: 5px;
+  padding: 14px 16px;
 `;

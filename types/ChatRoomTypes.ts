@@ -13,22 +13,29 @@ export interface ChatListData {
 }
 
 export interface MemberInfoData {
-  chatRoomId: number;
-  memberList: {
-    memberId: number;
-    memberNickname: string;
-    memberProfile: string | null;
-    memberFollowerCounts: string | null;
-    memberPostCounts: string | null;
-    memberFollowState: boolean;
-  };
+  memberId: number;
+  memberNickname: string;
+  memberProfile: string | null;
+  memberFollowerCounts: string | null;
+  memberPostCounts: string | null;
+  memberFollowState: boolean;
 }
 
+export interface SendNewMessageData {
+  type: string;
+  chatRoomId: number;
+  receiverMemberId: number;
+  message: string;
+}
+
+export interface NewImageData {}
+
 export interface PreviousMessageData {
+  type: string;
   chatMessageId: number;
   chatRoomId: number;
   createdAt: string;
-  image: string | null;
+  image: string;
   memberIdInShareObject: number;
   memberNicknameInShareObject: string;
   memberProfileInShareObject: string | null;
@@ -41,12 +48,4 @@ export interface PreviousMessageData {
   shareObjectId: number;
   shareObjectImage: string;
   sharePostType: string;
-  type: string;
-}
-
-export interface NewMessageData {
-  type: string;
-  chatRoomId: string;
-  receiverMemberId: number;
-  message: string;
 }

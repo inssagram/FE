@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { BackChevron } from "@/components/atoms/Icon";
-import { UserInfoData } from "@/types/UserTypes";
+import { UserInfoData, MemberInfoData } from "@/types/UserTypes";
 
 interface PageHeaderProps {
   title: string;
@@ -40,7 +40,9 @@ export const MyPageHeader: React.FC<MyPageHeaderProps> = ({ userInfo }) => {
   );
 };
 
-interface UserPageHeaderProps {}
+interface UserPageHeaderProps {
+  memberInfo: MemberInfoData;
+}
 
 export const UserPageHeader: React.FC<UserPageHeaderProps> = ({
   memberInfo,
