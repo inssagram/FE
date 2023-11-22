@@ -106,10 +106,10 @@ const Job = () => {
             ></SC.JobInput>
             <SC.JobList>
               {jobList.length > 0 &&
-                jobList.map((v) => (
+                jobList.map((v, i) => (
                   <>
                     <SC.JobName
-                      onClick={(e: React.MouseEvent<HTMLLIElement>) =>
+                      key={i} onClick={(e: React.MouseEvent<HTMLLIElement>) =>
                         jobShorcutHandler(v)
                       }
                     >
