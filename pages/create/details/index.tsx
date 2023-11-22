@@ -20,7 +20,6 @@ import { handleResizeImage } from "./handleResizeImage";
 const Details: React.FC = () => {
   const router = useRouter();
   const [contents, setContents] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const [previewImage,setPreviewImage] = useState<string>('')
   const [fileData, setFileData] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
@@ -28,8 +27,8 @@ const Details: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContents(event.target.value);
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContents(e.target.value);
   };
 
   const uploadImageToServer = async (imageBlob: string, contents: string, fileName: string) => {
@@ -121,6 +120,7 @@ const Details: React.FC = () => {
         <SC.MyProfile></SC.MyProfile>
           <SC.Textarea
             placeholder="내용을 입력해주세요"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextareaChange(e)}
           />
           <input
             ref={fileRef}
@@ -128,7 +128,7 @@ const Details: React.FC = () => {
             onChange={(e) => handleFileChange(e)}
             style={{display: 'none'}}
           />
-          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle}/>}
+          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
         </SC.TextCont>
       </SC.Container>
       <SC.FunctionPannels>
