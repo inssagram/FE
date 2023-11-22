@@ -1,17 +1,17 @@
-import React , {ButtonHTMLAttributes, useState, useRef} from "react";
+import { useState, useRef} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
-import * as SC from "@/components/styled/main_boardwirte_story";
+import * as SC from "@/components/styled/create_story";
 import Image from "next/image";
 import {ref, getDownloadURL, uploadBytes} from 'firebase/storage'
 import { storage } from "@/components/firebase/firebase";
 import html2canvas from "html2canvas";
-import axios from "axios";
 import { v4 as uuidv4} from "uuid"
 import { useSelector } from "react-redux";
 import axiosInstance from "@/services/axiosInstance";
 import { handleResizeImage } from "../details/handleResizeImage";
+import { useRouter } from "next/router";
 
 const Story: React.FC = () => {
   const [previewImage, setPreviewImage] = useState<string>('')
@@ -20,6 +20,7 @@ const Story: React.FC = () => {
   const [textBoxes, setTextBoxes] = useState<string[]>([])
   const divRef = useRef<HTMLDivElement>(null);
   const user = useSelector((state: any) => state.user)
+  const router = useRouter()
 
   type Position = {
     x: string;
@@ -121,16 +122,19 @@ const Story: React.FC = () => {
     setIsDragging(false);
    }
 
+   const handleGoback = () => {
+    router.push('/main')
+   }
+
    
 
 
 
   return (
     <>
-    <form>
       <SC.Header>
         <SC.Prev>
-          <FontAwesomeIcon icon={faXmark} style={{ color: "white", fontSize: "2rem"}} />
+          <FontAwesomeIcon onClick={handleGoback} icon={faXmark} style={{ color: "white", fontSize: "2rem"}} />
         </SC.Prev>
         <SC.IconPannels>
           <SC.UploadBox>
@@ -142,7 +146,7 @@ const Story: React.FC = () => {
           {isTexting 
           ? <span onClick={handleEndText} style={{ color: "white", fontSize: "2rem" }}>완료</span> 
           : <FontAwesomeIcon 
-              onClick={(e) => handleStartText()} 
+              onClick={handleStartText} 
               icon={faFont} 
               style={{ color: "white", fontSize: "2rem" }}
             />
@@ -181,7 +185,6 @@ const Story: React.FC = () => {
           <span style={{ marginLeft: "1rem" }}>스토리에 추가</span>
         </SC.Button>
       </SC.Footer>
-    </form>
     </>
   );
 };

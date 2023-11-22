@@ -5,15 +5,11 @@ import {
   faChevronRight,
   faPlusCircle
 } from "@fortawesome/free-solid-svg-icons";
-import * as SC from "@/components/styled/main_boardwrite_details";
+import * as SC from "@/components/styled/create_details";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import { ImageUrlFunction, CreatePostType } from "@/src/redux/Posts/postSlice";
-import { useDispatch } from "react-redux";
-import { addPost } from "@/src/redux/Posts/postSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "@/src/redux/Posts/store";
 import { v4 as uuidv4} from "uuid"
 import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
 import { storage } from "@/components/firebase/firebase";
@@ -23,33 +19,17 @@ import { handleResizeImage } from "./handleResizeImage";
 
 const Details: React.FC = () => {
   const router = useRouter();
-  const [post, setPost] = useState<CreatePostType | null>(null);
   const [contents, setContents] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const dispatch = useDispatch();
-  const memberId = 1;
-  // const postData = useSelector((state: RootState) => state.posts);
   const [previewImage,setPreviewImage] = useState<string>('')
   const [fileData, setFileData] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  interface imageState {
-    image: string
-  }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContents(event.target.value);
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContents(e.target.value);
   };
-
-  useEffect(() => {
-    // inputRef에 input 요소를 할당
-    if (inputRef.current) {
-      inputRef.current.value = contents;
-    }
-  }, [contents]);
-
 
   const uploadImageToServer = async (imageBlob: string, contents: string, fileName: string) => {
     const postData = {
@@ -136,14 +116,11 @@ const Details: React.FC = () => {
         </SC.Next>
       </SC.Header>
       <SC.Container>
-        <SC.MyProfile />
         <SC.TextCont>
-          <SC.InputText
-            ref={inputRef}
-            type="text"
-            value={contents}
-            onChange={handleInputChange}
-            placeholder="내용을 입력하세요"
+        <SC.MyProfile></SC.MyProfile>
+          <SC.Textarea
+            placeholder="내용을 입력해주세요"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextareaChange(e)}
           />
           <input
             ref={fileRef}
@@ -151,7 +128,7 @@ const Details: React.FC = () => {
             onChange={(e) => handleFileChange(e)}
             style={{display: 'none'}}
           />
-          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle}/>}
+          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
         </SC.TextCont>
       </SC.Container>
       <SC.FunctionPannels>
