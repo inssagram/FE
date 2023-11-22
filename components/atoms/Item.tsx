@@ -163,10 +163,11 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   //     }
   // }
 
+  //답글 달기
   const handleMoreCommentClick = (commentId: number) => {
     setIsReplying((prevIsReplying) => !prevIsReplying);
     setReplyToCommentId(commentId);
-    console.log(commentId);
+    setReplyContent(`@${comment.nickname} `); // Include the tagged username
     commentInputRef?.current?.focus();
   };
   //대댓글 불러오기
