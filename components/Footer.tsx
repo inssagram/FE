@@ -17,27 +17,27 @@ const Footer: React.FC = () => {
   const [unreadChatCount, setUnreadChatCount] = useState<number>(0);
   const [showBubble, setShowBubble] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const eventSource = new EventSource(
-  //     `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
-  //   );
+  useEffect(() => {
+    const eventSource = new EventSource(
+      `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
+    );
 
-  //   eventSource.addEventListener("sse", (event) => {
-  //     const eventData = JSON.parse(event.data);
-  //     console.log("message: " + eventData.message);
-  //     console.log("unreadChatCount: " + eventData.unreadChatCount);
-  //     setUnreadChatCount(eventData.unreadChatCount);
-  //   });
+    eventSource.addEventListener("sse", (event) => {
+      const eventData = JSON.parse(event.data);
+      console.log("message: " + eventData.message);
+      console.log("unreadChatCount: " + eventData.unreadChatCount);
+      setUnreadChatCount(eventData.unreadChatCount);
+    });
 
-  //   eventSource.onerror = (error) => {
-  //     console.error("SSE connection error:", error);
-  //     eventSource.close();
-  //   };
+    eventSource.onerror = (error) => {
+      console.error("SSE connection error:", error);
+      eventSource.close();
+    };
 
-  //   return () => {
-  //     eventSource.close();
-  //   };
-  // }, []);
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {

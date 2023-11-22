@@ -1,10 +1,8 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-import {
-  faHeart as fasHeart,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 
 interface DeleteButtonProps {
   onClick: () => void;
@@ -13,7 +11,13 @@ interface DeleteButtonProps {
 export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick }) => {
   return (
     <Delete onClick={onClick}>
-      <Icon icon={faXmark} fontSize={16} />
+      <Icon
+        icon={faCircleXmark}
+        fontSize={18}
+        style={{
+          color: "#737373",
+        }}
+      />
     </Delete>
   );
 };
@@ -37,6 +41,23 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
     >
       {isFollowing ? "팔로잉" : "팔로우"}
     </Follow>
+  );
+};
+
+export const FollowStatusButton: React.FC<FollowButtonProps> = ({
+  onClick,
+  isFollowing,
+}) => {
+  return (
+    <MemberFollow
+      onClick={onClick}
+      style={{
+        background: isFollowing ? "#efefef" : "#0095f6",
+        color: isFollowing ? "#222222" : "#ffffff",
+      }}
+    >
+      {isFollowing ? "팔로잉" : "팔로우"}
+    </MemberFollow>
   );
 };
 
@@ -83,10 +104,7 @@ const Delete = styled.button`
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-  width: 24px;
-  height: 24px;
   margin-right: 8px;
-  color: "#737373";
 `;
 
 const Copy = styled.button`
@@ -104,6 +122,21 @@ const Follow = styled.button`
   border: none;
   border-radius: 10px;
   min-width: 71px;
+  height: 32px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #0095f6;
+`;
+
+const MemberFollow = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 10px;
+  width: 112px;
   height: 32px;
   font-size: 14px;
   color: #ffffff;

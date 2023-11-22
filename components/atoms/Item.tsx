@@ -13,16 +13,7 @@ import getReplyAxios from "@/services/postInfo/getReply";
 import postReplyAxios from "@/services/postInfo/postReply";
 import postReplyToReplyAxios from "@/services/postInfo/postReplyToReply";
 import { PostDetailData } from "@/types/PostTypes";
-
-interface SearchItemData {
-  memberId: number;
-  email: string;
-  searched: string;
-  nickName: string;
-  friendStatus: boolean;
-  job: string;
-  image: string;
-}
+import { SearchItemData } from "@/types/SearchItemTypes";
 
 interface SearchItemProps {
   result: SearchItemData;
@@ -53,7 +44,10 @@ export const SearchItem: React.FC<SearchItemProps> = ({
     <>
       {isHistory ? (
         <ItemContainer>
-          <ClickTo href="/" onClick={handleSearchItemClick}>
+          <ClickTo
+            href={`/user/${result.memberId}`}
+            onClick={handleSearchItemClick}
+          >
             <AccountImg
               src={result.image ? result?.image : "/images/noProfile.jpg"}
               alt="프로필 이미지"
@@ -64,8 +58,8 @@ export const SearchItem: React.FC<SearchItemProps> = ({
               <AccountInfo>
                 <Id>{result.searched}</Id>
                 <Status>
-                  {/* <Job>{result.job}</Job> */}
-                  {/* <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow> */}
+                  <Job>{result.job}</Job>
+                  <Follow>{result.friendStatus ? "팔로잉" : ""}</Follow>
                 </Status>
               </AccountInfo>
               <DeleteButton onClick={handleSearchItemDeleteClick} />
@@ -74,7 +68,10 @@ export const SearchItem: React.FC<SearchItemProps> = ({
         </ItemContainer>
       ) : (
         <ItemContainer>
-          <ClickTo href="/" onClick={handleSearchItemClick}>
+          <ClickTo
+            href={`/user/${result.memberId}`}
+            onClick={handleSearchItemClick}
+          >
             {result.nickName.includes("#") ? (
               <HashtagImg>
                 <Image
@@ -275,10 +272,10 @@ export const CommentItem: React.FC<CommentDataProps> = ({
             />
           </OriginalProfile>
           <OriginalInfo>
-            <Desc>
+            <OriginalDesc>
               <ID>{post.nickName}</ID>
               <Content>{post.contents}</Content>
-            </Desc>
+            </OriginalDesc>
             <Date>16주</Date>
           </OriginalInfo>
         </OriginalComment>
@@ -494,11 +491,9 @@ const OriginalComment = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  padding: 10px 12px;
+  padding: 10px 15px;
   border-bottom: 1px solid #cccccc;
-  height: 60px;
-  // margin-top: -1rem;
-  // position: relative;
+  height: 70px;
 `;
 
 const OriginalProfile = styled.div`
@@ -515,10 +510,22 @@ const OriginalInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   padding-left: 5px;
   margin-left: 5px;
   width: 100%;
   height: 80%;
+`;
+
+const OriginalDesc = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  max-width: 265px;
+  /* padding-bottom: 7px; */
+  font-size: 12px;
+  color: #737373;
+  align-items: center;
 `;
 
 const Info = styled.div`
@@ -547,6 +554,14 @@ const Desc = styled.div`
   padding-bottom: 7px;
   font-size: 12px;
   color: #737373;
+  // height: 100%;
+  // display: flex;
+  // flex-direction: row;
+  // max-width: 265px;
+  // /* padding-bottom: 7px; */
+  // font-size: 12px;
+  // color: #737373;
+  // align-items: center;
 `;
 
 const Date = styled.p`
@@ -566,7 +581,7 @@ const Likes = styled.p`
 const CommentContainer = styled.div`
   position: relative;
   display: flex;
-  padding: 10px 12px;
+  padding: 10px 15px;
   align-items: center;
   min-height: 80px;
 `;
@@ -576,7 +591,7 @@ const Comment = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 316px;
+  width: 100%;
   height: 90%;
 `;
 

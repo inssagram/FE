@@ -16,3 +16,29 @@ export interface PostDetailData {
   location: null;
   taggedMemberIds: number;
 }
+
+export interface MemberInfoData {
+  type: string;
+  postId: number;
+  memberId: number;
+  nickName: string;
+  memberImage: string | null;
+  image: [string];
+  contents: string;
+  location: string | null;
+  likeCount: number;
+  commentsCounts: number;
+  taggedMemberIds: number;
+  hashTags: [];
+  createdAt: string;
+  postLike: boolean;
+  bookmarked: boolean;
+  followed: boolean;
+}
+
+export interface LikedPostMemberData {
+  memberId: number;
+  memberNickname: string;
+  memberProfile: string;
+  followedState: boolean;
+}

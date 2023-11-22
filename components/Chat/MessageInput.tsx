@@ -2,20 +2,23 @@ import { useState, useRef } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
-import { MemberInfoData, NewMessageData } from "@/types/ChatRoomTypes";
+import { MemberInfoData, SendNewMessageData } from "@/types/ChatRoomTypes";
 
 interface MessageInputProps {
-  roomId: string;
-  receiver: MemberInfoData | null;
-  onEnterKeyPress: (messageData: NewMessageData) => void;
+  roomId: number;
+  chatRoom: {
+    receiver: MemberInfoData | null;
+  } | null;
+  onEnterKeyPress: (messageData: SendNewMessageData) => void;
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
   roomId,
-  receiver,
+  chatRoom,
   onEnterKeyPress,
 }) => {
   const [messageValue, setMessageValue] = useState<string>("");
+  const receiver = chatRoom?.receiver;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newMessage = event.target.value;
@@ -25,8 +28,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const handleSendMessage = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (receiver && roomId && event.key === "Enter") {
       event.preventDefault();
-      const messageData: NewMessageData = {
-        type: "text",
+      const messageData: SendNewMessageData = {
+        type: "message",
         chatRoomId: roomId,
         receiverMemberId: receiver.memberId,
         message: messageValue,
@@ -39,7 +42,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   // const handleSendImage = () => {
   //   const imageFile = /* 여기에 이미지 파일을 가져오는 코드 */
   //   const messageData: MessageData = {
-  //     type: "image",
+  //     type: "message",
   //     chatRoomId: 123,
   //     receiverMemberId: 456,
   //     message: "",
@@ -70,6 +73,8 @@ const MessageInput: React.FC<MessageInputProps> = ({
     </>
   );
 };
+
+export default MessageInput;
 
 const Container = styled.div`
   position: fixed;
@@ -175,5 +180,3 @@ const CancelIcon = styled(FontAwesomeIcon)`
   top: -10px;
   right: -10px;
 `;
-
-export default MessageInput;

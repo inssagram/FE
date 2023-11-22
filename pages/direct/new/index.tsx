@@ -9,20 +9,13 @@ import AccountList from "@/components/Chat/AccountList";
 import SearchInput from "@/components/Chat/SearchInput";
 import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
 import postNewChatRoomAxios from "@/services/chatInfo/postNewChatRoom";
+import { SearchItemData } from "@/types/SearchItemTypes";
 
-interface AccountData {
-  memberId: number;
-  nickName: string;
-  job: string;
-  friendStatus: boolean;
-  image: string;
-}
-
-const New: React.FC<AccountData> = () => {
+const New: React.FC<SearchItemData> = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<AccountData[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<AccountData | null>(
+  const [searchResults, setSearchResults] = useState<SearchItemData[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<SearchItemData | null>(
     null
   );
   const [isAccountSelected, setIsAccountSelected] = useState(false);
@@ -57,7 +50,7 @@ const New: React.FC<AccountData> = () => {
     setSearchTerm("");
   }, [selectedAccount]);
 
-  const handleSelectedAccount = (account: AccountData) => {
+  const handleSelectedAccount = (account: SearchItemData) => {
     setSelectedAccount(account);
   };
 

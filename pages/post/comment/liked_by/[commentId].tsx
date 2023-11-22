@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
@@ -8,18 +8,12 @@ import { PageHeader } from "@/components/atoms/Header";
 import { FollowButton } from "@/components/atoms/Button";
 import getLikeCommentMemberListAxios from "@/services/postInfo/getLikeCommentMemberList";
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
+import { LikedPostMemberData } from "@/types/PostTypes";
 
-interface LikeMemberData {
-  memberId: number;
-  email: string;
-  memberNickname: string;
-  job: string;
-  memberProfile: string;
-  friendStatus: boolean;
-}
-
-const LikedPost: React.FC<LikeMemberData> = () => {
-  const [commentMembers, setCommentMembers] = useState<LikeMemberData[]>([]);
+const LikedPost: React.FC<LikedPostMemberData> = () => {
+  const [commentMembers, setCommentMembers] = useState<LikedPostMemberData[]>(
+    []
+  );
   const [isFollowing, setIsFollowing] = useState(false);
 
   const router = useRouter();
@@ -69,7 +63,6 @@ const LikedPost: React.FC<LikeMemberData> = () => {
             <ContentArea>
               <AccountInfo>
                 <Id>{comment.memberNickname}</Id>
-                <Status>{comment.job && <Job>{comment.job}</Job>}</Status>
               </AccountInfo>
               <FollowButton
                 onClick={() => handleFollowClick(comment.memberId)}

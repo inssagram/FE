@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,41 +19,19 @@ import { HeartButton } from "@/components/atoms/Button";
 import postLikePostAxios from "@/services/postInfo/postLikePost";
 import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
 import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
-
-interface PostData {
-  postId: number;
-  memberId: number;
-  nickName: string;
-  image: [string];
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
-
-interface CommentData {
-  postId: number;
-}
-
-interface UserInfo {
-  email: string;
-  member_id: number;
-  nickname: string;
-  job: string;
-  profilePic: string;
-}
+import { PostDetailData } from "@/types/PostTypes";
 
 type HandleLikeClick = (postId: number) => void;
 
 interface PostContentsProps {
-  post: PostData;
-  userInfo: UserInfo;
+  post: PostDetailData;
   handleLikeClick: HandleLikeClick;
 }
 
-const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
+const PostContents: React.FC<PostContentsProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [selectedReceiver, setSelectedReceiver] = useState(null);
   const router = useRouter();
 
   const handleActionClick = async (postId: number, actionType: string) => {
@@ -96,6 +73,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
           height={412}
         />
       )}
+
       <PostDetails>
         <ButtonArea>
           <Left>
@@ -106,14 +84,11 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
             <Link href={`/my/feeds/${post.postId}/comments`}>
               <FontAwesomeIcon icon={faComment} fontSize={24} />
             </Link>
-            {userInfo ? (
-              <Link href={`/direct/in/${post.memberId}`}>
-                <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
-              </Link>
-            ) : (
+            <Link href={`/post/share/${post.postId}`}>
               <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
-            )}
+            </Link>
           </Left>
+
           <Right>
             <FontAwesomeIcon
               onClick={() => handleActionClick(post.postId, "bookmark")}
@@ -167,7 +142,6 @@ const ButtonArea = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 54px;
-  margin-top: 4px;
   padding: 6px 0 8px;
 `;
 

@@ -4,21 +4,18 @@ import { fileToDataUrl } from "@/utils/fileToDataUrl";
 import {
   MemberInfoData,
   PreviousMessageData,
-  NewMessageData,
+  SendNewMessageData,
 } from "@/types/ChatRoomTypes";
+import SharedPost from "@/components/Chat/SharedPost";
 
 interface ChatRoomProps {
   userInfo: any;
-  sender: MemberInfoData | null;
-  receiver: MemberInfoData | null;
   previousMessages: PreviousMessageData[];
-  newMessage: NewMessageData[];
+  newMessage: SendNewMessageData[];
 }
 
 const ChatRoom: React.FC<ChatRoomProps> = ({
   userInfo,
-  sender,
-  receiver,
   previousMessages,
   newMessage,
 }) => {
@@ -56,8 +53,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
             alt={`Selected Image ${index}`}
           />
         ))} */}
-      {previousMessages &&
-        previousMessages.map((message, index) => (
+      {previousMessages.map((message, index) => {
+        return message.type === "message" ? (
           <MessageContainer key={index}>
             {message.senderMemberId === userInfo.member_id ? (
               <MyMessage>{message.message}</MyMessage>
@@ -65,7 +62,11 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
               <OtherMessage>{message.message}</OtherMessage>
             )}
           </MessageContainer>
-        ))}
+        ) : (
+          <SharedPost key={index} {...message} />
+        );
+      })}
+
       {newMessage &&
         newMessage.map((message, index) => (
           <MessageContainer key={index}>
@@ -75,6 +76,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({
     </Content>
   );
 };
+
+export default ChatRoom;
 
 const Content = styled.div`
   font-size: 15px;
@@ -127,5 +130,3 @@ const ImagePreview = styled.img`
   padding: 5px;
   border-radius: 20px;
 `;
-
-export default ChatRoom;

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/src/redux/Posts/store";
 import * as SC from "@/components/styled/my";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,7 +14,6 @@ import { faBookmark, faUser } from "@fortawesome/free-regular-svg-icons";
 import { handleError } from "@/utils/errorHandler";
 import { MyPageHeader } from "@/components/atoms/Header";
 import Footer from "@/components/Footer";
-import { RootState } from "@/src/redux/Posts/store";
 import getMyPostAllAxios from "@/services/postInfo/getMyPostAll";
 import getTaggedPostAllAxios from "@/services/postInfo/getTaggedPostAll";
 import getBookmarkPostAllAxios from "@/services/postInfo/getBookmarkPostAll";
@@ -105,61 +105,9 @@ const My: React.FC<MyProps> = () => {
     }
   }, [userInfo]);
 
-  // 무한스크롤
-  // const [isClient, setIsClient] = useState(false);
-  // const sentinelRef = useRef(null);
-  // const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
-  // const userProfile = useSelector((state: RootState) => {
-  //   const contents = state.profile.contents as ImageType[];
-  //   const latestProfile = contents.slice().reverse()[0];
-  //   return latestProfile;
-  // });
-
-  // const repeatData = useCallback(() => {
-  //   const currentDataLength = posts.length;
-  //   const newPosts = posts.map((post, index) => {
-  //     return {
-  //       ...post,
-  //       id: post.id + currentDataLength,
-  //     };
-  //   });
-  //   setPosts((prev) => [...prev, ...newPosts]);
-  // }, [posts]);
-
-  // useEffect(() => {
-  //   const options = {
-  //     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
-  //     rootMargin: "0px",
-  //     threshold: 0.1,
-  //   };
-
-  //   const observer = new IntersectionObserver((entries) => {
-  //     if (entries[0].isIntersecting) {
-  //       repeatData();
-  //     }
-  //   }, options);
-
-  //   const currentSentinel = sentinelRef.current;
-
-  //   if (currentSentinel) {
-  //     observer.observe(currentSentinel);
-  //   }
-
-  //   return () => {
-  //     if (currentSentinel) {
-  //       observer.unobserve(currentSentinel);
-  //     }
-  //   };
-  // }, [repeatData]);
-
-  // if (!isClient) {
-  //   return null;
-  // }
-
   return (
     <>
-      <MyPageHeader userInfo={userInfo} isNotMe={false} />
-
+      <MyPageHeader userInfo={userInfo} />
       <SC.Container>
         <SC.Profile>
           <Image
@@ -277,3 +225,54 @@ const My: React.FC<MyProps> = () => {
 };
 
 export default My;
+       
+  // 무한스크롤
+  // const [isClient, setIsClient] = useState(false);
+  // const sentinelRef = useRef(null);
+  // const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
+  // const userProfile = useSelector((state: RootState) => {
+  //   const contents = state.profile.contents as ImageType[];
+  //   const latestProfile = contents.slice().reverse()[0];
+  //   return latestProfile;
+  // });
+
+  // const repeatData = useCallback(() => {
+  //   const currentDataLength = posts.length;
+  //   const newPosts = posts.map((post, index) => {
+  //     return {
+  //       ...post,
+  //       id: post.id + currentDataLength,
+  //     };
+  //   });
+  //   setPosts((prev) => [...prev, ...newPosts]);
+  // }, [posts]);
+
+  // useEffect(() => {
+  //   const options = {
+  //     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
+  //     rootMargin: "0px",
+  //     threshold: 0.1,
+  //   };
+
+  //   const observer = new IntersectionObserver((entries) => {
+  //     if (entries[0].isIntersecting) {
+  //       repeatData();
+  //     }
+  //   }, options);
+
+  //   const currentSentinel = sentinelRef.current;
+
+  //   if (currentSentinel) {
+  //     observer.observe(currentSentinel);
+  //   }
+
+  //   return () => {
+  //     if (currentSentinel) {
+  //       observer.unobserve(currentSentinel);
+  //     }
+  //   };
+  // }, [repeatData]);
+
+  // if (!isClient) {
+  //   return null;
+  // }

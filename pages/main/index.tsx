@@ -1,32 +1,21 @@
 import styled from "styled-components";
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
 import PostContents from "@/components/Post/Contents";
-import getPostAllAxios from "@/services/postInfo/getPostAll";
-import { RootState } from "@/src/redux/Posts/store";
-
-interface PostData {
-  postId: number;
-  memberId: number;
-  nickname: string;
-  image: string;
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
+import getFollowingMemberPostAllAxios from "@/services/postInfo/getFollowingMemberPostAll";
+import { PostDetailData } from "@/types/PostTypes";
 
 const Main: React.FC = () => {
   const userInfo: any = useSelector((state: RootState) => state.user.member);
-  const [posts, setPosts] = useState<PostData[]>([]);
+  const [posts, setPosts] = useState<PostDetailData[]>([]);
 
   const fetchPostData = useCallback(async () => {
     try {
-      const res = await getPostAllAxios();
+      const res = await getFollowingMemberPostAllAxios();
       setPosts(res.data);
     } catch (err) {
       handleError(err, "Error fetching posts:");
@@ -51,6 +40,8 @@ const Main: React.FC = () => {
   );
 };
 
+export default Main;
+
 const PostArea = styled.section`
   padding: 44px 0 48px 0;
 `;
@@ -58,5 +49,3 @@ const PostArea = styled.section`
 const Post = styled.article`
   border-bottom: 1px solid #ccc;
 `;
-
-export default Main;

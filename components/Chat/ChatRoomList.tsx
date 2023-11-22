@@ -13,7 +13,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
 }) => {
   return (
     <>
-      {myChatList ? (
+      {myChatList &&
         myChatList.map((list) => (
           <ContentContainer
             key={list.chatroom_id}
@@ -32,17 +32,27 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
               />
             </Profile>
             <Content>
-              <Name>{list.sender_name}</Name>
+              <Name style={{ fontWeight: list.read_status ? "500" : "600" }}>
+                {list.sender_name}
+              </Name>
               <Recent>
-                <span>{list.message}</span>
-                <span>{list.created_at}</span>
+                <Message
+                  style={{
+                    color: list.read_status ? "#737373" : "#222222",
+                    fontWeight: list.read_status ? "500" : "600",
+                  }}
+                >
+                  {list.message}
+                </Message>
+                <CreatedAt>
+                  {/* {list.created_at} */}
+                  1주
+                </CreatedAt>
               </Recent>
             </Content>
+            {list.read_status ? "" : <Mark />}
           </ContentContainer>
-        ))
-      ) : (
-        <Error>참여중인 방이 없습니다.</Error>
-      )}
+        ))}
     </>
   );
 };
@@ -50,6 +60,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
 export default ChatRoomList;
 
 const ContentContainer = styled.li`
+  position: relative;
   width: 100%;
   height: 72px;
   display: flex;
@@ -70,7 +81,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 36px;
+  height: 100%;
   font-size: 14px;
   gap: 3px;
 `;
@@ -83,11 +94,25 @@ const Recent = styled.div`
   display: flex;
   flex-direction: row;
   color: #737373;
-  gap: 5px;
 `;
 
-const Error = styled.p`
-  font-size: 14px;
-  margin-top: 5px;
-  padding: 14px 16px;
+const Message = styled.span`
+  max-width: 265px;
+  height: 18px;
+  padding-right: 12px;
+`;
+
+const CreatedAt = styled.p`
+  max-width: 22px;
+  overflow: hidden;
+`;
+
+const Mark = styled.p`
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  width: 10px;
+  height: 10px;
+  background-color: #0095f6;
+  border-radius: 100%;
 `;

@@ -1,17 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-
-interface AccountData {
-  memberId: number;
-  nickName: string;
-  job: string;
-  friendStatus: boolean;
-  image: string;
-}
+import { SearchItemData } from "@/types/SearchItemTypes";
 
 interface SearchInputProps {
   onSearch: (searchValue: string) => void;
-  selectedAccount: AccountData | null;
+  selectedAccount: SearchItemData | null;
   isAccountSelected: boolean;
 }
 
@@ -57,6 +50,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
     </>
   );
 };
+
+export default SearchInput;
 
 const SearchBarContainer = styled.div`
   display: flex;
@@ -109,5 +104,3 @@ const Name = styled.p`
   font-weight: 500;
   color: #0095f6;
 `;
-
-export default SearchInput;

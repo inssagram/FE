@@ -3,29 +3,22 @@ import Image from "next/image";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { SearchItemData } from "@/types/SearchItemTypes";
 
-interface AccountData {
-  memberId: number;
-  nickName: string;
-  job: string;
-  friendStatus: boolean;
-  image: string;
-}
-
-interface AccountListProps {
-  searchResults: AccountData[];
-  onSelectAccount: (selectedAccount: AccountData) => void;
+interface SearchItemListProps {
+  searchResults: SearchItemData[];
+  onSelectAccount: (selectedAccount: SearchItemData) => void;
   isAccountSelected: boolean;
   setIsAccountSelected: Dispatch<SetStateAction<boolean>>;
 }
 
-const AccountList: React.FC<AccountListProps> = ({
+const AccountList: React.FC<SearchItemListProps> = ({
   searchResults,
   onSelectAccount,
   isAccountSelected,
   setIsAccountSelected,
 }) => {
-  const handleSelectAccount = (selectedAccount: AccountData) => {
+  const handleSelectAccount = (selectedAccount: SearchItemData) => {
     onSelectAccount(selectedAccount);
     setIsAccountSelected(true);
   };
