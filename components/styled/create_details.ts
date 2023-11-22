@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.main`
   width: 100%;
-  height: 20vh;
+  height: 100%;
   border-bottom: 1px solid #e2e2e2;
   display: flex;
   flex-direction: column;
@@ -19,10 +19,8 @@ export const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding: 0 16px;
-  position: fixed;
   background-color: #ffffff;
   color: #222222;
-  z-index: 10;
   border-bottom: 1px solid #e2e2e2;
 `;
 
@@ -41,6 +39,7 @@ export const Prev = styled.button`
   display: flex;
   align-items: center;
   padding: 0;
+  color: black;
 `;
 
 export const Next = styled.span`
@@ -56,31 +55,44 @@ export const Next = styled.span`
 `;
 
 export const MyProfile = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 10%;
+  height: 38px;
   border-radius: 50%;
-  position: absolute;
-  bottom: 45%;
   background-color: aliceblue;
+  margin-bottom: 10px;
 `;
 
 export const TextCont = styled.div`
-  position: absolute;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  width: 80%;
-  height: 51px;
+  width: 100%;
+  height: 90%;
   bottom: 35%;
   left: 20%;
   font-size: 1.5rem;
 `;
 
-export const InputText = styled.input`
-border-style:none;
+export const Textarea = styled.textarea`
+  border-style:none;
+  background-color: transparent;
+  color: black;
+  width: 70%;
+  height: 100%;
+  font-size: 14px;
+  &:focus{
+    border: none;
+    outline: none;
+  }
+  &::placeholder {
+    font-family: JejuGothic;
+  }
+  padding: 5px 0 0 5px;
+  margin-bottom: 10px;
 `;
 
-export const Text = styled.span``;
+export const Text = styled.span`
+`;
 
 export const PicCon = styled.div`
   position: absolute;
@@ -92,18 +104,19 @@ export const PicCon = styled.div`
 export const FunctionPannels = styled.div`
   width: 100%;
   height: 44px;
-  align-items: center;
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 0 0 16px;
+  padding: 0 20px 0 16px;
   border-top: 1px solid #e2e2e2;
   border-bottom: 1px solid #e2e2e2;
   margin: 1rem 0 1rem 0;
+  color: black;
 `;
 
 export const Button = styled.button`
-  width: 20%;
   border-style: none;
   background-color: transparent;
+  color: black;
 `;
