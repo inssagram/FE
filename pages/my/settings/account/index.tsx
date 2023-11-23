@@ -3,9 +3,14 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "@/src/redux/Posts/userSlice"
+import { RootState } from "@/src/redux/Posts/store";
 
 const Account: React.FC = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
+  const member = useSelector((state: RootState) => state.user.member)
   const [nicknameSet, setNicknameSet] = useState(false);
   const [passwordSet, setPasswordSet] = useState(false);
 
@@ -38,40 +43,28 @@ const Account: React.FC = () => {
   const nicknameHandler = () => {
     const nicknamePattern = /^[A-Za-z0-9._]*$/;
     if (nickname.length === 0) {
-      setNicknameProcessState("닉네임을 작성해주세요");
+      setNicknameProcessState("Please write a nickname");
       setWrongWayNickname(true);
       setNicknameSet(false);
       return;
     } else if (nickname.length > 15 || nickname.length < 2) {
       setNicknameProcessState(
-        "닉네임은 최소 2글자 최대 15글자 이하로 작성할 수 있습니다."
+        "The nickname can be a minimum of 2 characters and a maximum of 15 characters."
       );
       setWrongWayNickname(true);
       setNicknameSet(false);
       return;
     } else if (!nicknamePattern.test(nickname)) {
       setNicknameProcessState(
-        "닉네임은 영문, 숫자, 밑줄 및 마침표만 사용할 수 있습니다."
+        "Nicknames can only contain letters, numbers, underscores, and periods."
       );
       setWrongWayNickname(true);
       setNicknameSet(false);
       return;
     } else {
-      axios.get("http://localhost:5000/account").then((response) => {
-        const data = response.data;
-        const filtered = data.filter((v: any) => v.nickname === nickname);
-        if (filtered.length === 0) {
-          setNicknameProcessState("");
-          setWrongWayNickname(false);
-          setNicknameSet(true);
-          axios.post("http://localhost:5000/account").then((response) => {});
-        } else {
-          setNicknameProcessState("중복된 계정이 있습니다.");
-          setWrongWayNickname(true);
-          setNicknameSet(false);
-          return;
-        }
-      });
+      setNicknameProcessState("");
+      setWrongWayNickname(false);
+      setNicknameSet(true);
     }
   };
 
@@ -113,24 +106,41 @@ const Account: React.FC = () => {
   };
 
   const setHandler = () => {
-    if (passwordSet && nicknameSet) {
-      let id = sessionStorage.getItem("accountId");
-      axios
-        .patch(`http://localhost:5000/account/${id}`, {
+    const token = sessionStorage.getItem('token');
+    if (!member || !member.member_id || !token) {
+      console.error("Invalid member or token");
+      return;
+    }
+    axios
+      .put(
+        `http://3.36.239.69:8080/member/update/${member.member_id}`,
+        {
           nickname: nickname,
           password: password,
-        })
-        .then(() => {
-          alert("닉네임과 비밀번호가 설정 되었습니다");
+        },
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log('API Response:', response);
+  
+        if (response.status === 200 && response.data && response.data.status === "success") {
+          const updatedMember = response.data.data;
+          dispatch(loginUser(updatedMember));
+          alert("회원정보가 변경되었습니다.");
           router.push("/my/settings");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      alert("계정 정보가 잘못입력 되었습니다");
-    }
+        } else {
+          console.log('유효한 api응답 값이 없습니다.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating user details:', error);
+      });
   };
+  
 
   return (
     <>
