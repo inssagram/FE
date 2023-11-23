@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -8,20 +8,11 @@ import { handleError } from "@/utils/errorHandler";
 import SearchBar from "@/components/atoms/SearchBar";
 import Footer from "@/components/Footer";
 import getPostAllAxios from "@/services/postInfo/getPostAll";
-
-interface ExplorePostData {
-  postId: number;
-  memberId: number;
-  image: string;
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
+import { PostDetailData } from "@/types/PostTypes";
 
 const Explore: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>();
-  const [randomPosts, setRandomPosts] = useState<ExplorePostData[]>([]);
+  const [randomPosts, setRandomPosts] = useState<PostDetailData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchExplorePostData = async () => {
@@ -57,22 +48,13 @@ const Explore: React.FC = () => {
             </Loading>
           ) : (
             randomPosts.map((post) => (
-              <Link key={post.postId} href={`/explore/${post.postId}`}>
-                {post.image ? (
-                  <Image
-                    src={post.image[0]}
-                    alt="게시글"
-                    width={135}
-                    height={135}
-                  />
-                ) : (
-                  <Image
-                    src="/images/noImage.svg"
-                    alt="게시글"
-                    width={135}
-                    height={135}
-                  />
-                )}
+              <Link key={post.postId} href={`/explore/post/${post.postId}`}>
+                <Image
+                  src={post.image ? post.image[0] : "/images/noImage.svg"}
+                  alt="게시글"
+                  width={135}
+                  height={135}
+                />
               </Link>
             ))
           )}
@@ -82,6 +64,8 @@ const Explore: React.FC = () => {
     </>
   );
 };
+
+export default Explore;
 
 const Container = styled.section`
   width: 100%;
@@ -112,4 +96,3 @@ const Loading = styled.div`
   top: 25%;
   right: 50%;
 `;
-export default Explore;

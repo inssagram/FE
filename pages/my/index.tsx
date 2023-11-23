@@ -125,14 +125,14 @@ const My: React.FC<MyProps> = () => {
             <SC.Company>{userInfo.job}</SC.Company>
           </SC.Intro>
           <SC.EditArea>
-            <SC.Edit>
+            <SC.ProfileEdit>
               <Link href="my/settings/profile" passHref>
                 <SC.Desc>프로필 편집</SC.Desc>
               </Link>
-            </SC.Edit>
-            <SC.Edit>
+            </SC.ProfileEdit>
+            <SC.StoryEdit>
               <SC.Desc>보관된 스토리 보기</SC.Desc>
-            </SC.Edit>
+            </SC.StoryEdit>
           </SC.EditArea>
         </SC.MyDescContainer>
       </SC.Container>
@@ -225,54 +225,54 @@ const My: React.FC<MyProps> = () => {
 };
 
 export default My;
-       
-  // 무한스크롤
-  // const [isClient, setIsClient] = useState(false);
-  // const sentinelRef = useRef(null);
-  // const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
-  // const userProfile = useSelector((state: RootState) => {
-  //   const contents = state.profile.contents as ImageType[];
-  //   const latestProfile = contents.slice().reverse()[0];
-  //   return latestProfile;
-  // });
 
-  // const repeatData = useCallback(() => {
-  //   const currentDataLength = posts.length;
-  //   const newPosts = posts.map((post, index) => {
-  //     return {
-  //       ...post,
-  //       id: post.id + currentDataLength,
-  //     };
-  //   });
-  //   setPosts((prev) => [...prev, ...newPosts]);
-  // }, [posts]);
+// 무한스크롤
+// const [isClient, setIsClient] = useState(false);
+// const sentinelRef = useRef(null);
+// const feedViewConRef = useRef(null); // FeedViewCon의 ref를 추가
+// const userProfile = useSelector((state: RootState) => {
+//   const contents = state.profile.contents as ImageType[];
+//   const latestProfile = contents.slice().reverse()[0];
+//   return latestProfile;
+// });
 
-  // useEffect(() => {
-  //   const options = {
-  //     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
-  //     rootMargin: "0px",
-  //     threshold: 0.1,
-  //   };
+// const repeatData = useCallback(() => {
+//   const currentDataLength = posts.length;
+//   const newPosts = posts.map((post, index) => {
+//     return {
+//       ...post,
+//       id: post.id + currentDataLength,
+//     };
+//   });
+//   setPosts((prev) => [...prev, ...newPosts]);
+// }, [posts]);
 
-  //   const observer = new IntersectionObserver((entries) => {
-  //     if (entries[0].isIntersecting) {
-  //       repeatData();
-  //     }
-  //   }, options);
+// useEffect(() => {
+//   const options = {
+//     root: feedViewConRef.current, // FeedViewCon의 ref를 root로 설정
+//     rootMargin: "0px",
+//     threshold: 0.1,
+//   };
 
-  //   const currentSentinel = sentinelRef.current;
+//   const observer = new IntersectionObserver((entries) => {
+//     if (entries[0].isIntersecting) {
+//       repeatData();
+//     }
+//   }, options);
 
-  //   if (currentSentinel) {
-  //     observer.observe(currentSentinel);
-  //   }
+//   const currentSentinel = sentinelRef.current;
 
-  //   return () => {
-  //     if (currentSentinel) {
-  //       observer.unobserve(currentSentinel);
-  //     }
-  //   };
-  // }, [repeatData]);
+//   if (currentSentinel) {
+//     observer.observe(currentSentinel);
+//   }
 
-  // if (!isClient) {
-  //   return null;
-  // }
+//   return () => {
+//     if (currentSentinel) {
+//       observer.unobserve(currentSentinel);
+//     }
+//   };
+// }, [repeatData]);
+
+// if (!isClient) {
+//   return null;
+// }

@@ -21,11 +21,11 @@ import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
 import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
 import { PostDetailData } from "@/types/PostTypes";
 
-type HandleLikeClick = (postId: number) => void;
+// type HandleLikeClick = (postId: number) => void;
 
 interface PostContentsProps {
   post: PostDetailData;
-  handleLikeClick: HandleLikeClick;
+  // handleLikeClick: HandleLikeClick;
 }
 
 const PostContents: React.FC<PostContentsProps> = ({ post }) => {
