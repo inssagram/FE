@@ -28,7 +28,6 @@ const Job = () => {
         );
         const data: JobData[] = response.data.dataSearch.content;
         const regexPattern = inputValue ? new RegExp(`^${inputValue}`) : null;
-        console.log(data);
         const jobListArr: string[] = [];
         for (let i in data) {
           if (regexPattern !== null && regexPattern.test(data[i].job)) {
