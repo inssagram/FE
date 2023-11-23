@@ -50,11 +50,19 @@ export const EditArea = styled.div`
   margin-top: 10px;
 `;
 
-export const Edit = styled.button`
-  width: 130px;
+export const ProfileEdit = styled.button`
+  width: 115px;
   height: 35px;
-  border-style: none;
-  border-radius: 10%;
+  border: none;
+  border-radius: 10px;
+  background-color: #efefef;
+`;
+
+export const StoryEdit = styled.button`
+  width: 145px;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
   background-color: #efefef;
 `;
 
@@ -84,17 +92,15 @@ export const Detail = styled(Link)`
   background-color: #efefef;
 `;
 
-export const Desc = styled.button`
+export const Desc = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 7px 16px;
-  border: none;
   border-radius: 10px;
-  width: 134px;
+  width: 100%;
   height: 32px;
   font-size: 14px;
-  color: #000000;
   background-color: #efefef;
 `;
 

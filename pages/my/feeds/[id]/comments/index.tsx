@@ -2,11 +2,9 @@ import axios from "axios";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import Modal from "./modal";
+import { CommentDeleteModal } from "@/components/atoms/Modal";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
@@ -16,48 +14,20 @@ import postLikeCommentAxios from "@/services/postInfo/postLikeComment";
 import getCommentAllAxios from "@/services/postInfo/getCommentAll";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
 import deleteCommentAxios from "@/services/postInfo/deleteComment";
-
-interface PostItemData {
-  commentsCounts: number;
-  contents: string;
-  createdAt: number;
-  hashTags: string;
-  image: string;
-  likeCount: number;
-  memberId: number;
-  nickname: string;
-  memberImage: string;
-  postId: number;
-  taggedMemberId: string;
-}
-
-interface CommentItemData {
-  commentId: number;
-  postId: number;
-  memberId: number;
-  nickname: string;
-  content: string;
-  memberImage: string;
-  likeCount: number;
-  replyFlag: boolean;
-  createdAt: number;
-  mentionList: string[];
-  image: string;
-}
+import { PostDetailData, CommentItemData } from "@/types/PostTypes";
 
 const Comments: React.FC = () => {
-  // const comments = useSelector((state: RootState) => state.comments.comments);
   const userInfo = useSelector((state: RootState) => state.user.member);
-  const [post, setPost] = useState<PostItemData | null>(null);
+  const [post, setPost] = useState<PostDetailData | null>(null);
   const [comment, setComment] = useState<string>("");
   const [commentId, setCommentId] = useState<string>("");
   const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
   const [commentLikes, setCommentLikes] = useState<boolean[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const commentInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { id } = router.query;
   const pageTitle = "댓글";
-  const commentInputRef = useRef<HTMLInputElement>(null);
 
   // 게시글 상세 조회
   const fetchPostDetailData = async (postId: number) => {
@@ -91,16 +61,12 @@ const Comments: React.FC = () => {
       .then((res) => {
         console.log("success", res);
 
-        // 댓글 목록에서 해당 댓글의 인덱스 찾기
         const commentIndex = commentAll.findIndex(
           (comment) => comment.commentId === commentId
         );
 
-        // 새로운 좋아요 상태 배열 생성
         const updatedLikes = [...commentLikes];
         updatedLikes[commentIndex] = !updatedLikes[commentIndex];
-
-        // 상태 업데이트
         setCommentLikes(updatedLikes);
       })
       .catch((err) => {
@@ -200,8 +166,6 @@ const Comments: React.FC = () => {
     setIsEditModalOpen(false);
   };
 
-  
-
   return (
     <Container>
       <PageHeader title={pageTitle} />
@@ -224,12 +188,9 @@ const Comments: React.FC = () => {
             onChange={handleCommentChange}
             placeholder="댓글 달기..."
           />
-          {/* <SmileIcon>
-            <FontAwesomeIcon icon={faFaceSmile} fontSize={"2rem"} />
-          </SmileIcon> */}
         </CommentsForm>
       </CommentsContainer>
-      {post && <CommentItem post={post} isReply={false}/>}
+      {post && <CommentItem post={post} isReply={false} />}
       {commentAll ? (
         commentAll.map((comment, index) => (
           <div key={index}>
@@ -249,7 +210,10 @@ const Comments: React.FC = () => {
         <Empty>제일 먼저 댓글을 달아보세요 :0</Empty>
       )}
       {isEditModalOpen && (
-        <Modal onDelete={handleCommentDelete} onCancel={handleCloseModal} />
+        <CommentDeleteModal
+          onDelete={handleCommentDelete}
+          onCancel={handleCloseModal}
+        />
       )}
       <Footer />
     </Container>
@@ -290,13 +254,6 @@ const CommentsInput = styled.input`
   border-radius: 10px;
   padding-left: 12px;
 `;
-
-// const SmileIcon = styled.div`
-//   position: absolute;
-//   right: 10%;
-//   top: 50%;
-//   transform: translateY(-50%);
-// `;
 
 const Empty = styled.span`
   padding: 12px;

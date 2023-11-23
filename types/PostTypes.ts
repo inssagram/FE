@@ -42,3 +42,19 @@ export interface LikedPostMemberData {
   memberProfile: string;
   followedState: boolean;
 }
+
+export interface CommentItemData {
+  parentId: number;
+  postId: number;
+  memberId: number;
+  nickname: string;
+  memberImage: string | null;
+  commentId: number;
+  commentLike: boolean;
+  commentCount: number;
+  content: string;
+  likeCount: number;
+  createdAt: string;
+  replyFlag: boolean;
+  mentionList: [];
+}
