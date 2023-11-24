@@ -93,13 +93,13 @@ const Search: React.FC = () => {
               handleClick={() => handleSearchItemClick(result.memberId)}
             />
           ))}
-        {searchResults.length > 0 ? (
-          ""
-        ) : (
+        {searchResults.length === 0 ? (
           <HistoryHeader>
             <HistoryTitle>최근 검색 항목</HistoryTitle>
             <DeleteBtn>모두 지우기</DeleteBtn>
           </HistoryHeader>
+        ) : (
+          ""
         )}
         {searchHistory.length > 0 &&
           !searchTerm &&

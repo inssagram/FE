@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
@@ -15,11 +15,10 @@ const LikedPost: React.FC<LikedPostMemberData> = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const router = useRouter();
-  const { postId } = router.query;
-
+  const { id } = router.query;
+  const postId: number = typeof id === "string" ? parseInt(id, 10) : -1;
   const PageTitle = "좋아요";
 
-  // 게시글 좋아요 멤버 목록
   const fetchLikePostMemberData = async (postId: number) => {
     try {
       const res = await getLikePostMemberListAxios(postId);
@@ -41,7 +40,7 @@ const LikedPost: React.FC<LikedPostMemberData> = () => {
 
   useEffect(() => {
     if (postId) {
-      fetchLikePostMemberData(postId as number);
+      fetchLikePostMemberData(postId);
     }
   }, [postId]);
 
@@ -74,6 +73,8 @@ const LikedPost: React.FC<LikedPostMemberData> = () => {
   );
 };
 
+export default LikedPost;
+
 const ItemContainer = styled.div`
   width: 100%;
   height: 60px;
@@ -88,18 +89,6 @@ const ClickTo = styled(Link)`
   flex-direction: row;
   align-items: center;
   padding: 8px 16px;
-`;
-
-const HashtagImg = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid #ccc;
-  border-radius: 100%;
-  margin-right: 12px;
-  width: 44px;
-  height: 44px;
 `;
 
 const AccountImg = styled(Image)`
@@ -133,21 +122,3 @@ const Id = styled.span`
   font-size: inherit;
   padding-bottom: 3px;
 `;
-
-const Status = styled.p`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Job = styled.span`
-  padding-right: 5px;
-  font-size: inherit;
-  color: #0095f6;
-`;
-
-const Follow = styled.span`
-  font-size: inherit;
-  color: #7c7c7c;
-`;
-
-export default LikedPost;

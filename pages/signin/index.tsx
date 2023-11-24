@@ -1,25 +1,18 @@
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import { loginUser } from "@/src/redux/Posts/userSlice";
 import * as SC from "@/components/styled/signin";
 import { handleError } from "@/utils/errorHandler";
 
 const Login: React.FC = () => {
-  const router = useRouter();
-  const token = sessionStorage.getItem("token");
-  if(token){
-    alert('이미 로그인 되어있습니다.')
-    router.push('/main')
-  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   const dispatch = useDispatch();
-
-
 
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -62,7 +55,6 @@ const Login: React.FC = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* <SC.FindPassword>비밀번호를 잊으셨나요?</SC.FindPassword> */}
           <SC.Login onClick={handleLogin}>로그인</SC.Login>
         </SC.LoginCont>
         <SC.SignupArea>

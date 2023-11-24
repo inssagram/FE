@@ -8,12 +8,12 @@ import Footer from "@/components/Footer";
 import getPostDetailAxios from "@/services/postInfo/getPostDetail";
 import { PostDetailData } from "@/types/PostTypes";
 
-const ExploredPost: React.FC = () => {
+const Post: React.FC = () => {
   const [post, setPost] = useState<PostDetailData | null>(null);
   const router = useRouter();
   const { id } = router.query;
   const postId: number = typeof id === "string" ? parseInt(id, 10) : -1;
-  const pageTitle = "탐색 탭";
+  const pageTitle = "게시물";
 
   const fetchPostDetailData = async (postId: number) => {
     try {
@@ -40,4 +40,4 @@ const ExploredPost: React.FC = () => {
   );
 };
 
-export default ExploredPost;
+export default Post;

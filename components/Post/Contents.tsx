@@ -31,7 +31,6 @@ interface PostContentsProps {
 const PostContents: React.FC<PostContentsProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState(null);
   const router = useRouter();
 
   const handleActionClick = async (postId: number, actionType: string) => {
@@ -58,22 +57,17 @@ const PostContents: React.FC<PostContentsProps> = ({ post }) => {
   };
 
   const handleCommentClick = () => {
-    router.push(`/my/feeds/${post.postId}/comments`);
+    router.push(`/post/${post.postId}/comments`);
   };
 
   return (
     <div>
-      {post.image ? (
-        <PostImage src={post.image[0]} alt="게시글" width={412} height={412} />
-      ) : (
-        <PostImage
-          src={"/images/noImage.svg"}
-          alt="게시글"
-          width={412}
-          height={412}
-        />
-      )}
-
+      <PostImage
+        src={post.image ? post.image[0] : "/images/noImage.svg"}
+        alt="게시글"
+        width={412}
+        height={412}
+      />
       <PostDetails>
         <ButtonArea>
           <Left>
@@ -81,7 +75,7 @@ const PostContents: React.FC<PostContentsProps> = ({ post }) => {
               isLiked={isLiked}
               onClick={() => handleActionClick(post.postId, "like")}
             />
-            <Link href={`/my/feeds/${post.postId}/comments`}>
+            <Link href={`/post/${post.postId}/comments`}>
               <FontAwesomeIcon icon={faComment} fontSize={24} />
             </Link>
             <Link href={`/post/share/${post.postId}`}>
