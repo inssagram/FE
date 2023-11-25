@@ -1,7 +1,7 @@
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/src/redux/Posts/userSlice";
@@ -11,10 +11,6 @@ import { handleError } from "@/utils/errorHandler";
 const Login: React.FC = () => {
   const router = useRouter();
   const token = sessionStorage.getItem("token");
-  if(token){
-    alert('이미 로그인 되어있습니다.')
-    router.push('/main')
-  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();

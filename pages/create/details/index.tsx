@@ -3,7 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
-  faPlusCircle
+  faImages,
+  faPlus,
+  faPlusCircle,
+  faX,
+  faCircleChevronRight,
+  faCircleChevronLeft,
+  faCircleXmark
 } from "@fortawesome/free-solid-svg-icons";
 import * as SC from "@/components/styled/create_details";
 import Image from "next/image";
@@ -20,11 +26,14 @@ import { handleResizeImage } from "./handleResizeImage";
 const Details: React.FC = () => {
   const router = useRouter();
   const [contents, setContents] = useState("");
-  const [previewImage,setPreviewImage] = useState<string>('')
+  const [previewImage,setPreviewImage] = useState<string[]>([])
   const [fileData, setFileData] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [isModal, setIsModal] = useState(false)
+  const [isImagesModal, setIsImagesModal] = useState(false)
+  const [slideProps, setSlideProps] = useState(0)
 
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -74,6 +83,10 @@ const Details: React.FC = () => {
   };
 
   const handleAddFile = () => {
+    if(previewImage.length > 4){
+      alert("사진은 최대 5장 업로드 할 수 있습니다.")
+      return
+    }
     if(fileRef.current){
       fileRef.current.click();
     }
@@ -88,7 +101,7 @@ const Details: React.FC = () => {
         return;
       }
       const imageURL = URL.createObjectURL(image)
-      setPreviewImage(imageURL)
+      setPreviewImage([...previewImage, imageURL])
       setFileData(image)
     }else{
       setPreviewImage((prev) => prev)
@@ -99,8 +112,34 @@ const Details: React.FC = () => {
     router.push("/");
   };
 
+  const handleModal = () => {
+    setIsModal(!isModal)
+  }
 
-  
+  const handleImagesModal = () => {
+    setIsImagesModal(!isImagesModal)
+  }
+
+  const handleDeleteImage = (index: number) => {
+    setPreviewImage((prev) => prev.filter((_, i) => i !== index))
+    setSlideProps((prev) => prev > 0 ? prev - 1 : prev)
+  }
+
+
+
+  const handleSlideProps = (direction: string) => {
+    console.log(previewImage, slideProps)
+
+    if(direction === "right" && slideProps <= previewImage.length){
+      setSlideProps((prev) => prev + 1)
+      return
+    }
+    if(direction === "left" && slideProps !== 0){
+      setSlideProps((prev) => prev - 1)
+      return
+    }
+  }
+
 
   return (
     <>
@@ -128,20 +167,12 @@ const Details: React.FC = () => {
             onChange={(e) => handleFileChange(e)}
             style={{display: 'none'}}
           />
-          {previewImage ? <Image src={previewImage} width={50} height={50} alt={previewImage} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
+          {previewImage.length > 0 ? <Image src={previewImage[0]} width={50} height={50} alt={previewImage[0]} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
         </SC.TextCont>
       </SC.Container>
-      <SC.FunctionPannels>
+      <SC.FunctionPannels onClick={handleModal}>
         <SC.Button>
-          <SC.Text>위치 추가</SC.Text>
-        </SC.Button>
-        <SC.Button>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </SC.Button>
-      </SC.FunctionPannels>
-      <SC.FunctionPannels>
-        <SC.Button>
-          <SC.Text>사람 태그</SC.Text>
+          <SC.Text>사진 추가</SC.Text>
         </SC.Button>
         <SC.Button>
           <FontAwesomeIcon icon={faChevronRight} />
@@ -156,6 +187,58 @@ const Details: React.FC = () => {
         </SC.Button>
       </SC.FunctionPannels>
       <canvas ref={canvasRef}></canvas>
+      {isModal 
+      ? (<SC.ModalFilter onClick={handleModal}>
+        <SC.Modal onClick={(e) => e.stopPropagation()}>
+          <SC.ModalHead>
+            <FontAwesomeIcon icon={faX} onClick={handleModal}/>
+            <SC.ModalTitle>사진 추가</SC.ModalTitle>
+            <SC.ModalPost>게시하기</SC.ModalPost>
+          </SC.ModalHead>
+          <SC.ModalBody>
+            {previewImage.length > 0 ? <Image src={previewImage[0]} fill={true} alt={previewImage[0]} style={{ borderRadius: "0 0 20px 20px"}}></Image> : <span>사진을 추가해 주세요</span> }
+            <SC.EditButton onClick={handleImagesModal} isImagesModal={isImagesModal}>
+              <FontAwesomeIcon icon={faImages}/>
+            </SC.EditButton>
+            {isImagesModal ?
+            <SC.ImagesModal>
+              <SC.Slide>
+                <SC.ImagesList slideProps={slideProps}>
+                { previewImage.length > 0 ?
+                  previewImage.map((v, i) => (
+                    <SC.ImageBox key={i}>
+                      <SC.DeleteButton key={i} onClick={() => handleDeleteImage(i)}>
+                        <FontAwesomeIcon icon={faCircleXmark}/>
+                      </SC.DeleteButton>
+                      <Image src={v} alt={v} fill={true} style={{borderRadius: "20px"}}></Image>
+                    </SC.ImageBox>
+                  ))
+                  : null
+                }
+                </SC.ImagesList>
+                  {slideProps > 0 ? (
+                    <SC.LeftButton onClick={() => handleSlideProps("left")}>
+                      <FontAwesomeIcon icon={faCircleChevronLeft}/>
+                    </SC.LeftButton>)
+                    : null}
+                  {previewImage.length > 1 && slideProps < previewImage.length - 1 ? (
+                    <SC.RightButton onClick={() => handleSlideProps("right")}>
+                      <FontAwesomeIcon icon={faCircleChevronRight}/>
+                    </SC.RightButton>)
+                    : null 
+                  }
+              </SC.Slide>
+              <SC.AddButton onClick={handleAddFile} >
+                <FontAwesomeIcon icon={faPlus}/>
+              </SC.AddButton>
+            </SC.ImagesModal>
+            : null
+            }
+          </SC.ModalBody>
+        </SC.Modal>
+      </SC.ModalFilter>)
+      : null  
+      }
     </>
   );
 };
