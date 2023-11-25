@@ -117,7 +117,7 @@ const Copy = styled.button`
 const Follow = styled.button`
   display: flex;
   align-items: center;
-  margin-left: 12px;
+  // margin-left: 12px;
   padding: 7px 16px;
   border: none;
   border-radius: 10px;

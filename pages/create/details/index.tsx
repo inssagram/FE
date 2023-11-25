@@ -1,4 +1,10 @@
-import React, { useRef } from "react";
+import { useState, useRef } from "react";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as SC from "@/components/styled/create_details";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -11,20 +17,11 @@ import {
   faCircleChevronLeft,
   faCircleXmark
 } from "@fortawesome/free-solid-svg-icons";
-import * as SC from "@/components/styled/create_details";
-import Image from "next/image";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
-import { v4 as uuidv4} from "uuid"
-import { ref,uploadBytes,getDownloadURL } from "firebase/storage";
 import { storage } from "@/components/firebase/firebase";
-import axiosInstance from "@/services/axiosInstance";
 import { handleResizeImage } from "./handleResizeImage";
-
+import axiosInstance from "@/services/axiosInstance";
 
 const Details: React.FC = () => {
-  const router = useRouter();
   const [contents, setContents] = useState("");
   const [previewImage,setPreviewImage] = useState<string[]>([])
   const [fileData, setFileData] = useState<File | null>(null)
@@ -35,19 +32,23 @@ const Details: React.FC = () => {
   const [isImagesModal, setIsImagesModal] = useState(false)
   const [slideProps, setSlideProps] = useState(0)
 
-
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContents(e.target.value);
   };
 
-  const uploadImageToServer = async (imageBlob: string, contents: string, fileName: string) => {
+  const uploadImageToServer = async (
+    imageBlob: string,
+    contents: string,
+    fileName: string
+  ) => {
     const postData = {
-      "type": "post",
-      "image": [imageBlob],
-      "contents": contents,
-      "fileName": [fileName]
-    }
-    try{
+      type: "post",
+      image: [imageBlob],
+      contents: contents,
+      fileName: [fileName],
+    };
+
+    try {
       const res = await axiosInstance({
         method: "post",
         url: "/post/create",
@@ -57,27 +58,27 @@ const Details: React.FC = () => {
         },
         data: postData,
       });
-      return res.data.postId
-    }catch(error){
-      console.error(error)
+
+      return res.data.postId;
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  
-
   const handleCreateBoard = async () => {
     try {
-      if(fileData !== null){
-        const uuid = uuidv4()
-        const resizedImage = (await handleResizeImage(fileData)) as File
+      if (fileData !== null) {
+        const uuid = uuidv4();
+        const resizedImage = (await handleResizeImage(fileData)) as File;
         const storageRef = ref(storage, `post/${user.member.nickname}/${uuid}`);
         const uploadTask = uploadBytes(storageRef, resizedImage);
         const blobImage = await uploadTask;
         const downloadURL = await getDownloadURL(blobImage.ref);
-        const postId = await uploadImageToServer(downloadURL, contents, uuid)
-        router.push(`/my/feeds/${postId}`)
-     }
-    }catch (error) {``
+        const postId = await uploadImageToServer(downloadURL, contents, uuid);
+        router.push(`/post/${postId}`);
+      }
+    } catch (error) {
+      ``;
       console.error(error);
     }
   };
@@ -90,14 +91,16 @@ const Details: React.FC = () => {
     if(fileRef.current){
       fileRef.current.click();
     }
-  }
+  };
 
-  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.files !== null){
-      const image = e.target.files[0]
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files !== null) {
+      const image = e.target.files[0];
       const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
       if (!supportedFormats.includes(image.type)) {
-        alert("지원되지 않는 이미지 형식입니다. JPEG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요.");
+        alert(
+          "지원되지 않는 이미지 형식입니다. JPEG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요."
+        );
         return;
       }
       const imageURL = URL.createObjectURL(image)
@@ -106,10 +109,10 @@ const Details: React.FC = () => {
     }else{
       setPreviewImage((prev) => prev)
     }
-  }
+  };
 
   const handlePrevClick = () => {
-    router.push("/");
+    router.push("/main");
   };
 
   const handleModal = () => {
@@ -140,7 +143,6 @@ const Details: React.FC = () => {
     }
   }
 
-
   return (
     <>
       <SC.Header>
@@ -148,24 +150,22 @@ const Details: React.FC = () => {
           <FontAwesomeIcon icon={faChevronLeft} />
         </SC.Prev>
         <SC.H1>새 게시물</SC.H1>
-        <SC.Next
-          onClick={handleCreateBoard}
-        >
-          공유하기
-        </SC.Next>
+        <SC.Next onClick={handleCreateBoard}>공유하기</SC.Next>
       </SC.Header>
       <SC.Container>
         <SC.TextCont>
-        <SC.MyProfile></SC.MyProfile>
+          <SC.MyProfile></SC.MyProfile>
           <SC.Textarea
             placeholder="내용을 입력해주세요"
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleTextareaChange(e)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              handleTextareaChange(e)
+            }
           />
           <input
             ref={fileRef}
             type="file"
             onChange={(e) => handleFileChange(e)}
-            style={{display: 'none'}}
+            style={{ display: "none" }}
           />
           {previewImage.length > 0 ? <Image src={previewImage[0]} width={50} height={50} alt={previewImage[0]} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
         </SC.TextCont>
