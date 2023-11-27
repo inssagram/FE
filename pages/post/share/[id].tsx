@@ -19,6 +19,7 @@ const SharePost: React.FC = () => {
   const pageTitle = "공유";
   const router = useRouter();
   const { id } = router.query;
+  const postId: number = typeof id === "string" ? parseInt(id, 10) : -1;
 
   const handleSearch = (searchValue: string) => {
     setSearchTerm(searchValue);
@@ -62,7 +63,7 @@ const SharePost: React.FC = () => {
       );
 
       if (res.status === "success") {
-        router.push(`/post/${id}`);
+        router.push(`/post/${postId}`);
       }
       console.log(res);
     } catch (err) {
@@ -75,11 +76,11 @@ const SharePost: React.FC = () => {
   };
 
   const handleSendPost = () => {
-    if (selectedAccount && id) {
+    if (selectedAccount && postId) {
       handleSharePost(
         "message",
         selectedAccount.memberId,
-        Number(id),
+        postId,
         "share post"
       );
     }
@@ -128,9 +129,4 @@ const SendButton = styled.button`
   border-radius: 10px;
   color: #ffffff;
   background-color: #0095f6;
-`;
-
-const SendSuccess = styled.div`
-  width: 412px;
-  height: 44px;
 `;

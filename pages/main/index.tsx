@@ -1,7 +1,5 @@
-import styled from "styled-components";
 import { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/src/redux/Posts/store";
+import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
 import Layout from "@/components/Layout";
 import PostTop from "@/components/Post/Top";
@@ -10,10 +8,9 @@ import getFollowingMemberPostAllAxios from "@/services/postInfo/getFollowingMemb
 import { PostDetailData } from "@/types/PostTypes";
 
 const Main: React.FC = () => {
-  const userInfo: any = useSelector((state: RootState) => state.user.member);
   const [posts, setPosts] = useState<PostDetailData[]>([]);
 
-  const fetchPostData = useCallback(async () => {
+  const fetchFollowingMemberPostData = useCallback(async () => {
     try {
       const res = await getFollowingMemberPostAllAxios();
       setPosts(res.data);
@@ -23,8 +20,8 @@ const Main: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetchPostData();
-  }, [fetchPostData]);
+    fetchFollowingMemberPostData();
+  }, [fetchFollowingMemberPostData]);
 
   return (
     <Layout>
@@ -32,7 +29,7 @@ const Main: React.FC = () => {
         {posts.map((post, index) => (
           <Post key={index}>
             <PostTop post={post} />
-            <PostContents post={post} userInfo={userInfo} />
+            <PostContents post={post} />
           </Post>
         ))}
       </PostArea>

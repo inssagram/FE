@@ -4,11 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import { CommentDeleteModal } from "@/components/atoms/Modal";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
 import { CommentItem } from "@/components/atoms/Item";
+import { CommentDeleteModal } from "@/components/atoms/Modal";
 import Footer from "@/components/Footer";
 import postLikeCommentAxios from "@/services/postInfo/postLikeComment";
 import getCommentAllAxios from "@/services/postInfo/getCommentAll";
@@ -27,6 +27,7 @@ const Comments: React.FC = () => {
   const commentInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { id } = router.query;
+  const postId: number = typeof id === "string" ? parseInt(id, 10) : -1;
   const pageTitle = "댓글";
 
   // 게시글 상세 조회
@@ -73,8 +74,6 @@ const Comments: React.FC = () => {
         handleError(err, "error fetching comments like:");
       });
   };
-
-  const postId = Number(id);
 
   useEffect(() => {
     if (!isNaN(postId)) {
