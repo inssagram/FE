@@ -25,12 +25,13 @@ const Details: React.FC = () => {
   const [contents, setContents] = useState("");
   const [previewImage,setPreviewImage] = useState<string[]>([])
   const [fileData, setFileData] = useState<File | null>(null)
+  const router = useRouter()
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [isModal, setIsModal] = useState(false)
-  const [isImagesModal, setIsImagesModal] = useState(false)
-  const [slideProps, setSlideProps] = useState(0)
+  const [isImagesModal, setIsImagesModal] = useState<boolean>(false)
+  const [slideProps, setSlideProps] = useState<number>(0)
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContents(e.target.value);
@@ -93,10 +94,10 @@ const Details: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files !== null) {
-      const image = e.target.files[0];
-      const supportedFormats = ["image/jpeg", "image/png", "image/webp"];
+  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files !== null && e.target.files !== undefined){
+      const image = e.target.files[0]
+      const supportedFormats = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
       if (!supportedFormats.includes(image.type)) {
         alert(
           "지원되지 않는 이미지 형식입니다. JPEG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요."
@@ -131,8 +132,6 @@ const Details: React.FC = () => {
 
 
   const handleSlideProps = (direction: string) => {
-    console.log(previewImage, slideProps)
-
     if(direction === "right" && slideProps <= previewImage.length){
       setSlideProps((prev) => prev + 1)
       return
@@ -142,6 +141,25 @@ const Details: React.FC = () => {
       return
     }
   }
+
+  const handleDragStart = (e:React.DragEvent, index: number) => {
+    e.dataTransfer.setData('text/plain', index.toString());
+  }
+
+  const handleDragOver = (e:React.DragEvent) => {
+    e.preventDefault()
+  }
+
+
+  const handleDrop = (e: React.DragEvent, index: number) => {
+    const dragIndex = Number(e.dataTransfer.getData('text/plain'));
+    const hoverIndex = index;
+    const newImages = [...previewImage];
+    const dragImage = newImages[dragIndex];
+    newImages.splice(dragIndex, 1);
+    newImages.splice(hoverIndex, 0, dragImage);
+    setPreviewImage(newImages);
+  };
 
   return (
     <>
@@ -196,8 +214,8 @@ const Details: React.FC = () => {
             <SC.ModalPost>게시하기</SC.ModalPost>
           </SC.ModalHead>
           <SC.ModalBody>
-            {previewImage.length > 0 ? <Image src={previewImage[0]} fill={true} alt={previewImage[0]} style={{ borderRadius: "0 0 20px 20px"}}></Image> : <span>사진을 추가해 주세요</span> }
-            <SC.EditButton onClick={handleImagesModal} isImagesModal={isImagesModal}>
+            {previewImage.length > 0 ? <Image src={previewImage[slideProps]} fill={true} alt={previewImage[slideProps]} style={{ borderRadius: "0 0 20px 20px"}}></Image> : <span>사진을 추가해 주세요</span> }
+            <SC.EditButton onClick={handleImagesModal} isimagesmodal={isImagesModal}>
               <FontAwesomeIcon icon={faImages}/>
             </SC.EditButton>
             {isImagesModal ?
@@ -206,7 +224,11 @@ const Details: React.FC = () => {
                 <SC.ImagesList slideProps={slideProps}>
                 { previewImage.length > 0 ?
                   previewImage.map((v, i) => (
-                    <SC.ImageBox key={i}>
+                    <SC.ImageBox key={i}
+                      onDragStart={(e:React.DragEvent) => handleDragStart(e, i)}
+                      onDragOver={(e:React.DragEvent) =>handleDragOver(e)}
+                      onDrop={(e:React.DragEvent) => handleDrop(e, i)}
+                      >
                       <SC.DeleteButton key={i} onClick={() => handleDeleteImage(i)}>
                         <FontAwesomeIcon icon={faCircleXmark}/>
                       </SC.DeleteButton>

@@ -174,11 +174,11 @@ export const ModalBody = styled.div`
   position: relative;
 `
 
-interface isImagesModalProps {
-  isImagesModal: boolean 
+interface isimagesmodalProps {
+  isimagesmodal: boolean 
 }
 
-export const EditButton = styled.button<isImagesModalProps>`
+export const EditButton = styled.button<isimagesmodalProps>`
   position: absolute;
   font-size: 15px;
   bottom: 5%;
@@ -191,7 +191,7 @@ export const EditButton = styled.button<isImagesModalProps>`
   z-index: 10;
   transition: 0.3s ease-in-out;
   cursor: pointer;
-  opacity: ${(props) => props.isImagesModal ? 0.2 : 1};
+  opacity: ${(props) => props.isimagesmodal ? 0.2 : 1};
 `
 
 
