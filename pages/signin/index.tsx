@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 import { loginUser } from "@/src/redux/Posts/userSlice";
 import * as SC from "@/components/styled/signin";
 import { handleError } from "@/utils/errorHandler";

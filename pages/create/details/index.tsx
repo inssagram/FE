@@ -79,7 +79,6 @@ const Details: React.FC = () => {
         router.push(`/post/${postId}`);
       }
     } catch (error) {
-      ``;
       console.error(error);
     }
   };
@@ -95,18 +94,25 @@ const Details: React.FC = () => {
   };
 
   const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files !== null && e.target.files.length > 5){
+      alert("사진은 최대 5장까지 업로드 가능합니다.")
+      return
+    }
     if(e.target.files !== null && e.target.files !== undefined){
-      const image = e.target.files[0]
+      const images = e.target.files
       const supportedFormats = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+      Array.from(images).map((image) => {
       if (!supportedFormats.includes(image.type)) {
-        alert(
-          "지원되지 않는 이미지 형식입니다. JPEG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요."
-        );
-        return;
-      }
-      const imageURL = URL.createObjectURL(image)
-      setPreviewImage([...previewImage, imageURL])
-      setFileData(image)
+          alert(
+            "지원되지 않는 이미지 형식입니다. JPEG, JPG, PNG 또는 WEBP 형식의 이미지를 업로드해주세요."
+          );
+          return;
+        }else {
+          const imageURL = URL.createObjectURL(image)
+          setPreviewImage((prev) => prev.concat(imageURL))
+        }
+      })
+      setFileData(images[0])
     }else{
       setPreviewImage((prev) => prev)
     }
@@ -184,8 +190,9 @@ const Details: React.FC = () => {
             type="file"
             onChange={(e) => handleFileChange(e)}
             style={{ display: "none" }}
+            multiple
           />
-          {previewImage.length > 0 ? <Image src={previewImage[0]} width={50} height={50} alt={previewImage[0]} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
+          {previewImage.length > 0 ? <Image onClick={handleModal} src={previewImage[0]} width={50} height={50} alt={previewImage[0]} />: <FontAwesomeIcon onClick={handleAddFile} icon={faPlusCircle} style={{marginBottom: "10px"}}/>}
         </SC.TextCont>
       </SC.Container>
       <SC.FunctionPannels onClick={handleModal}>
