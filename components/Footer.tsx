@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
     return () => {
       eventSource.close();
     };
-  }, []);
+  }, [userInfo?.member_id]);
 
   // useEffect(() => {
   //   const timer = setTimeout(() => {
