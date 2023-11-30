@@ -29,8 +29,10 @@ const Notifications: React.FC<NotificationProps> = () => {
       const res = await getNotificationAllAxios();
       // 기본적으로 모든 알림 항목에 대해 삭제 아이콘 가시성을 비활성화
       const initialDeleteIconVisible = res.data.reduce(
-        (acc, notification) => ({ ...acc, [notification.id]: false }),
-        {}
+        (acc: Record<number, boolean>, notification: NotificationData) => ({
+          ...acc,
+          [notification.id]: false,
+        })
       );
       setDeleteIconVisible(initialDeleteIconVisible);
       setNotifications(res.data);
@@ -80,10 +82,12 @@ const Notifications: React.FC<NotificationProps> = () => {
 
   const handleNotificationClick = (id: number) => {
     // 클릭한 알림 항목에 대한 삭제 아이콘 가시성을 토글합니다.
-    setDeleteIconVisible((prevDeleteIconVisible) => ({
-      ...prevDeleteIconVisible,
-      [id]: !prevDeleteIconVisible[id],
-    }));
+    setDeleteIconVisible(
+      (prevDeleteIconVisible: { [key: number]: boolean }) => ({
+        ...prevDeleteIconVisible,
+        [id]: !prevDeleteIconVisible[id],
+      })
+    );
   };
 
   return (
@@ -144,17 +148,17 @@ const Notifications: React.FC<NotificationProps> = () => {
                   />
                 </Board>
               )}
-              {deleteIconVisible[notification.id] && (
-                <DeleteIcon
-                  onClick={() => handleDeleteNotification(notification.id)}
-                >
-                  <FontAwesomeIcon
-                    icon={faEllipsisVertical}
-                    fontSize={"20px"}
-                    style={{ color: "#0095f6" }}
-                  />
-                </DeleteIcon>
-              )}
+              {/* {deleteIconVisible[notification.id] && ( */}
+              <DeleteIcon
+                onClick={() => handleDeleteNotification(notification.id)}
+              >
+                <FontAwesomeIcon
+                  icon={faEllipsisVertical}
+                  fontSize={"20px"}
+                  style={{ color: "#0095f6" }}
+                />
+              </DeleteIcon>
+              {/* )} */}
             </ContentArea>
           ))}
       </Container>
