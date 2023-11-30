@@ -49,7 +49,7 @@ interface ReplyDataProps {
   handleLikeCommentClick: (commentId: number) => void;
   handleShowModal: (comment: any) => void;
   index: any;
-  commentInputRef: React.RefObject<HTMLTextAreaElement>;
+  commentInputRef: React.RefObject<HTMLInputElement>
 }
 
 export const ReplyItem: React.FC<ReplyDataProps> = ({
