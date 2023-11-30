@@ -1,6 +1,6 @@
 import Stomp from "stompjs";
 import SockJS from "sockjs-client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
@@ -41,56 +41,23 @@ const In: React.FC = () => {
   const withMemberId: number =
     typeof memberId === "string" ? parseInt(memberId, 10) : -1;
 
+  const accessToken = sessionStorage.getItem("token");
   const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
   const stompClient = Stomp.over(socket);
-  const accessToken = sessionStorage.getItem("token");
 
-  const fetchChatRoomDataAll = async (roomId: number) => {
-    try {
-      const res = await getChatRoomDataAxios(roomId);
-      const memberList = res.memberList;
-      const currentUserId = userInfo?.member_id;
-      const otherMemberId = Object.keys(memberList).find(
-        (memberId) => Number(memberId) !== Number(currentUserId)
-      );
+  // useEffect(() => {
+  //   const handleConnect = () => {
+  //     console.log("웹 소켓 연결됐어요");
+  //   };
 
-      if (currentUserId && otherMemberId) {
-        const senderId = currentUserId;
-        const receiverId = otherMemberId;
-        const sender = memberList[senderId];
-        const receiver = memberList[receiverId];
+  //   // 컴포넌트가 마운트될 때 WebSocket에 연결
+  //   stompClient.connect({ token: accessToken }, handleConnect);
 
-        setChatRoom((prevChatRoom) => ({
-          ...prevChatRoom,
-          sender: sender || null,
-          receiver: receiver || null,
-        }));
-      }
-    } catch (err) {
-      handleError(err, "fetching chat room data error");
-    }
-  };
-
-  // 특정 채팅방 과거 대화내용
-  const fetchChatRoomHistory = async (id: number) => {
-    try {
-      const res = await getChatHistoryWithRoomIdAxios(id);
-      setPreviousMessages(res.data);
-    } catch (err) {
-      handleError(err, "fetching chat room contents error");
-    }
-  };
-
-  useEffect(() => {
-    if (withRoomId !== -1) {
-      fetchChatRoomDataAll(withRoomId);
-      fetchChatRoomHistory(withRoomId);
-    }
-  }, [withRoomId]);
-
-  const handleConnect = () => {
-    console.log("웹 소켓 연결 됐어용");
-  };
+  //   // 컴포넌트가 언마운트될 때 연결 해제
+  //   return () => {
+  //     stompClient.disconnect();
+  //   };
+  // }, [stompClient, accessToken]);
 
   const handleSendMessage = (messageData: SendNewMessageData) => {
     if (stompClient && messageData.message.trim() !== "" && chatRoom) {
@@ -107,6 +74,58 @@ const In: React.FC = () => {
   const handleEnterKeyPress = (messageData: SendNewMessageData) => {
     handleSendMessage(messageData);
   };
+
+  const fetchChatRoomDataAll = useCallback(
+    async (roomId: number) => {
+      try {
+        const res = await getChatRoomDataAxios(roomId);
+        const memberList = res.memberList;
+        const currentUserId = userInfo?.member_id;
+        const otherMemberId = Object.keys(memberList).find(
+          (memberId) => Number(memberId) !== Number(currentUserId)
+        );
+
+        if (currentUserId && otherMemberId) {
+          const senderId = currentUserId;
+          const receiverId = otherMemberId;
+          const sender = memberList[senderId];
+          const receiver = memberList[receiverId];
+
+          setChatRoom({
+            sender: sender || null,
+            receiver: receiver || null,
+          });
+        }
+      } catch (err) {
+        handleError(err, "fetching chat room data error");
+      }
+    },
+    [userInfo?.member_id]
+  );
+
+  const fetchChatRoomHistory = useCallback(async (id: number) => {
+    try {
+      const res = await getChatHistoryWithRoomIdAxios(id);
+      setPreviousMessages(res.data);
+    } catch (err) {
+      handleError(err, "fetching chat room contents error");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchChatRoomDataAll(withRoomId);
+      await fetchChatRoomHistory(withRoomId);
+    };
+
+    if (withRoomId !== -1) {
+      fetchData();
+    }
+  }, [withRoomId, fetchChatRoomDataAll, fetchChatRoomHistory]);
+
+  function handleConnect(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
@@ -13,12 +13,7 @@ import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
 import { MemberInfoData } from "@/types/UserTypes";
 import { PostDetailData } from "@/types/PostTypes";
 
-interface UserProps {
-  memberInfo: MemberInfoData;
-  posts: PostDetailData;
-}
-
-const User: React.FC<UserProps> = () => {
+const User: React.FC = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
   const [memberInfo, setMemberInfo] = useState<MemberInfoData | undefined>();
   const [posts, setPosts] = useState<PostDetailData[] | undefined>([]);
@@ -34,25 +29,7 @@ const User: React.FC<UserProps> = () => {
   const { id } = router.query;
   const memberId: number = typeof id === "string" ? parseInt(id, 10) : -1;
 
-  const fetchUserDetailData = async (id: number) => {
-    try {
-      const res = await getUserDetailAxios(id);
-      const memberInfoData = res.data;
-      if (userInfo) {
-        const isFollowing = memberInfoData.followers.some(
-          (follower: { followerName: string }) =>
-            follower.followerName === userInfo.nickname
-        );
-        setIsFollowing(isFollowing);
-      }
-      setMemberInfo(memberInfoData);
-      await fetchMemberPostAllData(memberId);
-    } catch (err) {
-      handleError(err, "Error fetcing member detail:");
-    }
-  };
-
-  const fetchMemberPostAllData = async (memberId: number) => {
+  const fetchMemberPostAllData = useCallback(async (memberId: number) => {
     try {
       const res = await getMemberPostAllAxios(memberId);
       setPosts(res.data);
@@ -60,6 +37,49 @@ const User: React.FC<UserProps> = () => {
     } catch (err) {
       handleError(err, "Error fetching posts:");
       setLoading(true);
+    }
+  }, []);
+
+  const fetchUserDetailData = useCallback(
+    async (id: number) => {
+      try {
+        const res = await getUserDetailAxios(id);
+        const memberInfoData = res.data;
+
+        if (userInfo) {
+          const isFollowing = memberInfoData.followers.some(
+            (follower: { followerName: string }) =>
+              follower.followerName === userInfo.nickname
+          );
+          setIsFollowing(isFollowing);
+        }
+
+        setMemberInfo(memberInfoData);
+        await fetchMemberPostAllData(memberId);
+      } catch (err) {
+        handleError(err, "Error fetching member detail:");
+      }
+    },
+    [userInfo, memberId, fetchMemberPostAllData]
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (memberId !== -1) {
+        await fetchUserDetailData(memberId);
+      }
+    };
+
+    fetchData();
+  }, [memberId, fetchUserDetailData]);
+
+  const handleFollowClick = async (followId: number) => {
+    try {
+      const res = await postMemberFollowAxios(followId);
+      console.log("success", res);
+      setIsFollowing((setIsFollowing) => !setIsFollowing);
+    } catch (error) {
+      console.error("error", error);
     }
   };
 
@@ -75,44 +95,24 @@ const User: React.FC<UserProps> = () => {
   };
 
   const handlePostIconClick = () => {
+    setIsShowPosts(!isShowPosts);
+    setIsShowTagged(false);
     if (!isShowPosts) {
       fetchMemberPostAllData(memberId);
     }
-    setIsShowPosts(!isShowPosts);
-    setIsShowTagged(false);
   };
 
   const handleTaggedIconClick = () => {
-    if (!isShowTagged) {
-      fetchTaggedPostAllData(memberId);
-    }
     setIsShowTagged(!isShowTagged);
     setIsShowPosts(false);
-  };
-
-  const handleFollowClick = async (followId: number) => {
-    try {
-      const res = await postMemberFollowAxios(followId);
-      console.log("success", res);
-      setIsFollowing((setIsFollowing) => !setIsFollowing);
-    } catch (error) {
-      console.error("error", error);
+    if (!isShowTagged) {
+      fetchTaggedPostAllData(memberId);
     }
   };
 
   const handleChatClick = () => {
     router.push(`/direct/new`);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (memberId !== -1) {
-        await fetchUserDetailData(memberId);
-      }
-    };
-
-    fetchData();
-  }, [memberId]);
 
   return (
     <>
