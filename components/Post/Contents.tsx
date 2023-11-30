@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,39 +19,16 @@ import { HeartButton } from "@/components/atoms/Button";
 import postLikePostAxios from "@/services/postInfo/postLikePost";
 import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
 import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
+import { PostDetailData } from "@/types/PostTypes";
 
-interface PostData {
-  postId: number;
-  memberId: number;
-  nickName: string;
-  image: [string];
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
-
-interface CommentData {
-  postId: number;
-}
-
-interface UserInfo {
-  email: string;
-  member_id: number;
-  nickname: string;
-  job: string;
-  profilePic: string;
-}
-
-type HandleLikeClick = (postId: number) => void;
+// type HandleLikeClick = (postId: number) => void;
 
 interface PostContentsProps {
-  post: PostData;
-  userInfo: UserInfo;
-  handleLikeClick: HandleLikeClick;
+  post: PostDetailData;
+  // handleLikeClick: HandleLikeClick;
 }
 
-const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
+const PostContents: React.FC<PostContentsProps> = ({ post }) => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
@@ -81,39 +57,32 @@ const PostContents: React.FC<PostContentsProps> = ({ post, userInfo }) => {
   };
 
   const handleCommentClick = () => {
-    router.push(`/my/feeds/${post.postId}/comments`);
+    router.push(`/post/${post.postId}/comments`);
   };
 
   return (
     <div>
-      {post.image ? (
-        <PostImage src={post.image[0]} alt="게시글" width={412} height={412} />
-      ) : (
-        <PostImage
-          src={"/images/noImage.svg"}
-          alt="게시글"
-          width={412}
-          height={412}
-        />
-      )}
+      <PostImage
+        src={post.image ? post.image[0] : "/images/noImage.svg"}
+        alt="게시글"
+        width={412}
+        height={412}
+      />
       <PostDetails>
         <ButtonArea>
           <Left>
             <HeartButton
               isLiked={isLiked}
-              handleLikeClick={() => handleActionClick(post.postId, "like")}
+              onClick={() => handleActionClick(post.postId, "like")}
             />
-            <Link href={`/my/feeds/${post.postId}/comments`}>
+            <Link href={`/post/${post.postId}/comments`}>
               <FontAwesomeIcon icon={faComment} fontSize={24} />
             </Link>
-            {userInfo ? (
-              <Link href={`/direct/in/${post.memberId}`}>
-                <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
-              </Link>
-            ) : (
+            <Link href={`/post/share/${post.postId}`}>
               <FontAwesomeIcon icon={faPaperPlane} fontSize={24} />
-            )}
+            </Link>
           </Left>
+
           <Right>
             <FontAwesomeIcon
               onClick={() => handleActionClick(post.postId, "bookmark")}
@@ -167,7 +136,6 @@ const ButtonArea = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 54px;
-  margin-top: 4px;
   padding: 6px 0 8px;
 `;
 

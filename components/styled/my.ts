@@ -6,7 +6,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  margin: 16px 16px 24px 16px;
+  margin: 16px 16px 24px;
 `;
 
 export const Profile = styled.div`
@@ -50,11 +50,19 @@ export const EditArea = styled.div`
   margin-top: 10px;
 `;
 
-export const Edit = styled.button`
-  width: 130px;
+export const ProfileEdit = styled.button`
+  width: 115px;
   height: 35px;
-  border-style: none;
-  border-radius: 10%;
+  border: none;
+  border-radius: 10px;
+  background-color: #efefef;
+`;
+
+export const StoryEdit = styled.button`
+  width: 145px;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
   background-color: #efefef;
 `;
 
@@ -70,7 +78,6 @@ export const DetailArea = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin-top: 10px;
 `;
 
@@ -86,7 +93,15 @@ export const Detail = styled(Link)`
 `;
 
 export const Desc = styled.span`
-  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 16px;
+  border-radius: 10px;
+  width: 100%;
+  height: 32px;
+  font-size: 14px;
+  background-color: #efefef;
 `;
 
 export const MyDataContainer = styled.div`

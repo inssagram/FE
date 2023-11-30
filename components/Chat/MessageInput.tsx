@@ -1,113 +1,80 @@
 import { useState, useRef } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
+import { MemberInfoData, SendNewMessageData } from "@/types/ChatRoomTypes";
 
 interface MessageInputProps {
-  onMessageSend: (message: string, images: File[]) => void;
-  images: File[];
+  roomId: number;
+  chatRoom: {
+    receiver: MemberInfoData | null;
+  } | null;
+  onEnterKeyPress: (messageData: SendNewMessageData) => void;
 }
+
 const MessageInput: React.FC<MessageInputProps> = ({
-  onMessageSend,
-  images,
+  roomId,
+  chatRoom,
+  onEnterKeyPress,
 }) => {
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [message, setMessage] = useState<string>("");
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [messageValue, setMessageValue] = useState<string>("");
+  const receiver = chatRoom?.receiver;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(event.target.value);
+    const newMessage = event.target.value;
+    setMessageValue(newMessage);
   };
 
-  const handleSendClick = () => {
-    if (message.trim() !== "" || selectedFiles.length > 0) {
-      onMessageSend(message, selectedFiles);
-      setMessage("");
-      setSelectedFiles([]);
-    }
-  };
-
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+  const handleSendMessage = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (receiver && roomId && event.key === "Enter") {
       event.preventDefault();
-      handleSendClick();
+      const messageData: SendNewMessageData = {
+        type: "message",
+        chatRoomId: roomId,
+        receiverMemberId: receiver.memberId,
+        message: messageValue,
+      };
+      onEnterKeyPress(messageData);
+      setMessageValue("");
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const fileList = Array.from(files);
-      setSelectedFiles([...selectedFiles, ...fileList]);
-    }
-  };
-
-  const handleCancel = (index: number) => {
-    const newFiles = [...selectedFiles];
-    newFiles.splice(index, 1);
-    setSelectedFiles(newFiles);
-  };
-
-  const handleUpload = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const ImagePreviews = () => {
-    return (
-      <PreviewContainer>
-        {selectedFiles.map((file, index) => (
-          <ImagePreview key={index}>
-            <Image
-              src={URL.createObjectURL(file)}
-              alt={`이미지 미리보기 ${index}`}
-            />
-            <CancelIcon
-              icon={faTimesCircle}
-              fontSize={"18px"}
-              onClick={() => handleCancel(index)}
-            />
-          </ImagePreview>
-        ))}
-      </PreviewContainer>
-    );
-  };
+  // const handleSendImage = () => {
+  //   const imageFile = /* 여기에 이미지 파일을 가져오는 코드 */
+  //   const messageData: MessageData = {
+  //     type: "message",
+  //     chatRoomId: 123,
+  //     receiverMemberId: 456,
+  //     message: "",
+  //   };
+  //   onSendMessage(messageData);
+  // };
 
   return (
     <>
       <Container>
-        <Message data-files-selected={selectedFiles.length > 0}>
-          {selectedFiles.length > 0 && <ImagePreviews />}
+        <Message>
           <Input>
             <TextInput
               type="text"
               placeholder="메시지 입력..."
-              value={message}
+              value={messageValue}
               onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
+              onKeyPress={handleSendMessage}
             />
-            <ImageInput
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              ref={fileInputRef}
-              multiple
-            />
-            <DirectBtn>
-              <UploadBtn onClick={handleUpload}>
+            {/* <DirectBtn>
+              <UploadBtn onClick={handleSendImage}>
                 <ImageIcon icon={faImage} fontSize={"24px"} />
               </UploadBtn>
-              {selectedFiles.length > 0 && (
-                <SendBtn onClick={handleSendClick}>보내기</SendBtn>
-              )}
-            </DirectBtn>
+            </DirectBtn> */}
           </Input>
         </Message>
       </Container>
     </>
   );
 };
+
+export default MessageInput;
 
 const Container = styled.div`
   position: fixed;
@@ -213,5 +180,3 @@ const CancelIcon = styled(FontAwesomeIcon)`
   top: -10px;
   right: -10px;
 `;
-
-export default MessageInput;

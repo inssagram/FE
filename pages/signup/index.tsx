@@ -29,9 +29,6 @@ const Signup: React.FC = () => {
     }
   };
 
-  const backButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    router.back();
-  };
 
   const submitHandler = () => {
     setButtonDisabled(true)

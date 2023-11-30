@@ -4,7 +4,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import * as SC from "@/components/styled/main_boardwrite_details";
+import * as SC from "@/components/styled/create_details";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -23,7 +23,7 @@ const Details: React.FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
   const memberId = 1;
-  const postData = useSelector((state: RootState) => state.posts);
+  // const postData = useSelector((state: RootState) => state.posts);
   const { postId } = router.query;
 
   useEffect(() => {

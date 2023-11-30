@@ -51,10 +51,6 @@ export const NotiAlarm = styled.span`
   z-index: 100;
 `;
 
-export const NotiCount = styled.span`
-  padding-left: 2px;
-`;
-
 export const SpeechBubble = styled.div`
   z-index: 1000;
   display: flex;
@@ -82,3 +78,36 @@ export const SpeechBubble = styled.div`
     transform: translateX(-20%);
   }
 `;
+
+export const NotiCount = styled.span`
+  padding-left: 2px;
+`;
+
+export const Modal = styled.div`
+  position: absolute;
+  right: 5%;
+  top: 100%;
+  width: 150px;
+  height: 80px;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 10px;
+`
+
+export const CreateBoard = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+  font-size: 20px;
+  border-bottom: 2px solid gray;
+`
+export const CreateStory = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 50%;
+  font-size: 20px;
+`

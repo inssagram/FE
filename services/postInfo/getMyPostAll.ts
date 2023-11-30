@@ -1,15 +1,12 @@
 import axiosInstance from "../axiosInstance";
 
-const getMyPostAllAxios = (memberId: number): Promise<any> => {
+const getMyPostAllAxios = (): Promise<any> => {
   return axiosInstance({
     method: "get",
-    url: `/post/member?`,
+    url: `/post/my`,
     headers: {
       "Content-Type": "application/json",
       charset: "utf-8",
-    },
-    params: {
-      "member-id": memberId,
     },
   });
 };

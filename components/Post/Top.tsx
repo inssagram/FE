@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
+import { RootState } from "@/src/redux/Posts/store";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -9,55 +11,98 @@ import {
   EllipsisModal,
   MyEllipsisModal,
   AccountInfoModal,
-  EditModal,
+  PostEditModal,
 } from "../atoms/Modal";
-import { RootState } from "@/src/redux/Posts/store";
+import { handleError } from "@/utils/errorHandler";
+import putUpdatePostAxios from "@/services/postInfo/putUpdatePost";
+import deletePostAxios from "@/services/postInfo/deletePost";
 import postMemberFollowAxios from "@/services/userInfo/postMemberFollow";
-
-interface UserInfo {
-  email: string;
-  member_id: number;
-  nickname: string;
-  job: string;
-}
-
-interface PostData {
-  postId: number;
-  memberId: number;
-  nickName: string;
-  image: string;
-  memberImage: string;
-  contents: string;
-  likeCount: number;
-  commentsCounts: number;
-  hashTags: string;
-}
+import { UserInfoData } from "@/types/UserTypes";
+import { PostDetailData } from "@/types/PostTypes";
 
 interface PostContentsProps {
-  post: PostData;
+  post: PostDetailData;
 }
 
 const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const userInfo = useSelector(
     (state: RootState) => state.user.member
-  ) as UserInfo;
+  ) as UserInfoData;
   const [isFollowing, setIsFollowing] = useState(false);
   const [isEllipsisModalOpen, setIsEllipsisModalOpen] = useState(false);
   const [isAccountInfoModalOpen, setIsAccountInfoModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+  const [editFormData, setEditFormData] = useState({
+    type: "post",
+    postId: "",
+    contents: "",
+    location: "",
+    taggedMemberIds: [],
+  });
+  const router = useRouter();
   const isCurrentUserPost = userInfo.member_id === post.memberId;
   const isCurrentUser = userInfo.nickname === post.nickName;
 
   const handleFollowClick = async () => {
     try {
       const followId = post.memberId;
-      const response = await postMemberFollowAxios(followId);
-      console.log("success", response);
+      const res = await postMemberFollowAxios(followId);
+      console.log("follow member success", res);
       setIsFollowing(!isFollowing);
-    } catch (error) {
-      console.error("error", error);
+    } catch (err) {
+      handleError(err, "follow member failed");
     }
+  };
+
+  const handleUpdatePost = async (
+    postId: number,
+    contents: string,
+    location: string | null,
+    taggedMemberIds: number[] | null
+  ) => {
+    try {
+      console.log("API 호출 전:", contents, location, taggedMemberIds);
+
+      const res = await putUpdatePostAxios("post", postId, {
+        contents,
+        location,
+        taggedMemberIds,
+      });
+      console.log("게시글 업데이트 성공", res);
+      router.push(`/my/feeds/${post.postId}`);
+    } catch (err) {
+      handleError(err, "게시글 업데이트 실패");
+    }
+  };
+
+  const handlePostUpdate = async () => {
+    try {
+      await handleUpdatePost(
+        post.postId,
+        editFormData.contents,
+        editFormData.location,
+        editFormData.taggedMemberIds
+      );
+    } catch (err) {
+      handleError(err, "게시글 업데이트 실패");
+    }
+  };
+
+  const handlePostDelete = async (postId: number) => {
+    try {
+      const res = await deletePostAxios(postId);
+      console.log("delete Post success", res);
+    } catch (err) {
+      handleError(err, "delete Post failed");
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      contents: value,
+    }));
   };
 
   const handleEtcClick = () => {
@@ -72,11 +117,18 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const handleEditClick = () => {
     setIsEllipsisModalOpen(false);
     setIsEditModalOpen(true);
+    setEditFormData({
+      ...editFormData,
+      contents: post.contents,
+      location: post.location || "",
+      taggedMemberIds: [],
+    });
   };
 
   const handleInfoClose = () => {
     setIsEllipsisModalOpen(false);
     setIsAccountInfoModalOpen(false);
+    setIsEditModalOpen(false);
   };
 
   if (!post) {
@@ -88,7 +140,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   }
 
   return (
-    <Top>
+    <TopContainer>
       <Account>
         <Link href={isCurrentUser ? "/my" : `/user/${post.memberId}`}>
           <ProfileImage
@@ -118,15 +170,16 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
         ? isEllipsisModalOpen && (
             <MyEllipsisModal
               post={post}
-              handleEditClick={handleEditClick}
-              handleAccountInfoClick={handleAccountInfoClick}
+              handlePostDelete={() => handlePostDelete(post.postId)}
+              handleEditPost={handleEditClick}
+              handleAccountInfo={handleAccountInfoClick}
               handleInfoClose={handleInfoClose}
             />
           )
         : isEllipsisModalOpen && (
             <EllipsisModal
               post={post}
-              handleAccountInfoClick={handleAccountInfoClick}
+              handleAccountInfo={handleAccountInfoClick}
               handleInfoClose={handleInfoClose}
             />
           )}
@@ -134,13 +187,21 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
         <AccountInfoModal post={post} handleInfoClose={handleInfoClose} />
       )}
       {isEditModalOpen && (
-        <EditModal post={post} handleEditClick={handleEditClick} />
+        <PostEditModal
+          post={post}
+          editFormData={editFormData}
+          handlePostUpdate={() => handlePostUpdate(editFormData.contents)}
+          handleInputChange={handleInputChange}
+          handleInfoClose={handleInfoClose}
+        />
       )}
-    </Top>
+    </TopContainer>
   );
 };
 
-const Top = styled.div`
+export default PostTop;
+
+const TopContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -190,5 +251,3 @@ const Loading = styled.div`
   top: 25%;
   left: 50%;
 `;
-
-export default PostTop;

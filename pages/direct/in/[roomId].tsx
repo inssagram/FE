@@ -1,137 +1,191 @@
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import Stomp from "stompjs";
+import SockJS from "sockjs-client";
+import React, { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
-import { ChatRoomHeader } from "@/components/atoms/Header";
+import { ChatRoomHeader } from "@/components/Chat/Header";
 import MemberProfile from "@/components/Chat/MemberProfile";
 import ChatRoom from "@/components/Chat/ChatRoom";
 import MessageInput from "@/components/Chat/MessageInput";
 import WebSocketHandler from "@/services/chatInfo/webSocketHandler";
 import getChatRoomDataAxios from "@/services/chatInfo/getChatRoom";
+import getChatHistoryWithRoomIdAxios from "@/services/chatInfo/getChatHistoryWithRoomId";
+import getChatHistoryWithMemberIdAxios from "@/services/chatInfo/getChatHistoryWithMemberId";
 
-interface ChatRoomData {
-  chatRoomId: number;
-  firstMemberId: number;
-  firstMemberNickname: string;
-  firstMemberProfile: string;
-  firstMemberFollowState: boolean;
-  firstMemberFollowerCounts: number;
-  firstMemberPostCounts: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
-interface InProps {}
+import {
+  MemberInfoData,
+  PreviousMessageData,
+  SendNewMessageData,
+} from "@/types/ChatRoomTypes";
 
-const In: React.FC<InProps> = () => {
-  const contentRef = useRef<HTMLDivElement | null>(null);
-  const [chatRoom, setChatRoom] = useState<ChatRoomData | null>(null);
-  const [messages, setMessages] = useState<any[]>([]);
-  const [images, setImages] = useState<File[]>([]);
+const In: React.FC = () => {
+  // const contentRef = useRef<HTMLDivElement | null>(null);
+  const userInfo = useSelector((state: RootState) => state.user.member);
+  const [chatRoom, setChatRoom] = useState<{
+    sender: MemberInfoData | null;
+    receiver: MemberInfoData | null;
+  } | null>(null);
+  const [isFetchingData, setIsFetchingData] = useState(false);
+  const [previousMessages, setPreviousMessages] = useState<
+    PreviousMessageData[]
+  >([]);
+  const [newMessage, setNewMessage] = useState<SendNewMessageData[]>([]);
 
   const router = useRouter();
-  const { roomId } = router.query;
+  const { roomId: roomId } = router.query;
+  const withRoomId: number =
+    typeof roomId === "string" ? parseInt(roomId, 10) : -1;
+  const { memberId: memberId } = router.query;
+  const withMemberId: number =
+    typeof memberId === "string" ? parseInt(memberId, 10) : -1;
 
-  // 웹소켓 연결 시 호출될 함수
-  const handleConnect = () => {
-    console.log("WebSocket connected!");
-  };
+  const accessToken = sessionStorage.getItem("token");
+  const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
+  const stompClient = Stomp.over(socket);
 
-  // 특정 채팅방 조회
-  const fetchChatRoomDataAll = async (roomId: number) => {
-    try {
-      const res = await getChatRoomDataAxios(roomId);
-      setChatRoom(res);
-    } catch (err) {
-      handleError(err, "fetching chat room data error");
-    }
-  };
-
-  // 메시지 수신 시 호출될 함수
-  const handleMessageReceived = (message: any) => {
-    console.log("Received message:", message);
-    setMessages((prevMessages) => [...prevMessages, message]);
-  };
-
-  useEffect(() => {
-    if (roomId) {
-      fetchChatRoomDataAll(roomId);
-      // 채팅방에 들어가면 웹소켓 연결
-      console.log("Joining Chat Room:", roomId);
-    }
-  }, [roomId]);
-
-  // // 메세지 보내기
-  // const handleSendMessage = (message: string, images: File[]) => {
-  //   // const getCurrentTime = (): string => {
-  //   //   const now = new Date();
-  //   //   const hours = now.getHours();
-  //   //   const minutes = now.getMinutes();
-  //   //   const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-  //   //   const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-  //   //   return `${formattedHours}:${formattedMinutes}`;
-  //   // };
-
-  //   setMessages((prevMessages) => [...prevMessages, message]);
-  //   setImages((prevImages) => [...prevImages, ...images]);
-
-  //   const messageData = {
-  //     type: "message",
-  //     chatRoomId: roomId,
-  //     sender: "userInfo.nickname",
-  //     message: message,
-  //     // postId: 1,
-  //     timestamp: getCurrentTime(),
+  // useEffect(() => {
+  //   const handleConnect = () => {
+  //     console.log("웹 소켓 연결됐어요");
   //   };
 
-  //   if (stompClient) {
-  //     stompClient.send(
-  //       `/pub/chat.message.${roomId}`,
-  //       {},
-  //       JSON.stringify(messageData)
-  //     );
-  //     stompClient.send(
-  //       `/pub/chat.messageWithPost.${roomId}`,
-  //       {},
-  //       JSON.stringify({ images })
-  //     );
-  //   }
+  //   // 컴포넌트가 마운트될 때 WebSocket에 연결
+  //   stompClient.connect({ token: accessToken }, handleConnect);
 
-  //   if (contentRef.current) {
-  //     contentRef.current.scrollTop = contentRef.current.scrollHeight;
-  //     contentRef.current.focus();
-  //   } else {
-  //     console.error("WebSocket is not connected.");
-  //   }
-  //   console.log(`전달된 메시지: ${message}`);
-  // };
+  //   // 컴포넌트가 언마운트될 때 연결 해제
+  //   return () => {
+  //     stompClient.disconnect();
+  //   };
+  // }, [stompClient, accessToken]);
+
+  const handleSendMessage = (messageData: SendNewMessageData) => {
+    if (stompClient && messageData.message.trim() !== "" && chatRoom) {
+      stompClient.send(
+        `/pub/chat.message.${withRoomId}`,
+        { token: accessToken },
+        JSON.stringify(messageData)
+      );
+
+      setNewMessage((prevMessages) => [...prevMessages, messageData]);
+    }
+  };
+
+  const handleEnterKeyPress = (messageData: SendNewMessageData) => {
+    handleSendMessage(messageData);
+  };
+
+  const fetchChatRoomDataAll = useCallback(
+    async (roomId: number) => {
+      try {
+        const res = await getChatRoomDataAxios(roomId);
+        const memberList = res.memberList;
+        const currentUserId = userInfo?.member_id;
+        const otherMemberId = Object.keys(memberList).find(
+          (memberId) => Number(memberId) !== Number(currentUserId)
+        );
+
+        if (currentUserId && otherMemberId) {
+          const senderId = currentUserId;
+          const receiverId = otherMemberId;
+          const sender = memberList[senderId];
+          const receiver = memberList[receiverId];
+
+          setChatRoom({
+            sender: sender || null,
+            receiver: receiver || null,
+          });
+        }
+      } catch (err) {
+        handleError(err, "fetching chat room data error");
+      }
+    },
+    [userInfo?.member_id]
+  );
+
+  const fetchChatRoomHistory = useCallback(async (id: number) => {
+    try {
+      const res = await getChatHistoryWithRoomIdAxios(id);
+      setPreviousMessages(res.data);
+    } catch (err) {
+      handleError(err, "fetching chat room contents error");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchChatRoomDataAll(withRoomId);
+      await fetchChatRoomHistory(withRoomId);
+    };
+
+    if (withRoomId !== -1) {
+      fetchData();
+    }
+  }, [withRoomId, fetchChatRoomDataAll, fetchChatRoomHistory]);
+
+  function handleConnect(): void {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <>
-      {roomId && (
-        <>
-          <WebSocketHandler
-            onConnect={handleConnect}
-            roomId={roomId}
-            onMessageReceived={handleMessageReceived}
-          />
-          <ChatRoomHeader memberInfo={chatRoom} />
-          <MemberProfile memberInfo={chatRoom} />
-          <ChatRoom
-            messages={messages}
-            images={images}
-            contentRef={contentRef}
-          />
-          <MessageInput images={images} />
-        </>
-      )}
+      <WebSocketHandler
+        roomId={withRoomId}
+        onConnect={handleConnect}
+        onMessageReceived={previousMessages}
+      />
+      <ChatRoomHeader chatRoom={chatRoom} />
+      <MemberProfile chatRoom={chatRoom} />
+      <ChatRoom
+        userInfo={userInfo}
+        previousMessages={previousMessages}
+        newMessage={newMessage}
+      />
+      <MessageInput
+        roomId={withRoomId}
+        chatRoom={chatRoom}
+        onEnterKeyPress={handleEnterKeyPress}
+      />
     </>
   );
 };
 
 export default In;
+
+// 두가지 루트로 이전 대화 내용 조회
+// const fetchChatRoomHistory = async (id: number) => {
+//   try {
+//     if (isFetchingData) return;
+
+//     setIsFetchingData(true);
+
+//     if (withRoomId !== -1 && !withMemberId) {
+//       const res = await getChatHistoryWithRoomIdAxios(id);
+//       setPreviousMessages(res.data);
+//     }
+
+//     if (withMemberId !== -1 && !withRoomId) {
+//       const res = await getChatHistoryWithMemberIdAxios(id);
+//       setPreviousMessages(res.data);
+//     }
+//   } catch (err) {
+//     handleError(err, "Error handling chat room action");
+//   } finally {
+//     setIsFetchingData(false);
+//   }
+// };
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     if (withRoomId !== -1) {
+//       fetchChatRoomDataAll(withRoomId);
+//       await fetchChatRoomHistory(withRoomId);
+//     }
+
+//     if (withMemberId !== -1) {
+//       await fetchChatRoomHistory(withMemberId);
+//     }
+//   };
+
+//   fetchData();
+// }, [withRoomId, withMemberId, userInfo?.member_id]);

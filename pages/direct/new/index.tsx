@@ -1,50 +1,32 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import styled from "styled-components";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { handleError } from "@/utils/errorHandler";
-import { DirectNewHeader } from "@/components/atoms/Header";
-import SearchInput from "@/components/Chat/SearchInput";
-import AccountList from "@/components/Chat/AccountList";
-import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
-import WebSocketHandler from "@/services/chatInfo/webSocketHandler";
-import postChatRoomAxios from "@/services/chatInfo/postChatRoom";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
+import styled from "styled-components";
+import { handleError } from "@/utils/errorHandler";
+import { NewChatRoomHeader } from "@/components/Chat/Header";
+import AccountList from "@/components/Chat/AccountList";
+import SearchInput from "@/components/Chat/SearchInput";
+import getSearchResultAxios from "@/services/searchInfo/getSearchResult";
+import postNewChatRoomAxios from "@/services/chatInfo/postNewChatRoom";
+import { SearchItemData } from "@/types/SearchItemTypes";
 
-interface UserData {
-  member_id: number;
-  nickname: string;
-  job: string;
-  image: string;
-}
-
-interface AccountData {
-  memberId: number;
-  nickName: string;
-  job: string;
-  friendStatus: boolean;
-  image: string;
-}
-
-const New: React.FC<AccountData> = () => {
+const New: React.FC<SearchItemData> = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
-  const userToken = sessionStorage.getItem("token");
-  const [roomId, setRoomId] = useState<number | null>(null);
-  console.log(roomId);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<AccountData[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<AccountData[]>([]);
-  console.log(selectedAccount);
+  const [searchResults, setSearchResults] = useState<SearchItemData[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<SearchItemData | null>(
+    null
+  );
+  const [isAccountSelected, setIsAccountSelected] = useState(false);
 
   const router = useRouter();
 
   const handleSearch = (searchValue: string) => {
     setSearchTerm(searchValue);
-    if (!searchValue) {
-      setSelectedAccount([]);
+    if (isAccountSelected) {
+      setSearchTerm("");
+      setIsAccountSelected(false);
     }
   };
 
@@ -64,22 +46,25 @@ const New: React.FC<AccountData> = () => {
     }
   }, [searchTerm]);
 
-  const handleSelectedAccount = (account: AccountData) => {
-    setSelectedAccount([account]);
+  useEffect(() => {
+    setSearchTerm("");
+  }, [selectedAccount]);
+
+  const handleSelectedAccount = (account: SearchItemData) => {
+    setSelectedAccount(account);
   };
 
   const handleChatRoomClick = async () => {
-    if (userInfo && selectedAccount.length > 0) {
+    if (userInfo && selectedAccount) {
       const firstParticipantId = userInfo.member_id;
-      const secondParticipantId = selectedAccount[0].memberId;
+      const secondParticipantId = selectedAccount.memberId;
 
       try {
-        const res = await postChatRoomAxios(
+        const res = await postNewChatRoomAxios(
           firstParticipantId,
           secondParticipantId
         );
         const createdRoomId = res;
-        setRoomId(createdRoomId.chatRoomId);
         router.push(`/direct/in/${createdRoomId.chatRoomId}`);
       } catch (err) {
         handleError(err, "Error creating chat room:");
@@ -89,30 +74,28 @@ const New: React.FC<AccountData> = () => {
 
   return (
     <>
-      {/* <WebSocketHandler
-        onConnect={() => {}}
-        roomId={roomId}
-        // onMessageReceived={handleNewMessageReceived}
-      /> */}
-      <DirectNewHeader onChatRoomClick={handleChatRoomClick} />
-      <div>
+      <NewChatRoomHeader onClick={handleChatRoomClick} />
+      <>
         <SearchInput
           onSearch={handleSearch}
           selectedAccount={selectedAccount}
+          isAccountSelected={isAccountSelected}
         />
         <ResultsContainer>
           <AccountList
             searchResults={searchResults}
             onSelectAccount={handleSelectedAccount}
+            isAccountSelected={isAccountSelected}
+            setIsAccountSelected={setIsAccountSelected}
           />
         </ResultsContainer>
-      </div>
+      </>
     </>
   );
 };
 
+export default New;
+
 const ResultsContainer = styled.div`
   margin-top: 16px;
 `;
-
-export default New;

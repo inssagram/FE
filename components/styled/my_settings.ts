@@ -71,5 +71,64 @@ export const Logout = styled.div`
   font-size: 15px;
   padding-left: 10px;
   position: absolute;
-  bottom: 5%;
+  bottom: 7%;
+`;
+
+export const Unregister = styled.div`
+  width: 412px;
+  height: 44px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: gainsboro;
+  color: red;
+  border-bottom: 1px solid #e2e2e2;
+  font-size: 15px;
+  padding-left: 10px;
+  position: absolute;
+  bottom: 0;
+`;
+
+export const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+`;
+
+export const ModalContent = styled.div`
+  text-align: center;
+  p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+`;
+
+export const ModalButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  button:nth-child(1) {
+    background-color: #db4437;
+    color: white;
+  }
+
+  button:nth-child(2) {
+    background-color: #fafafa;
+    color: #333;
+  }
 `;
