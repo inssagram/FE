@@ -5,9 +5,6 @@ import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./userSlice";
 import { registerSlice } from "@/pages/signup/emailState";
-import profileReducer from "./userProfileSlice";
-import { postsSlice } from "./postSlice";
-import { commentsSlice } from "./commentSlice";
 
 const persistConfig = {
   key: "root",

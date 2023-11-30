@@ -1,56 +1,54 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 import { RootState } from "@/src/redux/Posts/store";
+import styled from "styled-components";
 import { handleError } from "@/utils/errorHandler";
-import { DirectHeader } from "@/components/atoms/Header";
+import { ChatListHeader } from "@/components/Chat/Header";
 import ChatRoomList from "@/components/Chat/ChatRoomList";
-import getChatRoomListAxios from "@/services/chatInfo/getChatRoomList";
-
-interface ChatRoomListData {
-  chatRoomId: number;
-  firstMemberId: number;
-  firstMemberNickname: string;
-  firstMemberProfile: string;
-  firstMemberFollowState: boolean;
-  firstMemberFollowerCounts: number;
-  firstMemberPostCounts: number;
-  secondMemberId: number;
-  secondMemberNickname: string;
-  secondMemberProfile: string;
-  secondMemberFollowState: boolean;
-  secondMemberFollowCounts: number;
-  secondMemberPostCounts: number;
-}
+import getMyChatListAllAxios from "@/services/chatInfo/getMyChatListAll";
+import { ChatListData } from "@/types/ChatRoomTypes";
 
 interface ChatRoomListProps {
-  chatRooms: ChatRoomListData[];
+  myChatList: ChatListData[] | null;
 }
 
 const Direct: React.FC<ChatRoomListProps> = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
-  const [chatRooms, setChatRooms] = useState([]);
+  const [myChatList, setMyChatList] = useState<ChatListData[] | null>(null);
+  const router = useRouter();
 
-  const fetchChatRoomList = async (memberId: number) => {
+  const fetchChatRoomList = async () => {
     try {
-      const res = await getChatRoomListAxios(memberId);
-      setChatRooms(res);
+      const res = await getMyChatListAllAxios();
+      setMyChatList(res.data);
     } catch (err) {
       handleError(err, "fetching chat room data error");
     }
   };
 
   useEffect(() => {
-    if (userInfo) {
-      fetchChatRoomList(userInfo.member_id);
+    if (!myChatList) {
+      fetchChatRoomList();
     }
-  }, [userInfo]);
+  }, [myChatList]);
+
+  const handleChatRoomClick = (roomId: number) => {
+    router.push(`/direct/in/${roomId}`);
+  };
 
   return (
     <Container>
-      <DirectHeader userInfo={userInfo} />
-      <PageTitle>메시지</PageTitle>
-      <ChatRoomList chatRooms={chatRooms} />
+      <ChatListHeader userInfo={userInfo} />
+      <Title>메시지</Title>
+      {myChatList && myChatList.length > 0 ? (
+        <ChatRoomList
+          myChatList={myChatList}
+          onChatRoomClick={handleChatRoomClick}
+        />
+      ) : (
+        <Error>참여중인 방이 없습니다.</Error>
+      )}
     </Container>
   );
 };
@@ -63,8 +61,14 @@ const Container = styled.section`
   background-color: #fff;
 `;
 
-const PageTitle = styled.div`
+const Title = styled.span`
   display: flex;
   padding: 14px 16px 10px;
   font-size: 16px;
+`;
+
+const Error = styled.p`
+  font-size: 14px;
+  margin-top: 5px;
+  padding: 14px 16px;
 `;

@@ -6,6 +6,8 @@ import { BackArrow } from "@/components/atoms/Icon";
 import { reduceJob } from "../emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import axiosInstance from "@/services/axiosInstance";
+
 
 
 const Job = () => {
@@ -23,7 +25,6 @@ const Job = () => {
       email: string,
       password: string,
       nickname: string,
-      job: string
     }
   }
 
@@ -35,9 +36,7 @@ const Job = () => {
     const fetchData = async () => {
       try {
         const encodedString = encodeURIComponent(inputValue);
-        const response = await axios.get(
-          `https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`
-        );
+        const response = await axios.get(`https://www.career.go.kr/cnet/openapi/getOpenApi?apiKey=${API_KEY}&svcType=api&svcCode=JOB&contentType=json&gubun=job_dic_list&searchJobNm=${encodedString}`);
         const data: JobData[] = response.data.dataSearch.content;
         const regexPattern = inputValue ? new RegExp(`^${inputValue}`) : null;
         const jobListArr: string[] = [];
@@ -65,13 +64,21 @@ const Job = () => {
 
   const submitButtonHandler = async () => {
     try{
-      await dispatch(reduceJob(inputValue))
-      await axios.post(`${BASE_URL}/signup`, {
+      const postData = {
         email: register.email,
         password: register.password,
         nickname: register.nickname,
-        job: register.job
-      })
+        job: inputValue
+      }
+        await axiosInstance({
+          method: "post",
+          url: "/signup",
+          headers: {
+            "Content-Type": "application/json",
+            charset: "utf-8",
+          },
+          data: postData,
+        });
         alert("계정이 생성되었습니다.");
         router.push("/signin");
       } catch (error) {
@@ -99,10 +106,10 @@ const Job = () => {
             ></SC.JobInput>
             <SC.JobList>
               {jobList.length > 0 &&
-                jobList.map((v) => (
+                jobList.map((v, i) => (
                   <>
                     <SC.JobName
-                      onClick={(e: React.MouseEvent<HTMLLIElement>) =>
+                      key={i} onClick={(e: React.MouseEvent<HTMLLIElement>) =>
                         jobShorcutHandler(v)
                       }
                     >

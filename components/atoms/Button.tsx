@@ -1,46 +1,30 @@
-import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as farHeart } from "@fortawesome/free-regular-svg-icons";
-import {
-  faHeart as fasHeart,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fasHeart } from "@fortawesome/free-solid-svg-icons";
 
-export const CopyLinkButton: React.FC<{ linkToCopy: string }> = ({
-  linkToCopy,
-}) => {
-  const copyToClipboard = () => {
-    const tempInput = document.createElement("input");
-    tempInput.value = linkToCopy;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
-    alert("링크가 복사되었습니다.");
-  };
-
-  return <CopyLink onClick={copyToClipboard}>링크 복사</CopyLink>;
-};
-
-interface CloseButtonProps {
-  onClick?: () => void;
+interface DeleteButtonProps {
+  onClick: () => void;
 }
-export const CloseButton: React.FC<CloseButtonProps> = ({ onClick }) => {
+
+export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick }) => {
   return (
-    <CloseBtn onClick={onClick}>
-      <FontAwesomeIcon
-        icon={faXmark}
-        fontSize={16}
-        style={{ color: "#737373" }}
+    <Delete onClick={onClick}>
+      <Icon
+        icon={faCircleXmark}
+        fontSize={18}
+        style={{
+          color: "#737373",
+        }}
       />
-    </CloseBtn>
+    </Delete>
   );
 };
 
 interface FollowButtonProps {
-  onClick?: () => void;
   isFollowing: boolean;
+  onClick?: () => void;
 }
 
 export const FollowButton: React.FC<FollowButtonProps> = ({
@@ -48,7 +32,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
   isFollowing,
 }) => {
   return (
-    <FollowBtn
+    <Follow
       onClick={onClick}
       style={{
         background: isFollowing ? "#efefef" : "#0095f6",
@@ -56,54 +40,110 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
       }}
     >
       {isFollowing ? "팔로잉" : "팔로우"}
-    </FollowBtn>
+    </Follow>
+  );
+};
+
+export const FollowStatusButton: React.FC<FollowButtonProps> = ({
+  onClick,
+  isFollowing,
+}) => {
+  return (
+    <MemberFollow
+      onClick={onClick}
+      style={{
+        background: isFollowing ? "#efefef" : "#0095f6",
+        color: isFollowing ? "#222222" : "#ffffff",
+      }}
+    >
+      {isFollowing ? "팔로잉" : "팔로우"}
+    </MemberFollow>
   );
 };
 
 interface HeartButtonProps {
   isLiked: boolean;
-  handleLikeClick: () => void;
+  onClick: () => void;
 }
 
 export const HeartButton: React.FC<HeartButtonProps> = ({
   isLiked,
-  handleLikeClick,
+  onClick,
 }) => {
   return (
-    <HeartBtn onClick={handleLikeClick}>
+    <Heart onClick={onClick}>
       <FontAwesomeIcon
         icon={isLiked ? fasHeart : farHeart}
         style={{ color: isLiked ? "red" : "inherit" }}
-        fontSize={"24px"}
+        fontSize={24}
       />
-    </HeartBtn>
+    </Heart>
   );
 };
 
-const CopyLink = styled.span`
+export const LinkCopyButton: React.FC<{ linkCopy: string }> = ({
+  linkCopy,
+}) => {
+  const copyToClipboard = () => {
+    const tempInput = document.createElement("input");
+    tempInput.value = linkCopy;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    alert("링크가 복사되었습니다.");
+  };
+
+  return <Copy onClick={copyToClipboard}>링크 복사</Copy>;
+};
+
+const Delete = styled.button`
+  padding: 8px;
+  border: none;
+  background-color: transparent;
+`;
+
+const Icon = styled(FontAwesomeIcon)`
+  margin-right: 8px;
+`;
+
+const Copy = styled.button`
   width: 100%;
   border: none;
   padding: 4px 8px;
   background-color: transparent;
 `;
 
-const CloseBtn = styled.button`
-  padding: 8px;
-  border: none;
-  background-color: transparent;
-`;
-
-const FollowBtn = styled.button`
-  width: 82px;
-  height: 32px;
+const Follow = styled.button`
+  display: flex;
+  align-items: center;
+  // margin-left: 12px;
   padding: 7px 16px;
   border: none;
   border-radius: 10px;
+  min-width: 71px;
+  height: 32px;
+  font-size: 14px;
   color: #ffffff;
   background-color: #0095f6;
 `;
 
-const HeartBtn = styled.button`
+const MemberFollow = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 10px;
+  width: 112px;
+  height: 32px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #0095f6;
+`;
+
+const Heart = styled.button`
   border: none;
   background-color: transparent;
 `;
