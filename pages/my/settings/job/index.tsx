@@ -5,13 +5,14 @@ import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
 import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "@/src/redux/Posts/userSlice";
+import { RootState } from "@/src/redux/Posts/store";
 
 const Job = () => {
   const API_KEY = process.env.JOBLIST_API_KEY;
   const [inputValue, setInputValue] = useState("");
   const [jobList, setJobList] = useState<string[]>([]);
   const router = useRouter();
-  const member = useSelector((state) => state.user.member);
+  const member = useSelector((state: RootState) => state.user.member);
   const token = sessionStorage.getItem("token");
   const dispatch = useDispatch();
 
