@@ -122,10 +122,10 @@ export const AccountInfoModal: React.FC<AccountInfoModalProps> = ({
 
 interface EditFormData {
   type: string;
-  postId: number;
+  postId: number | null;
   contents: string;
-  location: string | null;
-  taggedMemberIds: number[] | null;
+  // location: string | null;
+  // taggedMemberIds: number[] | null;
 }
 
 interface PostEditModalProps {

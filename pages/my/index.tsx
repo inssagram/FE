@@ -21,6 +21,7 @@ const My: React.FC<MyProps> = () => {
     (state: RootState) => state.user.member
   ) as UserInfoData;
   const [posts, setPosts] = useState<PostDetailData[] | undefined>([]);
+  console.log(posts);
   const [loading, setLoading] = useState<boolean>(true);
   const [bookmarkedPost, setBookmarkedPost] = useState<
     PostDetailData[] | undefined
@@ -66,27 +67,27 @@ const My: React.FC<MyProps> = () => {
     }
   };
 
-  const handlePostIconClick = () => {
+  const handlePostIconClick = async () => {
     if (!isShowPosts) {
-      fetchMyPostAllData();
+      await fetchMyPostAllData();
     }
     setIsShowPosts(!isShowPosts);
     setIsShowBookmarked(false);
     setIsShowTagged(false);
   };
 
-  const handleBookmarkIconClick = () => {
+  const handleBookmarkIconClick = async () => {
     if (!isShowBookmarked) {
-      fetchBookmarkPostAllData();
+      await fetchBookmarkPostAllData();
     }
     setIsShowBookmarked(!isShowBookmarked);
     setIsShowPosts(false);
     setIsShowTagged(false);
   };
 
-  const handleTaggedIconClick = () => {
+  const handleTaggedIconClick = async () => {
     if (!isShowTagged) {
-      fetchTaggedPostAllData(userInfo.member_id);
+      await fetchTaggedPostAllData(userInfo.member_id);
     }
     setIsShowTagged(!isShowTagged);
     setIsShowPosts(false);
