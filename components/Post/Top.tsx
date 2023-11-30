@@ -34,10 +34,10 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
     type: "post",
-    postId: "",
+    postId: null,
     contents: "",
-    location: "",
-    taggedMemberIds: [],
+    // location: "",
+    // taggedMemberIds: [],
   });
   const router = useRouter();
   const isCurrentUserPost = userInfo.member_id === post.memberId;
@@ -56,20 +56,20 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
 
   const handleUpdatePost = async (
     postId: number,
-    contents: string,
-    location: string | null,
-    taggedMemberIds: number[] | null
+    contents: string
+    // location: string | null,
+    // taggedMemberIds: number[] | null
   ) => {
     try {
-      console.log("API 호출 전:", contents, location, taggedMemberIds);
+      console.log("API 호출 전:", contents);
 
       const res = await putUpdatePostAxios("post", postId, {
         contents,
-        location,
-        taggedMemberIds,
+        // location,
+        // taggedMemberIds,
       });
       console.log("게시글 업데이트 성공", res);
-      router.push(`/my/feeds/${post.postId}`);
+      router.push(`/my`);
     } catch (err) {
       handleError(err, "게시글 업데이트 실패");
     }
@@ -79,9 +79,9 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
     try {
       await handleUpdatePost(
         post.postId,
-        editFormData.contents,
-        editFormData.location,
-        editFormData.taggedMemberIds
+        editFormData.contents
+        // editFormData.location,
+        // editFormData.taggedMemberIds
       );
     } catch (err) {
       handleError(err, "게시글 업데이트 실패");
@@ -120,8 +120,8 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
     setEditFormData({
       ...editFormData,
       contents: post.contents,
-      location: post.location || "",
-      taggedMemberIds: [],
+      // location: post.location || "",
+      // taggedMemberIds: [],
     });
   };
 
@@ -190,7 +190,7 @@ const PostTop: React.FC<PostContentsProps> = ({ post }) => {
         <PostEditModal
           post={post}
           editFormData={editFormData}
-          handlePostUpdate={() => handlePostUpdate(editFormData.contents)}
+          handlePostUpdate={handlePostUpdate}
           handleInputChange={handleInputChange}
           handleInfoClose={handleInfoClose}
         />

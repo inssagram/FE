@@ -25,7 +25,7 @@ const ExploredPost: React.FC = () => {
   };
 
   useEffect(() => {
-    if (postId) {
+    if (postId !== -1) {
       fetchPostDetailData(postId);
     }
   }, [postId]);
