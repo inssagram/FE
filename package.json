@@ -6,10 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "server": "json-server --watch kj.json --port 3001",
-    "test": "json-server ./data.json --port 4000",
-    "story": "json-server --watch story.json --port 5000"
+    "lint": "next lint"
   },
   "proxy": "http://localhost:3000",
   "dependencies": {

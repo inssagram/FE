@@ -1,24 +1,23 @@
 name: our-ci
 
 on:
-    push:
-      branches: [ main, dev ]
-    pull_request:
-      branches: [ main, dev ]
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
 
 jobs:
   build:
     strategy:
       matrix:
         node-version: [10.x, 12.x]
-  
+
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code 
+      - name: Checkout source code
         uses: actions/checkout@v2
-        
+
       - name: Set Step
-        run:
-         yarn add
-         yarn test
-         yarn build
+        run: yarn add
+          yarn test
+          yarn build

@@ -1,7 +1,6 @@
 import React from "react";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
-import "../styles/main.css";
 import { Provider } from "react-redux";
 import { persistor, store } from "@/src/redux/Posts/store";
 import { PersistGate } from "redux-persist/integration/react";
