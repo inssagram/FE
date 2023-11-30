@@ -148,7 +148,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
   const [replyToReply, setReplyToReplyId] = useState<number | null>(null);
   const [isReplying, setIsReplying] = useState(false);
   const [isReplyingToReply, setIsReplyingToReply] = useState(false);
-  const [replycomments, setReplyComments] = useState<Array<string>>([]);
+  const [replycomments, setReplyComments] = useState<CommentItemData[]>([]);
 
   //   //답글달기 api 요청
   //   const fetchPostReplyData = async (parentCommentId: number, contents: string, mentionList: string[]) => {
@@ -208,7 +208,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
 
           setReplyComments((prevComments: CommentItemData[]) => [
             ...prevComments,
-            result.data,
+            result.data as CommentItemData,
           ]);
 
           // Clear input fields
@@ -394,7 +394,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
           {isReplying && (
             <InputContainer>
               <NewReplyInput
-                value={replyContent}
+                value={replyContent.toString()}
                 onChange={(e) => setReplyContent(e.target.value)}
                 onKeyDown={handleKeyPress}
               />
@@ -404,7 +404,7 @@ export const CommentItem: React.FC<CommentDataProps> = ({
       )}
       {isReplyingToReply && (
         <NewReplyInput
-          value={replyContent}
+          value={replyContent.toString()}
           onChange={(e) => setReplyContent(e.target.value)}
           onKeyDown={handleSendReplytoReply}
         />
