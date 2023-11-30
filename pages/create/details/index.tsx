@@ -24,7 +24,7 @@ import axiosInstance from "@/services/axiosInstance";
 const Details: React.FC = () => {
   const [contents, setContents] = useState("");
   const [previewImage,setPreviewImage] = useState<string[]>([])
-  const [fileData, setFileData] = useState<File | null>(null)
+  const [fileData, setFileData] = useState<FileList | null>(null)
   const router = useRouter()
   const fileRef = useRef<HTMLInputElement | null>(null)
   const user = useSelector((state: any) => state.user)
@@ -38,15 +38,15 @@ const Details: React.FC = () => {
   };
 
   const uploadImageToServer = async (
-    imageBlob: string,
+    imageBlob: string[],
     contents: string,
-    fileName: string
+    fileName: string[]
   ) => {
     const postData = {
       type: "post",
-      image: [imageBlob],
+      image: imageBlob,
       contents: contents,
-      fileName: [fileName],
+      fileName: fileName,
     };
 
     try {
@@ -69,13 +69,13 @@ const Details: React.FC = () => {
   const handleCreateBoard = async () => {
     try {
       if (fileData !== null) {
-        const uuid = uuidv4();
-        const resizedImage = (await handleResizeImage(fileData)) as File;
-        const storageRef = ref(storage, `post/${user.member.nickname}/${uuid}`);
-        const uploadTask = uploadBytes(storageRef, resizedImage);
-        const blobImage = await uploadTask;
-        const downloadURL = await getDownloadURL(blobImage.ref);
-        const postId = await uploadImageToServer(downloadURL, contents, uuid);
+        const uuid = Array.from(fileData).map(() => uuidv4())
+        const resizedImages = await handleResizeImage(fileData)
+        const storageRef = Array.from(resizedImages).map((_, i) => ref(storage, `post/${user.member.nickname}/${uuid[i]}`));
+        const uploadTask = Array.from(resizedImages).map((file: any, i) => uploadBytes(storageRef[i], file));
+        const blobImages = await Promise.all(uploadTask);
+        const downloadURLs = await Promise.all(blobImages.map(blobImage => getDownloadURL(blobImage.ref)));
+        const postId = await uploadImageToServer(downloadURLs, contents, uuid);
         router.push(`/post/${postId}`);
       }
     } catch (error) {
@@ -112,7 +112,7 @@ const Details: React.FC = () => {
           setPreviewImage((prev) => prev.concat(imageURL))
         }
       })
-      setFileData(images[0])
+      setFileData(images)
     }else{
       setPreviewImage((prev) => prev)
     }
@@ -133,6 +133,15 @@ const Details: React.FC = () => {
   const handleDeleteImage = (index: number) => {
     setPreviewImage((prev) => prev.filter((_, i) => i !== index))
     setSlideProps((prev) => prev > 0 ? prev - 1 : prev)
+    if(fileData !== null){
+      const newFileList = new DataTransfer();
+      Array.from(fileData)
+          .filter((_, i) => i != index)
+          .forEach(file => {
+              newFileList.items.add(file);
+          });
+      setFileData(newFileList.files)
+    }
   }
 
 
@@ -178,7 +187,6 @@ const Details: React.FC = () => {
       </SC.Header>
       <SC.Container>
         <SC.TextCont>
-          <SC.MyProfile></SC.MyProfile>
           <SC.Textarea
             placeholder="내용을 입력해주세요"
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
