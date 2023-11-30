@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
 import { handleError } from "@/utils/errorHandler";
 import { PageHeader } from "@/components/atoms/Header";
-import { CommentItem } from "@/components/atoms/Item";
+import { CommentItem, ReplyItem } from "@/components/atoms/Comment";
 import { CommentDeleteModal } from "@/components/atoms/Modal";
 import Footer from "@/components/Footer";
 import postLikeCommentAxios from "@/services/postInfo/postLikeComment";
@@ -20,7 +20,7 @@ const Comments: React.FC = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
   const [post, setPost] = useState<PostDetailData | null>(null);
   const [comment, setComment] = useState<string>("");
-  const [commentId, setCommentId] = useState<string>("");
+  const [commentId, setCommentId] = useState<number>(0);
   const [commentAll, setCommentAll] = useState<CommentItemData[]>([]);
   const [commentLikes, setCommentLikes] = useState<boolean[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const Comments: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!isNaN(postId)) {
+    if (postId !== -1) {
       fetchPostDetailData(postId);
       fetchCommentAllData(postId);
     }
@@ -135,7 +135,7 @@ const Comments: React.FC = () => {
 
   // 모달 열기
   const handleShowModal = (comment: any) => {
-    setCommentId(comment.commentId);
+    setCommentId(comment.commentId || 0);
     setIsEditModalOpen(true);
   };
 
@@ -189,18 +189,17 @@ const Comments: React.FC = () => {
           />
         </CommentsForm>
       </CommentsContainer>
-      {post && <CommentItem post={post} isReply={false} />}
+      {post && <CommentItem post={post} />}
       {commentAll ? (
         commentAll.map((comment, index) => (
           <div key={index}>
-            <CommentItem
-              post={post}
+            <ReplyItem
+              userInfo={userInfo}
               comment={comment}
               commentLikes={commentLikes}
               handleLikeCommentClick={handleLikeCommentClick}
               handleShowModal={handleShowModal}
               index={index}
-              isReply={true}
               commentInputRef={commentInputRef}
             />
           </div>
