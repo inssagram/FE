@@ -94,20 +94,20 @@ const User: React.FC = () => {
     }
   };
 
-  const handlePostIconClick = () => {
+  const handlePostIconClick = async () => {
+    if (!isShowPosts) {
+      await fetchMemberPostAllData(memberId);
+    }
     setIsShowPosts(!isShowPosts);
     setIsShowTagged(false);
-    if (!isShowPosts) {
-      fetchMemberPostAllData(memberId);
-    }
   };
 
-  const handleTaggedIconClick = () => {
+  const handleTaggedIconClick = async () => {
+    if (!isShowTagged) {
+      await fetchTaggedPostAllData(memberId);
+    }
     setIsShowTagged(!isShowTagged);
     setIsShowPosts(false);
-    if (!isShowTagged) {
-      fetchTaggedPostAllData(memberId);
-    }
   };
 
   const handleChatClick = () => {
