@@ -2,6 +2,7 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { loginUser } from "@/src/redux/Posts/userSlice";
