@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
-import { reduceNickname, reducePassword } from "../emailState";
+import { reduceNickname, reducePassword } from "../../../components/redux/emailState";
 import { useDispatch } from "react-redux";
 
 const Details: React.FC = () => {
