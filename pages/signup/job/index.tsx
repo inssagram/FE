@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
-import { reduceJob } from "../emailState";
+import { reduceJob } from "../../../components/redux/emailState";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import axiosInstance from "@/services/axiosInstance";
