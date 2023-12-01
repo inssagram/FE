@@ -27,6 +27,7 @@
     "debug": "^4.3.4",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
+    "eslint-plugin-react-hooks": "^5.0.0-canary-c17a27ef4-20231127",
     "event-source-polyfill": "^1.0.31",
     "file-saver": "^2.0.5",
     "firebase": "^10.5.2",

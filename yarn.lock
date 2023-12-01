@@ -802,11 +802,6 @@
   resolved "https://registry.yarnpkg.com/@types/event-source-polyfill/-/event-source-polyfill-1.0.4.tgz#566fe195ad2e583e3d597c30d0fd314eac74c6f6"
   integrity sha512-vkNHHMGWl5PieP9E2gkCpLOMjbVXkf1ViDcGmxlJy8QwL7URh/Y5Tk5S/PMKlof/Eslx1oZUeuKXKgUxf74iOA==
 
-"@types/file-saver@^2.0.7":
-  version "2.0.7"
-  resolved "https://registry.yarnpkg.com/@types/file-saver/-/file-saver-2.0.7.tgz#8dbb2f24bdc7486c54aa854eb414940bbd056f7d"
-  integrity sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==
-
 "@types/hoist-non-react-statics@*", "@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.5.tgz#dab7867ef789d87e2b4b0003c9d65c49cc44a494"
@@ -2145,6 +2140,11 @@ eslint-plugin-jsx-a11y@^6.5.1:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.6.0.tgz#4c3e697ad95b77e93f8646aaa1630c1ba607edd3"
   integrity sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==
+
+eslint-plugin-react-hooks@^5.0.0-canary-c17a27ef4-20231127:
+  version "5.0.0-canary-c17a27ef4-20231127"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-5.0.0-canary-c17a27ef4-20231127.tgz#59ef4ed325e3d510b5eda11372dec91a6bdca9f0"
+  integrity sha512-7WpmKpUJQ2cYSYc6u1aaSK5lNGDx1nXufiO0QWWbB7p4MN9Mk4rr3sysfzzC/glvCElYp5vvPb0A9RS5QgY5xw==
 
 eslint-plugin-react@^7.31.7:
   version "7.33.2"
