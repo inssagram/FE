@@ -3,7 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { BackArrow } from "@/components/atoms/Icon";
-import { reduceEmail } from "./emailState";
+import { reduceEmail } from "../../components/redux/emailState";
 import { useDispatch } from "react-redux";
 
 const Signup: React.FC = () => {
