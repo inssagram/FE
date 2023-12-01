@@ -18,7 +18,7 @@ import {
   faCircleXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { storage } from "@/components/firebase/firebase";
-import { handleResizeImage } from "./handleResizeImage";
+import { handleResizeImage } from "@/components/Post/handleResizeImage";
 import axiosInstance from "@/services/axiosInstance";
 
 const Details: React.FC = () => {
