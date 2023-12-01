@@ -43,7 +43,7 @@ const Job = () => {
     };
 
     fetchData();
-  }, [inputValue]);
+  }, [API_KEY, inputValue]);
 
   const jobListHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
