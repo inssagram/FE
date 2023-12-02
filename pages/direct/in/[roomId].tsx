@@ -42,7 +42,7 @@ const In: React.FC = () => {
     typeof memberId === "string" ? parseInt(memberId, 10) : -1;
 
   const accessToken = sessionStorage.getItem("token");
-  const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
+  const socket = new SockJS("https://inssagram-fe.vercel.app/ws-stomp");
   const stompClient = Stomp.over(socket);
 
   // useEffect(() => {

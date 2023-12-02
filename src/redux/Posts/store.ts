@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./userSlice";
-import { registerSlice } from "@/pages/signup/emailState";
+import { registerSlice } from "@/components/redux/emailState";
 
 const persistConfig = {
   key: "root",

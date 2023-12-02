@@ -8,7 +8,6 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import axiosInstance from "@/services/axiosInstance";
-import getStorydata from "./getStorydata";
 
 
 
@@ -70,14 +69,14 @@ const Story: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    getStorydata()
-    .then((res) => {
-      setData(res.data)
-      console.log(res)
-    })
-    .catch((error) => console.error(error))
-  },[])
+  // useEffect(() => {
+  //   getStorydata()
+  //   .then((res) => {
+  //     setData(res.data)
+  //     console.log(res)
+  //   })
+  //   .catch((error) => console.error(error))
+  // },[])
 
   useEffect(() => {
     setImagesIndexArr(Array(data.length).fill(0))
