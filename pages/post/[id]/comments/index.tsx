@@ -94,7 +94,7 @@ const Comments: React.FC = () => {
       }
       axios
         .post(
-          `http://3.36.239.69:8080/comment/create`,
+          `https://inssagram-fe.vercel.app/comment/create`,
           {
             contents: comment.trim(),
             postId: id,
