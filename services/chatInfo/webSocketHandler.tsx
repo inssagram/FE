@@ -15,7 +15,7 @@ const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
 }) => {
   useEffect(() => {
     if (roomId) {
-      const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
+      const socket = new SockJS("https://api.inssagram.shop/ws-stomp");
       const stompClient = Stomp.over(socket);
       const token = sessionStorage.getItem("token");
 
