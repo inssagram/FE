@@ -14,9 +14,9 @@ const BackButton: React.FC<BackButtonProps> = ({ icon }) => {
     router.back();
   };
   return (
-    <Button type="button" onClick={goBack}>
+    <button type="button" onClick={goBack}>
       <Icon icon={icon} />
-    </Button>
+    </button>
   );
 };
 
@@ -27,11 +27,6 @@ export const BackArrow = () => {
 export const BackChevron = () => {
   return <BackButton icon={faChevronLeft} />;
 };
-
-const Button = styled.button`
-  border: none;
-  background-color: transparent;
-`;
 
 const Icon = styled(FontAwesomeIcon)`
   width: 24px;

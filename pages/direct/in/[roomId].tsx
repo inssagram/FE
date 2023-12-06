@@ -9,7 +9,7 @@ import { ChatRoomHeader } from "@/components/Chat/Header";
 import MemberProfile from "@/components/Chat/MemberProfile";
 import ChatRoom from "@/components/Chat/ChatRoom";
 import MessageInput from "@/components/Chat/MessageInput";
-import WebSocketHandler from "@/services/chatInfo/webSocketHandler";
+import WebSocketHandler from "@/hook/connectWebSocket";
 import getChatRoomDataAxios from "@/services/chatInfo/getChatRoom";
 import getChatHistoryWithRoomIdAxios from "@/services/chatInfo/getChatHistoryWithRoomId";
 import getChatHistoryWithMemberIdAxios from "@/services/chatInfo/getChatHistoryWithMemberId";
@@ -42,22 +42,12 @@ const In: React.FC = () => {
     typeof memberId === "string" ? parseInt(memberId, 10) : -1;
 
   const accessToken = sessionStorage.getItem("token");
-  const socket = new SockJS("https://inssagram-fe.vercel.app/ws-stomp");
+  const socket = new SockJS("https://api.inssagram.shop/ws-stomp");
   const stompClient = Stomp.over(socket);
 
-  // useEffect(() => {
-  //   const handleConnect = () => {
-  //     console.log("웹 소켓 연결됐어요");
-  //   };
-
-  //   // 컴포넌트가 마운트될 때 WebSocket에 연결
-  //   stompClient.connect({ token: accessToken }, handleConnect);
-
-  //   // 컴포넌트가 언마운트될 때 연결 해제
-  //   return () => {
-  //     stompClient.disconnect();
-  //   };
-  // }, [stompClient, accessToken]);
+  const handleConnect = () => {
+    console.log("WebSocket connected!");
+  };
 
   const handleSendMessage = (messageData: SendNewMessageData) => {
     if (stompClient && messageData.message.trim() !== "" && chatRoom) {
@@ -123,16 +113,14 @@ const In: React.FC = () => {
     }
   }, [withRoomId, fetchChatRoomDataAll, fetchChatRoomHistory]);
 
-  function handleConnect(): void {
-    throw new Error("Function not implemented.");
-  }
-
   return (
     <>
       <WebSocketHandler
-        roomId={withRoomId}
+        accessToken={accessToken}
+        stompClient={stompClient}
         onConnect={handleConnect}
-        onMessageReceived={previousMessages}
+        roomId={withRoomId}
+        onMessageReceived={setPreviousMessages}
       />
       <ChatRoomHeader chatRoom={chatRoom} />
       <MemberProfile chatRoom={chatRoom} />

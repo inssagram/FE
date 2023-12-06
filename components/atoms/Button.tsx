@@ -11,13 +11,7 @@ interface DeleteButtonProps {
 export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick }) => {
   return (
     <Delete onClick={onClick}>
-      <Icon
-        icon={faCircleXmark}
-        fontSize={18}
-        style={{
-          color: "#737373",
-        }}
-      />
+      <Icon icon={faCircleXmark} fontSize={18} />
     </Delete>
   );
 };
@@ -71,13 +65,13 @@ export const HeartButton: React.FC<HeartButtonProps> = ({
   onClick,
 }) => {
   return (
-    <Heart onClick={onClick}>
+    <button onClick={onClick}>
       <FontAwesomeIcon
         icon={isLiked ? fasHeart : farHeart}
         style={{ color: isLiked ? "red" : "inherit" }}
         fontSize={24}
       />
-    </Heart>
+    </button>
   );
 };
 
@@ -98,14 +92,12 @@ export const LinkCopyButton: React.FC<{ linkCopy: string }> = ({
 };
 
 const Delete = styled.button`
+  display: flex;
   padding: 8px;
-  border: none;
-  background-color: transparent;
+  align-items: center;
 `;
 
-const Icon = styled(FontAwesomeIcon)`
-  margin-right: 8px;
-`;
+const Icon = styled(FontAwesomeIcon)``;
 
 const Copy = styled.button`
   width: 100%;
@@ -143,7 +135,4 @@ const MemberFollow = styled.button`
   background-color: #0095f6;
 `;
 
-const Heart = styled.button`
-  border: none;
-  background-color: transparent;
-`;
+const Heart = styled.button``;
