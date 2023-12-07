@@ -1,24 +1,24 @@
-import { useEffect } from "react";
-import SockJS from "sockjs-client";
 import Stomp from "stompjs";
+import SockJS from "sockjs-client";
+import { useEffect } from "react";
 
 interface WebSocketHandlerProps {
-  roomId: number;
+  accessToken: string | null;
+  stompClient: Stomp.Client;
   onConnect: () => void;
+  roomId: number;
   onMessageReceived: any;
 }
 
 const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
-  roomId,
+  accessToken,
+  stompClient,
   onConnect,
+  roomId,
   onMessageReceived,
 }) => {
   useEffect(() => {
-    if (roomId) {
-      const socket = new SockJS("http://3.36.239.69:8080/ws-stomp");
-      const stompClient = Stomp.over(socket);
-      const token = sessionStorage.getItem("token");
-
+    if (roomId && stompClient) {
       const connectCallback = () => {
         console.log("Stomp client connected!");
         onConnect();
@@ -34,7 +34,8 @@ const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
             }
           }
         );
-        stompClient.connect({ token: token }, connectCallback);
+
+        stompClient.connect({ token: accessToken }, connectCallback);
 
         return () => {
           if (stompClient.connected) {
@@ -45,7 +46,7 @@ const WebSocketHandler: React.FC<WebSocketHandlerProps> = ({
         };
       };
     }
-  }, [onConnect, roomId, onMessageReceived]);
+  }, [accessToken, stompClient, onConnect, roomId, onMessageReceived]);
 
   return null;
 };

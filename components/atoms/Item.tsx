@@ -104,8 +104,9 @@ const ItemContainer = styled.div`
 const ClickTo = styled(Link)`
   display: flex;
   flex-direction: row;
-  align-items: center;
   padding: 8px 16px;
+  align-items: center;
+  justify-content: space-around;
 `;
 
 const HashtagImg = styled.div`
@@ -125,7 +126,6 @@ const AccountImg = styled(Image)`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid #ccc;
   border-radius: 100%;
   margin-right: 12px;
 `;

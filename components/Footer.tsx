@@ -1,6 +1,3 @@
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +7,12 @@ import {
   faPaperPlane,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "@/src/redux/Posts/store";
+import { createEventSource } from "@/hook/connectSSE";
 
 const Footer: React.FC = () => {
   const userInfo = useSelector((state: RootState) => state.user.member);
@@ -18,36 +20,31 @@ const Footer: React.FC = () => {
   const [showBubble, setShowBubble] = useState<boolean>(true);
 
   useEffect(() => {
-    const eventSource = new EventSource(
-      `${process.env.BASE_URL}/notification/subscribe/${userInfo?.member_id}`
+    const eventSource = createEventSource(
+      userInfo?.member_id,
+      (eventData: any) => {
+        console.log("Footer message: " + eventData.message);
+        console.log("new chat alarm: " + eventData.unreadCount);
+
+        if (eventData.unreadCount !== undefined) {
+          setUnreadChatCount(eventData.unreadChatCount);
+        }
+      }
     );
-
-    eventSource.addEventListener("sse", (event) => {
-      const eventData = JSON.parse(event.data);
-      console.log("message: " + eventData.message);
-      console.log("unreadChatCount: " + eventData.unreadChatCount);
-      setUnreadChatCount(eventData.unreadChatCount);
-    });
-
-    eventSource.onerror = (error) => {
-      console.error("SSE connection error:", error);
-      eventSource.close();
-    };
-
     return () => {
       eventSource.close();
     };
   }, [userInfo?.member_id]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowBubble(false);
-  //   }, 5000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowBubble(false);
+    }, 5000);
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [userInfo?.member_id]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [userInfo?.member_id]);
 
   return (
     <Container>

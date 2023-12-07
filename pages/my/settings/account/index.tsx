@@ -113,7 +113,7 @@ const Account: React.FC = () => {
     }
     axios
       .put(
-        `http://3.36.239.69:8080/member/update/${member.member_id}`,
+        `https://inssagram-fe.vercel.app/${member.member_id}`,
         {
           nickname: nickname,
           password: password,

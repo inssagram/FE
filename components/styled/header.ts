@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 412px;
+  width: 100%;
   height: 44px;
   align-items: center;
   display: flex;
@@ -92,7 +92,7 @@ export const Modal = styled.div`
   background-color: white;
   border: 1px solid gray;
   border-radius: 10px;
-`
+`;
 
 export const CreateBoard = styled.div`
   display: flex;
@@ -102,7 +102,7 @@ export const CreateBoard = styled.div`
   height: 50%;
   font-size: 20px;
   border-bottom: 2px solid gray;
-`
+`;
 export const CreateStory = styled.div`
   display: flex;
   justify-content: space-around;
@@ -110,4 +110,4 @@ export const CreateStory = styled.div`
   width: 100%;
   height: 50%;
   font-size: 20px;
-`
+`;
