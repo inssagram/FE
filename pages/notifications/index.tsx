@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { handleError } from "@/utils/errorHandler";
 import { FollowButton } from "@/components/atoms/Button";
 import { PageHeader } from "@/components/atoms/Header";
@@ -17,7 +17,9 @@ interface NotificationProps {}
 const Notifications: React.FC<NotificationProps> = () => {
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [deleteIconVisible, setDeleteIconVisible] = useState({});
+  const [deleteIconVisible, setDeleteIconVisible] = useState<
+    Record<string, boolean>
+  >({});
   const pageTitle = "알림";
 
   useEffect(() => {
@@ -32,7 +34,8 @@ const Notifications: React.FC<NotificationProps> = () => {
         (acc: Record<number, boolean>, notification: NotificationData) => ({
           ...acc,
           [notification.id]: false,
-        })
+        }),
+        {}
       );
       setDeleteIconVisible(initialDeleteIconVisible);
       setNotifications(res.data);
@@ -43,11 +46,11 @@ const Notifications: React.FC<NotificationProps> = () => {
 
   const handleFollowClick = async (followId: number) => {
     try {
-      const response = await postMemberFollowAxios(followId);
-      console.log("success", response);
+      const res = await postMemberFollowAxios(followId);
+      console.log("success", res);
       setIsFollowing((prevIsFollowing) => !prevIsFollowing);
-    } catch (error) {
-      console.error("error", error);
+    } catch (err) {
+      handleError(err, "Error following member:");
     }
   };
 
@@ -148,17 +151,17 @@ const Notifications: React.FC<NotificationProps> = () => {
                   />
                 </Board>
               )}
-              {/* {deleteIconVisible[notification.id] && ( */}
-              <DeleteIcon
-                onClick={() => handleDeleteNotification(notification.id)}
-              >
-                <FontAwesomeIcon
-                  icon={faEllipsisVertical}
-                  fontSize={"20px"}
-                  style={{ color: "#0095f6" }}
-                />
-              </DeleteIcon>
-              {/* )} */}
+              {deleteIconVisible[notification.id] && (
+                <DeleteIcon
+                  onClick={() => handleDeleteNotification(notification.id)}
+                >
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    fontSize={"16px"}
+                    style={{ color: "#0095f6" }}
+                  />
+                </DeleteIcon>
+              )}
             </ContentArea>
           ))}
       </Container>
@@ -202,6 +205,7 @@ const ContentArea = styled.div`
   align-items: center;
   height: 60px;
   padding: 8px 16px;
+  gap: 3px;
 `;
 
 const Account = styled.div`
@@ -219,7 +223,7 @@ const Content = styled.p`
 
 const Board = styled.div`
   display: flex;
-  margin-left: 14px;
+  margin-left: 8px;
 `;
 
 const DeleteIcon = styled.button`

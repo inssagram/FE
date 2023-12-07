@@ -231,14 +231,12 @@ const ProfileImage = styled(Image)`
 const Id = styled.button`
   margin-left: 12px;
   padding: 2px;
-  border: none;
-  background-color: transparent;
+  font-size: 14px;
 `;
 
 const FollowBtn = styled.button`
-  border: none;
   margin-left: 18px;
-  background-color: transparent;
+  font-size: 14px;
 `;
 
 const EtcIcon = styled.span`
