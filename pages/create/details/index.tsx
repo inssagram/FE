@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
+
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import * as SC from "@/components/styled/create_details";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
