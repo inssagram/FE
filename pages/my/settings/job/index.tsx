@@ -62,7 +62,7 @@ const Job = () => {
 
     axios
       .put(
-        `http://3.36.239.69:8080/member/update/${member.member_id}`,
+        `https://api.inssagram.shop/member/update/${member.member_id}`,
         {
           companyName: inputValue,
         },

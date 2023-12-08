@@ -40,7 +40,7 @@ const Settings: React.FC = () => {
     }
     try {
       const response = await axios.delete(
-        `http://3.36.239.69:8080/member/delete/${member.member_id}`,
+        `https://api.inssagram.shop/member/delete/${member.member_id}`,
         {
           headers: {
             Authorization: `${token}`,
