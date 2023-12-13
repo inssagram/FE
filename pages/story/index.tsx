@@ -69,14 +69,24 @@ const Story: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getStorydata()
-  //   .then((res) => {
-  //     setData(res.data)
-  //     console.log(res)
-  //   })
-  //   .catch((error) => console.error(error))
-  // },[])
+
+  useEffect(() => {
+    try{
+      const axiosData = axiosInstance({
+        method: "get",
+        url: `/chat/room/story/${storyID}`,
+        headers: {
+          "Content-Type": "application/json",
+          charset: "utf-8",
+        },params: {
+          "sotry-"
+        },
+      });
+    }catch (error){
+      console.log(error)
+    }
+      
+    })
 
   useEffect(() => {
     setImagesIndexArr(Array(data.length).fill(0))

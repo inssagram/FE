@@ -19,7 +19,7 @@ import {
   faCircleXmark
 } from "@fortawesome/free-solid-svg-icons";
 import { storage } from "@/components/firebase/firebase";
-import { handleResizeImage } from "@/components/Post/handleResizeImage";
+import { handleResizeImages } from "@/components/Post/handleResizeImages";
 import axiosInstance from "@/services/axiosInstance";
 
 const Details: React.FC = () => {
@@ -71,7 +71,7 @@ const Details: React.FC = () => {
     try {
       if (fileData !== null) {
         const uuid = Array.from(fileData).map(() => uuidv4())
-        const resizedImages = await handleResizeImage(fileData)
+        const resizedImages = await handleResizeImages(fileData)
         const storageRef = Array.from(resizedImages).map((_, i) => ref(storage, `post/${user.member.nickname}/${uuid[i]}`));
         const uploadTask = Array.from(resizedImages).map((file: any, i) => uploadBytes(storageRef[i], file));
         const blobImages = await Promise.all(uploadTask);
