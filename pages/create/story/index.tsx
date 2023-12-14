@@ -1,7 +1,7 @@
-import React , {ButtonHTMLAttributes, useState, useRef} from "react";
+import React , {useState, useRef} from "react";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload, faXmark, faPencil, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faFaceSmile } from "@fortawesome/free-regular-svg-icons";
+import { faDownload, faXmark, faFont, faPlus } from "@fortawesome/free-solid-svg-icons";
 import * as SC from "@/components/styled/main_boardwrite_story"
 import Image from "next/image";
 import {ref, getDownloadURL, uploadBytes} from 'firebase/storage'
@@ -19,6 +19,7 @@ const Story: React.FC = () => {
   const [textBoxes, setTextBoxes] = useState<string[]>([])
   const divRef = useRef<HTMLDivElement>(null);
   const user = useSelector((state: any) => state.user)
+  const router = useRouter()
 
   type Position = {
     x: string;
@@ -45,7 +46,7 @@ const Story: React.FC = () => {
       "image": imageBlob,
       "fileName": fileName
     }
-      await axiosInstance({
+      return axiosInstance({
         method: "post",
         url: "/story/create",
         headers: {
@@ -74,7 +75,9 @@ const Story: React.FC = () => {
         const uploadTask = uploadBytes(storageRef, resizedImage);
         const snapshot = await uploadTask;
         const downloadURL = await getDownloadURL(snapshot.ref);
-        await uploadImageToServer(downloadURL, uuid)
+        const uploadData = await uploadImageToServer(downloadURL, uuid)
+        console.log(uploadData)
+        // router.push(`/story/search-childstory/${uploadData.data.memberId}`)
     }}catch (error) {
       console.error("ERROR", error);
     }
@@ -87,6 +90,7 @@ const Story: React.FC = () => {
 
    const handleEndText = () => {
      setTextBoxes((prev) => [...prev, textValue])
+     setPosition((prev) => [...prev, {x: "50%", y: "20%"}])
      setTextValue("")
      setIsTexting(false);
    }
@@ -126,7 +130,6 @@ const Story: React.FC = () => {
 
   return (
     <>
-    <form>
       <SC.Header>
         <SC.Prev>
           <FontAwesomeIcon icon={faXmark} style={{ color: "white", fontSize: "2rem"}} />
@@ -136,12 +139,10 @@ const Story: React.FC = () => {
               <SC.HiddenInput onChange={(e) => handlePreviewImage(e)}></SC.HiddenInput>
               <FontAwesomeIcon icon={faDownload} style={{ color: "white", fontSize: "2rem"}} />
           </SC.UploadBox>
-          <FontAwesomeIcon icon={faFaceSmile} style={{ color: "white", fontSize: "2rem" }} />
-          <FontAwesomeIcon icon={faPencil} style={{ color: "white", fontSize: "2rem" }} />
           {isTexting 
           ? <span onClick={handleEndText} style={{ color: "white", fontSize: "2rem" }}>완료</span> 
           : <FontAwesomeIcon 
-              onClick={(e) => handleStartText()} 
+              onClick={handleStartText} 
               icon={faFont} 
               style={{ color: "white", fontSize: "2rem" }}
             />
@@ -164,7 +165,7 @@ const Story: React.FC = () => {
         {textBoxes.length > 0 
           ? textBoxes.map((_, i) => <SC.TextBox
             key={i}
-            style={{top: position[i].y, left: position[i].x}}
+            style={{top: `${position[i].y}`, left: `${position[i].x}`}}
             onTouchStart={handleTouchStart}
             onTouchMove={(e) => handleTouchMove(e, i)}
             onTouchEnd={handleTouchEnd}
@@ -180,7 +181,6 @@ const Story: React.FC = () => {
           <span style={{ marginLeft: "1rem" }}>스토리에 추가</span>
         </SC.Button>
       </SC.Footer>
-    </form>
     </>
   );
 };
