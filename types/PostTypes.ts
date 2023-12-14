@@ -5,7 +5,7 @@ export interface PostDetailData {
   nickName: string;
   followed: boolean;
   postId: number;
-  image: [string];
+  image: string[];
   contents: string;
   createdAt: string;
   postLike: boolean;
