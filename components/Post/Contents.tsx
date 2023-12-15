@@ -21,7 +21,7 @@ import postLikePostAxios from "@/services/postInfo/postLikePost";
 import postBookmarkPostAxios from "@/services/postInfo/postBookmarkPost";
 import deleteBookmarkPostAxios from "@/services/postInfo/deleteBookmarkPost";
 import { PostDetailData } from "@/types/PostTypes";
-
+import { base64 } from "./base64";
 // type HandleLikeClick = (postId: number) => void;
 
 interface PostContentsProps {
@@ -34,7 +34,6 @@ const PostContents: React.FC<PostContentsProps> = ({ post }) => {
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
   const [slideProps, setSlideProps] = useState<number>(0)
-
 
 
   const handleActionClick = async (postId: number, actionType: string) => {
@@ -74,12 +73,6 @@ const PostContents: React.FC<PostContentsProps> = ({ post }) => {
       return
     }
   }
-
-
-  console.log(post.image)
-
-  
-
   return (
     <div>
       <Slide>
@@ -99,9 +92,13 @@ const PostContents: React.FC<PostContentsProps> = ({ post }) => {
             post.image.map((v, i) => (
             <ImageItem key={i}>
               <Image
+                blurDataURL={base64}
                 src={v}
                 alt={v}
-                fill={true}
+                loading="lazy"
+                placeholder="blur"
+                width={420} 
+                height={420}
                 />
             </ImageItem>
             ))
@@ -191,7 +188,7 @@ const LeftButton = styled.button`
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 5%;
+  top: 50%;
   left: 0;
   z-index: 10;
 `
